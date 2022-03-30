@@ -77,8 +77,6 @@ function PoolPage() {
     },
   });
 
-  console.log(pool);
-
   const {
     flpAge,
     flpAgeRemoved,
