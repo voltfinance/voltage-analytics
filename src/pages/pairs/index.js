@@ -13,7 +13,7 @@ function PairsPage() {
   return (
     <AppShell>
       <Head>
-        <title>Pairs | Trader Joe Analytics</title>
+        <title>Pairs | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
       <PairTable title="Pairs" pairs={pairs} />
     </AppShell>

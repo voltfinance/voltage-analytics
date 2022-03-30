@@ -1,8 +1,13 @@
 import { Avatar } from "@material-ui/core";
-import HelpIcon from "@material-ui/icons/Help";
 import { makeStyles } from "@material-ui/core/styles";
-import { toChecksumAddress } from "web3-utils";
 import { useMemo } from "react";
+import { tokens } from "@voltage-finance/swap-default-token-list/build/voltage-swap-default.tokenlist.json";
+
+const voltTokenListLogos = tokens.reduce(
+  (acc, token) => ({ ...acc, [token.symbol]: token.logoURI }),
+  { "VOLT": "https://fuselogo.s3.eu-central-1.amazonaws.com/volt_icon.png"}
+);
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginRight: theme.spacing(2),
@@ -14,10 +19,7 @@ const useStyles = makeStyles((theme) => ({
 export default function TokenIcon({ id, ...rest }) {
   const classes = useStyles();
   const src = useMemo(
-    () =>
-      `https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/logos/${toChecksumAddress(
-        id
-      )}/logo.png`,
+    () => voltTokenListLogos[id],
     [id]
   );
   return <Avatar classes={{ root: classes.root }} src={src} {...rest} />;

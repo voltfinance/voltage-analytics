@@ -35,8 +35,8 @@ export default function PoolTable({ pools, ...rest }) {
               return (
                 <Box display="flex" alignItems="center">
                   <PairIcon
-                    base={row.liquidityPair?.token0?.id}
-                    quote={row.liquidityPair?.token1?.id}
+                    base={row.liquidityPair?.token0?.symbol}
+                    quote={row.liquidityPair?.token1?.symbol}
                   />
                   <Link href={`/pools/${row.id}`} variant="body2" noWrap>
                     {name}
@@ -49,7 +49,7 @@ export default function PoolTable({ pools, ...rest }) {
             key: "rewardPerSec",
             label: "Rewards",
             render: (row) =>
-              `${Number(row.rewardPerSec).toFixed(2)} JOE per sec`,
+              `${Number(row.rewardPerSec).toFixed(2)} VOLT per sec`,
           },
           {
             key: "roi",
@@ -80,7 +80,7 @@ export default function PoolTable({ pools, ...rest }) {
             render: (row) => (
               <Box display="flex">
                 <TokenIcon
-                  id={row.liquidityPair?.token0?.id}
+                  id={row.liquidityPair?.token0?.symbol}
                   className={classes.small}
                 />
                 <Typography variant="subtitle2" noWrap>
@@ -96,7 +96,7 @@ export default function PoolTable({ pools, ...rest }) {
             render: (row) => (
               <Box display="flex">
                 <TokenIcon
-                  id={row.liquidityPair?.token1?.id}
+                  id={row.liquidityPair?.token1?.symbol}
                   className={classes.small}
                 />
                 <Typography variant="subtitle2" noWrap>

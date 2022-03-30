@@ -96,49 +96,49 @@ function PoolPage() {
     parseFloat(token?.derivedAVAX) * parseFloat(bundles[0].avaxPrice);
 
   const {
-    slpAge,
-    slpAgeRemoved,
+    flpAge,
+    flpAgeRemoved,
     userCount,
-    slpDeposited,
-    slpWithdrawn,
-    slpAgeAverage,
-    slpBalance,
+    flpDeposited,
+    flpWithdrawn,
+    flpAgeAverage,
+    flpBalance,
     tvl,
   } = poolHistories.reduce(
     (previousValue, currentValue) => {
       const date = currentValue.timestamp * 1000;
 
-      previousValue.slpAge.push({
+      previousValue.flpAge.push({
         date,
-        value: currentValue.slpAge,
+        value: currentValue.flpAge,
       });
 
-      const slpAgeAverage =
-        parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
+      const flpAgeAverage =
+        parseFloat(currentValue.flpAge) / parseFloat(currentValue.flpBalance);
 
-      previousValue.slpAgeAverage.push({
+      previousValue.flpAgeAverage.push({
         date,
-        value: !Number.isNaN(slpAgeAverage) ? slpAgeAverage : 0,
+        value: !Number.isNaN(flpAgeAverage) ? flpAgeAverage : 0,
       });
 
-      previousValue.slpAgeRemoved.push({
+      previousValue.flpAgeRemoved.push({
         date,
-        value: currentValue.slpAgeRemoved,
+        value: currentValue.flpAgeRemoved,
       });
 
-      previousValue.slpBalance.push({
+      previousValue.flpBalance.push({
         date,
-        value: parseFloat(currentValue.slpBalance),
+        value: parseFloat(currentValue.flpBalance),
       });
 
-      previousValue.slpDeposited.push({
+      previousValue.flpDeposited.push({
         date,
-        value: parseFloat(currentValue.slpDeposited),
+        value: parseFloat(currentValue.flpDeposited),
       });
 
-      previousValue.slpWithdrawn.push({
+      previousValue.flpWithdrawn.push({
         date,
-        value: parseFloat(currentValue.slpWithdrawn),
+        value: parseFloat(currentValue.flpWithdrawn),
       });
 
       previousValue.tvl.push({
@@ -146,7 +146,7 @@ function PoolPage() {
         value:
           (parseFloat(pool.liquidityPair.reserveUSD) /
             parseFloat(pool.liquidityPair.totalSupply)) *
-          parseFloat(currentValue.slpBalance),
+          parseFloat(currentValue.flpBalance),
       });
 
       previousValue.userCount.push({
@@ -159,12 +159,12 @@ function PoolPage() {
     {
       entries: [],
       exits: [],
-      slpAge: [],
-      slpAgeAverage: [],
-      slpAgeRemoved: [],
-      slpBalance: [],
-      slpDeposited: [],
-      slpWithdrawn: [],
+      flpAge: [],
+      flpAgeAverage: [],
+      flpAgeRemoved: [],
+      flpBalance: [],
+      flpDeposited: [],
+      flpWithdrawn: [],
       tvl: [],
       userCount: [],
     }
@@ -173,7 +173,7 @@ function PoolPage() {
   return (
     <AppShell>
       <Head>
-        <title>Pool {id} | Trader Joe Analytics</title>
+        <title>Pool {id} | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
 
       <PageHeader mb={3}>
@@ -187,8 +187,8 @@ function PoolPage() {
           <Grid item xs={12} sm="auto" className={classes.title}>
             <Box display="flex" alignItems="center">
               <PairIcon
-                base={pool.liquidityPair.token0.id}
-                quote={pool.liquidityPair.token1.id}
+                base={pool.liquidityPair.token0.symbol}
+                quote={pool.liquidityPair.token1.symbol}
               />
               <Typography variant="h5" component="h1">
                 {pool.liquidityPair.token0.symbol}-
@@ -198,7 +198,7 @@ function PoolPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://traderjoexyz.com/pool/${pool.liquidityPair.token0.id}/${pool.liquidityPair.token1.id}`}
+              href={`https://app.voltage.finance/#/add/${pool.liquidityPair.token0.id}/${pool.liquidityPair.token1.id}`}
               target="_blank"
               variant="body1"
             >
@@ -224,7 +224,7 @@ function PoolPage() {
           <KPI
             title="~ LP Age"
             value={`${(
-              parseFloat(pool.slpAge) / parseFloat(pool.balance / 1e18)
+              parseFloat(pool.flpAge) / parseFloat(pool.balance / 1e18)
             ).toFixed(2)} Days`}
           />
         </Grid>
@@ -286,7 +286,7 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpAge, slpAgeRemoved]}
+                  data={[flpAge, flpAgeRemoved]}
                   labels={["LP Age", "LP Age Removed"]}
                 />
               )}
@@ -309,8 +309,8 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpDeposited, slpWithdrawn]}
-                  labels={["LP Deposited", "LP Age Withdrawn"]}
+                  data={[flpDeposited, flpWithdrawn]}
+                  labels={["LP Deposited", "LP Withdrawn"]}
                 />
               )}
             </ParentSize>
@@ -334,7 +334,7 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpAgeAverage]}
+                  data={[flpAgeAverage]}
                 />
               )}
             </ParentSize>
@@ -382,7 +382,7 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpBalance]}
+                  data={[flpBalance]}
                 />
               )}
             </ParentSize>

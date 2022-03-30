@@ -95,8 +95,9 @@ export default function Search({ pairs, tokens }) {
     return {
       __typename: option.__typename,
       id: option.id,
-      token0: option.token0 ? option.token0.id : "",
-      token1: option.token1 ? option.token1.id : "",
+      symbol: option.name ? option.symbol : "",
+      token0: option.token0 ? option.token0.symbol : "",
+      token1: option.token1 ? option.token1.symbol : "",
       text: option.name
         ? ` ${option.symbol} ${option.name}`
         : `${option.token0?.symbol}-${option.token1?.symbol}`,
@@ -133,7 +134,7 @@ export default function Search({ pairs, tokens }) {
         const parts = parse(option.text, matches);
         return (
           <Box display="flex" alignItems="center">
-            {option.__typename === "Token" ? <TokenIcon id={option.id} /> : <PairIcon base={option.token0} quote={option.token1} />}
+            {option.__typename === "Token" ? <TokenIcon id={option.symbol} /> : <PairIcon base={option.token0} quote={option.token1} />}
             {parts.map((part, index) => {
               return (
                 <span

@@ -30,36 +30,34 @@ export default function TokenTable({ tokens, title }) {
   });
 
   const { data: oneDayAvaxPriceData } = useQuery(oneDayAvaxPriceQuery);
-
   const { data: sevenDayAvaxPriceData } = useQuery(sevenDayAvaxPriceQuery);
-
   const rows = tokens
     .filter(({ id }) => {
       return !TOKEN_DENY.includes(id);
     })
-    .map((token) => {
+    .map((token) => {  
       const price =
-        parseFloat(token.derivedAVAX) * parseFloat(bundles[0]?.avaxPrice);
+        parseFloat(token.derivedETH) * parseFloat(bundles[0]?.ethPrice);
 
       const priceYesterday =
         parseFloat(token.oneDay?.derivedAVAX) *
-        parseFloat(oneDayAvaxPriceData?.avaxPrice);
+        parseFloat(oneDayAvaxPriceData?.ethPrice);
 
       const priceChange = ((price - priceYesterday) / priceYesterday) * 100;
 
       const priceLastWeek =
         parseFloat(token.sevenDay?.derivedAVAX) *
-        parseFloat(sevenDayAvaxPriceData?.avaxPrice);
+        parseFloat(sevenDayAvaxPriceData?.ethPrice);
 
       const sevenDayPriceChange =
         ((price - priceLastWeek) / priceLastWeek) * 100;
 
       const liquidityUSD =
-        parseFloat(token?.liquidity) *
-        parseFloat(token?.derivedAVAX) *
-        parseFloat(bundles[0]?.avaxPrice);
+        parseFloat(token?.totalLiquidity) *
+        parseFloat(token?.derivedETH) *
+        parseFloat(bundles[0]?.ethPrice);
 
-      const volumeYesterday = token.volumeUSD - token.oneDay?.volumeUSD;
+      const volumeYesterday = token.tradeVolumeUSD - token.oneDay?.volumeUSD;
 
       return {
         ...token,
@@ -83,7 +81,7 @@ export default function TokenTable({ tokens, title }) {
             label: "Name",
             render: (row, index) => (
               <Box display="flex" alignItems="center">
-                <TokenIcon id={row.id} />
+                <TokenIcon id={row.symbol} />
                 <Link href={`/tokens/${row.id}`}>
                   <Typography variant="body2" noWrap>
                     {row.name}
@@ -132,7 +130,7 @@ export default function TokenTable({ tokens, title }) {
             label: "Last 7 Days",
             render: (row) => (
               <Sparklines
-                data={row.dayData.map((d) => d.priceUSD)}
+                data={row.tokenDayData.map((d) => d.priceUSD)}
                 limit={7}
                 svgWidth={160}
                 svgHeight={30}

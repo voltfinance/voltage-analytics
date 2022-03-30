@@ -20,13 +20,13 @@ import { FACTORY_ADDRESS, JOE_TOKEN_ADDDRESS } from "../../config/index.ts";
 
 export async function getFactory(client = getApollo()) {
   const {
-    data: { factory },
+    data: { uniswapFactory },
   } = await client.query({
     query: factoryQuery,
   });
 
   const {
-    data: { factory: oneDay },
+    data: { uniswapFactory: oneDay },
   } = await client.query({
     query: factoryTimeTravelQuery,
     variables: {
@@ -35,7 +35,7 @@ export async function getFactory(client = getApollo()) {
   });
 
   const {
-    data: { factory: twoDay },
+    data: { uniswapFactory: twoDay },
   } = await client.query({
     query: factoryTimeTravelQuery,
     variables: {
@@ -46,10 +46,16 @@ export async function getFactory(client = getApollo()) {
   await client.cache.writeQuery({
     query: factoryQuery,
     data: {
-      factory: {
-        ...factory,
-        oneDay,
-        twoDay,
+      uniswapFactory: {
+        ...uniswapFactory,
+        oneDay: {
+          ...oneDay,
+          totalVolumeUSD: oneDay.totalVolumeUSD
+        },
+        twoDay: {
+          ...twoDay,
+          totalVolumeUSD: twoDay.totalVolumeUSD
+        },
       },
     },
   });
@@ -122,16 +128,16 @@ export async function getToken(id, client = getApollo()) {
       token: {
         ...token,
         oneDay: {
-          volumeUSD: String(oneDayToken?.volumeUSD),
-          derivedAVAX: String(oneDayToken?.derivedAVAX),
-          liquidity: String(oneDayToken?.liquidity),
-          txCount: String(oneDayToken?.txCount),
+          tradeVolumeUSD: String(oneDayToken?.tradeVolumeUSD),
+          derivedETH: String(oneDayToken?.derivedETH),
+          totalLiquidity: String(oneDayToken?.totalLiquidity),
+          dailyTxns: String(oneDayToken?.dailyTxns),
         },
         twoDay: {
-          volumeUSD: String(twoDayToken?.volumeUSD),
-          derivedAVAX: String(twoDayToken?.derivedAVAX),
-          liquidity: String(twoDayToken?.liquidity),
-          txCount: String(twoDayToken?.txCount),
+          tradeVolumeUSD: String(twoDayToken?.volumeUSD),
+          derivedETH: String(twoDayToken?.derivedETH),
+          totalLiquidity: String(twoDayToken?.totalLiquidity),
+          dailyTxns: String(twoDayToken?.dailyTxns),
         },
       },
     },
@@ -181,14 +187,14 @@ export async function getTokens(client = getApollo()) {
         return {
           ...token,
           oneDay: {
-            volumeUSD: String(oneDayToken?.volumeUSD),
-            derivedAVAX: String(oneDayToken?.derivedAVAX),
-            liquidity: String(oneDayToken?.liquidity),
+            volumeUSD: String(oneDayToken?.tradeVolumeUSD),
+            derivedAVAX: String(oneDayToken?.derivedETH),
+            liquidity: String(oneDayToken?.totalLiquidity),
           },
           sevenDay: {
-            volumeUSD: String(sevenDayToken?.volumeUSD),
-            derivedAVAX: String(sevenDayToken?.derivedAVAX),
-            liquidity: String(sevenDayToken?.liquidity),
+            volumeUSD: String(sevenDayToken?.tradeVolumeUSD),
+            derivedAVAX: String(sevenDayToken?.derivedETH),
+            liquidity: String(sevenDayToken?.totalLiquidity),
           },
         };
       }),

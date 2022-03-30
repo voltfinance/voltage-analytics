@@ -19,7 +19,9 @@ import {
   formatCurrency,
   formatDecimal,
   getApollo,
+  getAvaxPrice,
   getPair,
+  getPairDayDatas,
   pairDayDatasQuery,
   pairIdsQuery,
   pairQuery,
@@ -165,15 +167,15 @@ function PairPage(props) {
   const chartDatas = pairDayDatas.reduce(
     (previousValue, currentValue) => {
       const untrackedVolumeUSD =
-        currentValue?.token0.derivedAVAX * currentValue?.volumeToken0 +
-        currentValue?.token1.derivedAVAX *
-          currentValue?.volumeToken1 *
-          bundles[0].avaxPrice;
+        currentValue?.token0.derivedETH * currentValue?.dailyVolumeToken0 +
+        currentValue?.token1.derivedETH *
+          currentValue?.dailyVolumeToken1 *
+          bundles[0].ethPrice;
 
       const volumeUSD =
-        currentValue?.volumeUSD === "0"
+        currentValue?.dailyVolumeUSD === "0"
           ? untrackedVolumeUSD
-          : currentValue?.volumeUSD;
+          : currentValue?.dailyVolumeUSD;
 
       previousValue["liquidity"].unshift({
         date: currentValue.date,
@@ -192,20 +194,20 @@ function PairPage(props) {
     <AppShell>
       <Head>
         <title>
-          {pair.token0.symbol}-{pair.token1.symbol} | Trader Joe Analytics
+          {pair.token0.symbol}-{pair.token1.symbol} | {process.env.NEXT_PUBLIC_APP_NAME}
         </title>
       </Head>
       <PageHeader>
         <Box display="flex" alignItems="center" className={classes.pageHeader}>
           <Box display="flex" alignItems="center" flex={1} flexWrap="nowrap">
-            <PairIcon base={pair.token0.id} quote={pair.token1.id} />
+            <PairIcon base={pair.token0.symbol} quote={pair.token1.symbol} />
             <Typography variant="h5" component="h1" noWrap>
               {pair.token0.symbol}-{pair.token1.symbol}
             </Typography>
           </Box>
           <Box display="flex" alignItems="center" className={classes.links}>
             <Link
-              href={`https://traderjoexyz.com/pool/${pair.token0.id}/${pair.token1.id}`}
+              href={`https://app.voltage.finance/#/add/${pair.token0.id}/${pair.token1.id}`}
               target="_blank"
               variant="body1"
               className={classes.firstLink}
@@ -213,7 +215,7 @@ function PairPage(props) {
               Add Liquidity
             </Link>
             <Link
-              href={`https://traderjoexyz.com/trade?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
+              href={`https://app.voltage.finance/#/swap?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
               target="_blank"
               variant="body1"
             >
@@ -227,7 +229,7 @@ function PairPage(props) {
         <Grid item xs={12} sm={6}>
           <Paper variant="outlined" className={classes.paper}>
             <Box display="flex" alignItems="center">
-              <TokenIcon className={classes.avatar} id={pair.token0.id} />
+              <TokenIcon className={classes.avatar} id={pair.token0.symbol} />
               <Typography
                 variant="h6"
                 color="textPrimary"
@@ -244,7 +246,7 @@ function PairPage(props) {
               {`1 ${pair.token0.symbol} = ${formatDecimal(
                 pair.reserve1 / pair.reserve0
               )} ${pair.token1.symbol} (${formatCurrency(
-                pair.token0?.derivedAVAX * bundles[0].avaxPrice
+                pair.token0?.derivedETH * bundles[0].ethPrice
               )})`}
             </Typography>
           </Paper>
@@ -252,7 +254,7 @@ function PairPage(props) {
         <Grid item xs={12} sm={6}>
           <Paper variant="outlined" className={classes.paper}>
             <Box display="flex" alignItems="center">
-              <TokenIcon className={classes.avatar} id={pair.token1.id} />
+              <TokenIcon className={classes.avatar} id={pair.token1.symbol} />
               <Typography
                 variant="h6"
                 color="textPrimary"
@@ -269,7 +271,7 @@ function PairPage(props) {
               {`1 ${pair.token1.symbol} = ${formatDecimal(
                 pair.reserve0 / pair.reserve1
               )} ${pair.token0.symbol} (${formatCurrency(
-                pair.token1?.derivedAVAX * bundles[0].avaxPrice
+                pair.token1?.derivedETH * bundles[0].ethPrice
               )})`}
             </Typography>
           </Paper>
@@ -409,7 +411,7 @@ function PairPage(props) {
               {pair.token1.id}
             </Typography>,
             <Link
-              href={`https://cchain.explorer.avax.network/address/${pair.id}`}
+              href={`https://explorer.fuse.io/address/${pair.id}`}
             >
               View
             </Link>,
@@ -438,12 +440,7 @@ export async function getStaticProps({ params }) {
 
   await getPair(id, client);
 
-  await client.query({
-    query: pairDayDatasQuery,
-    variables: {
-      pairs: [id],
-    },
-  });
+  await getPairDayDatas(id, client);
 
   await client.query({
     query: transactionsQuery,

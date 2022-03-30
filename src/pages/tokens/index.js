@@ -24,7 +24,7 @@ function TokensPage() {
   return (
     <AppShell>
       <Head>
-        <title>Tokens | Trader Joe Analytics</title>
+        <title>Tokens | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
       <TokenTable title="Tokens" tokens={tokens} />
     </AppShell>

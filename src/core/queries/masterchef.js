@@ -13,7 +13,7 @@ export const lockupUserQuery = gql`
           totalAllocPoint
         }
         balance
-        accJoePerShare
+        accVoltPerShare
       }
     }
   }
@@ -27,15 +27,15 @@ const poolUserFragment = gql`
       id
       pair
       balance
-      accJoePerShare
+      accVoltPerShare
       lastRewardTimestamp
     }
     amount
     rewardDebt
     entryUSD
     exitUSD
-    joeHarvested
-    joeHarvestedUSD
+    voltHarvested
+    voltHarvestedUSD
   }
 `;
 
@@ -54,16 +54,16 @@ export const poolHistoryQuery = gql`
       id
       pool {
         id
-        accJoePerShare
+        accVoltPerShare
       }
-      jlpBalance
-      jlpAge
-      jlpAgeRemoved
-      jlpDeposited
-      jlpWithdrawn
+      flpBalance
+      flpAge
+      flpAgeRemoved
+      flpDeposited
+      flpWithdrawn
       entryUSD
       exitUSD
-      joeHarvestedUSD
+      voltHarvestedUSD
       userCount
       timestamp
       block
@@ -78,12 +78,12 @@ export const poolQuery = gql`
       pair
       allocPoint
       lastRewardTimestamp
-      accJoePerShare
+      accVoltPerShare
       balance
       userCount
       owner {
         id
-        joePerSec
+        voltPerSec
         totalAllocPoint
       }
       users(orderBy: amount, orderDirection: desc) {
@@ -92,7 +92,7 @@ export const poolQuery = gql`
         amount
         rewardDebt
       }
-      jlpAge
+      flpAge
       liquidityPair @client
       timestamp
       entryUSD
@@ -136,12 +136,12 @@ export const poolsQuery = gql`
       pair
       allocPoint
       lastRewardTimestamp
-      accJoePerShare
+      accVoltPerShare
       balance
       userCount
       owner {
         id
-        joePerSec
+        voltPerSec
         totalAllocPoint
       }
       liquidityPair @client

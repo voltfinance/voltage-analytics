@@ -42,10 +42,7 @@ export default function PairTable({ pairs, title, ...rest }) {
 
       return {
         ...pair,
-        displayName: `${pair.token0.symbol.replace(
-          "WETH",
-          "ETH"
-        )}-${pair.token1.symbol.replace("WETH", "ETH")}`,
+        displayName: `${pair.token0.symbol}-${pair.token1.symbol}`,
         oneDayVolume: !Number.isNaN(oneDayVolume) ? oneDayVolume : 0,
         sevenDayVolume: !Number.isNaN(sevenDayVolume) ? sevenDayVolume : 0,
         oneDayFees: !Number.isNaN(oneDayFees) ? oneDayFees : 0,
@@ -66,7 +63,7 @@ export default function PairTable({ pairs, title, ...rest }) {
             numeric: false,
             render: (row) => (
               <Box display="flex" alignItems="center">
-                <PairIcon base={row.token0.id} quote={row.token1.id} />
+                <PairIcon base={row.token0.symbol} quote={row.token1.symbol} />
                 <Link href={`/pairs/${row.id}`} variant="body2" noWrap>
                   {row.displayName}
                 </Link>

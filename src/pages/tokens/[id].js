@@ -129,11 +129,11 @@ function TokenPage() {
     (previousValue, currentValue) => {
       previousValue["liquidity"].unshift({
         date: currentValue.date,
-        value: parseFloat(currentValue.liquidityUSD),
+        value: parseFloat(currentValue.totalLiquidityUSD),
       });
       previousValue["volume"].unshift({
         date: currentValue.date,
-        value: parseFloat(currentValue.volumeUSD),
+        value: parseFloat(currentValue.dailyVolumeUSD),
       });
       return previousValue;
     },
@@ -141,29 +141,29 @@ function TokenPage() {
   );
 
   const totalLiquidityUSD =
-    parseFloat(token?.liquidity) *
-    parseFloat(token?.derivedAVAX) *
-    parseFloat(bundles[0].avaxPrice);
+    parseFloat(token?.totalLiquidity) *
+    parseFloat(token?.derivedETH) *
+    parseFloat(bundles[0].ethPrice);
 
   const totalLiquidityUSDYesterday =
-    parseFloat(token.oneDay?.liquidity) *
-    parseFloat(token.oneDay?.derivedAVAX) *
-    parseFloat(oneDayAvaxPriceData?.avaxPrice);
+    parseFloat(token.oneDay?.totalLiquidity) *
+    parseFloat(token.oneDay?.derivedETH) *
+    parseFloat(oneDayAvaxPriceData?.ethPrice);
 
   const price =
-    parseFloat(token?.derivedAVAX) * parseFloat(bundles[0].avaxPrice);
+    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const priceYesterday =
-    parseFloat(token.oneDay?.derivedAVAX) *
-    parseFloat(oneDayAvaxPriceData?.avaxPrice);
+    parseFloat(token.oneDay?.derivedETH) *
+    parseFloat(oneDayAvaxPriceData?.ethPrice);
 
   const priceChange = ((price - priceYesterday) / priceYesterday) * 100;
 
-  const volume = token?.volumeUSD - token?.oneDay?.volumeUSD;
-  const volumeYesterday = token?.oneDay?.volumeUSD - token?.twoDay?.volumeUSD;
+  const volume = token?.tradeVolumeUSD - token?.oneDay?.tradeVolumeUSD;
+  const volumeYesterday = token?.oneDay?.tradeVolumeUSD - token?.twoDay?.tradeVolumeUSD;
 
-  const txCount = token?.txCount - token?.oneDay?.txCount;
-  const txCountYesterday = token?.oneDay?.txCount - token?.twoDay?.txCount;
+  const txCount = token?.dailyTxns - token?.oneDay?.dailyTxns;
+  const txCountYesterday = token?.oneDay?.dailyTxns - token?.twoDay?.dailyTxns;
 
   const fees = volume * FEE_RATE;
   const feesYesterday = volumeYesterday * FEE_RATE;
@@ -172,7 +172,7 @@ function TokenPage() {
     <AppShell>
       <Head>
         <title>
-          {currencyFormatter.format(price || 0)} | {token.symbol} | Trader Joe
+          {currencyFormatter.format(price || 0)} | {token.symbol} | {process.env.NEXT_PUBLIC_APP_NAME}
           Analytics
         </title>
       </Head>
@@ -185,7 +185,7 @@ function TokenPage() {
         >
           <Grid item xs={12} sm="auto" className={classes.title}>
             <Box display="flex" alignItems="center">
-              <TokenIcon id={token.id} />
+              <TokenIcon id={token.symbol} />
               <Typography variant="h5" component="h1" noWrap>
                 {token.name} ({token.symbol}){" "}
               </Typography>
@@ -199,14 +199,14 @@ function TokenPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://traderjoexyz.com/pool/${token.id}/AVAX`}
+              href={`https://app.voltage.finance/#/add/${token.id}/FUSE`}
               target="_blank"
               variant="body1"
             >
               Add Liquidity
             </Link>
             <Link
-              href={`https://traderjoexyz.com/trade`}
+              href={`https://app.voltage.finance/trade`}
               target="_blank"
               variant="body1"
             >
@@ -299,7 +299,7 @@ function TokenPage() {
             token.symbol,
             token.id,
             <Link
-              href={`https://cchain.explorer.avax.network/address/${token.id}`}
+              href={`https://explorer.fuse.io/address/${token.id}`}
             >
               View
             </Link>,
@@ -309,7 +309,7 @@ function TokenPage() {
 
       <PairTable title="Pairs" pairs={pairs} />
 
-      <Transactions transactions={transactions} txCount={token.txCount} />
+      <Transactions transactions={transactions} txCount={token.dailyTxns} />
     </AppShell>
   );
 }
