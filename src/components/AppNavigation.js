@@ -1,59 +1,17 @@
+import { WavesOutlined } from "@material-ui/icons";
 import {
-  AccountTreeOutlined,
-  AppsOutlined,
-  Brightness4,
-  Brightness4Outlined,
-  Brightness7,
-  Brightness7Outlined,
-  CloseOutlined,
-  DashboardOutlined,
-  DetailsOutlined,
-  ExpandLess,
-  ExpandMore,
-  FastfoodOutlined,
-  FiberNewOutlined,
-  HistoryOutlined,
-  LinkOutlined,
-  ListAltOutlined,
-  Menu,
-  MoneyOutlined,
-  RadioButtonUncheckedOutlined,
-  ReorderOutlined,
-  SettingsEthernetOutlined,
-  StarBorder,
-  TrendingDownOutlined,
-  TrendingUpOutlined,
-  ViewStreamOutlined,
-  WavesOutlined,
-  AccountBalanceOutlined,
-} from "@material-ui/icons";
-import {
-  Box,
   Button,
-  Collapse,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider,
-  Hidden,
-  IconButton,
-  List,
   ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
   TextField,
-  Toolbar,
-  Tooltip,
-  Typography,
-  useMediaQuery,
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
-import styled from "styled-components";
 import {
   TrendingUp,
   List as ListIcon,
@@ -61,16 +19,16 @@ import {
   Disc,
   Zap,
 } from "react-feather";
+import clsx from "clsx";
 import { transparentize } from "polished";
 import { useReactiveVar } from "@apollo/client";
-
-import Joe from "./Joe";
 
 import Title from "./Title";
 import { AutoColumn } from "./Column";
 import { BasicLink } from "./Link";
 import { darkModeVar } from "app/core";
 import Toggle from "./Toggle";
+import SideNavTimer from "./SideNavTimer";
 
 const drawerWidth = 240;
 
@@ -78,6 +36,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     background: transparentize(0.4, theme.palette.background.default),
     background: "linear-gradient(193.68deg, #1b1c22 0.68%, #000000 100.48%)",
+    height: "100vh",
+  },
+  desktopWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
     height: "100vh",
   },
   list: {
@@ -101,12 +65,28 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   nested: {
-    paddingLeft: theme.spacing(3),
+    marginLeft: theme.spacing(3),
   },
+  mt2: { marginTop: theme.spacing(2) },
+  mt3: { marginTop: theme.spacing(3) },
+  mb8: { marginBottom: theme.spacing(8) },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   title: {
     padding: theme.spacing(1),
+  },
+  linkText: {
+    marginRight: "0.75rem",
+    fontSize: "0.825rem",
+    fontWeight: 500,
+    display: "inline-box",
+    opacity: 0.8,
+    "&:hover": {
+      opacity: 1,
+    },
+    "& > a": {
+      color: "white",
+    },
   },
 }));
 
@@ -149,14 +129,11 @@ export default function AppNavigation() {
   };
   return (
     <div className={classes.root}>
-      <DesktopWrapper>
-        <AutoColumn
-          gap="1rem"
-          style={{ marginLeft: theme.spacing(3), marginTop: theme.spacing(4) }}
-        >
+      <div className={classes.desktopWrapper}>
+        <AutoColumn gap="1rem" className={clsx(classes.nested, classes.mt3)}>
           <Title />
 
-          <AutoColumn gap="1.25rem" style={{ marginTop: "1rem" }}>
+          <AutoColumn gap="1.25rem" className={classes.mt2}>
             <ListItem
               key="/"
               button
@@ -254,42 +231,39 @@ export default function AppNavigation() {
             </ListItem>
           </AutoColumn>
         </AutoColumn>
-        <AutoColumn
-          gap="0.5rem"
-          style={{ marginLeft: theme.spacing(3), marginBottom: "4rem" }}
-        >
-          <HeaderText>
+        <AutoColumn gap="0.5rem" className={clsx(classes.nested, classes.mb8)}>
+          <div className={classes.linkText}>
             <BasicLink href="https://voltage.finance" target="_blank">
               Voltage
             </BasicLink>
-          </HeaderText>
-          <HeaderText>
+          </div>
+          <div className={classes.linkText}>
             <BasicLink href="https://docs.voltage.finance" target="_blank">
               Docs
             </BasicLink>
-          </HeaderText>
-          <HeaderText>
+          </div>
+          <div className={classes.linkText}>
             <BasicLink
               href="https://discord.com/invite/voltagefinance"
               target="_blank"
             >
               Discord
             </BasicLink>
-          </HeaderText>
-          <HeaderText>
+          </div>
+          <div className={classes.linkText}>
             <BasicLink href="https://twitter.com/voltfinance" target="_blank">
               Twitter
             </BasicLink>
-          </HeaderText>
-          <HeaderText>
+          </div>
+          <div className={classes.linkText}>
             <BasicLink href="https://t.me/voltage_finance" target="_blank">
               Telegram
             </BasicLink>
-          </HeaderText>
+          </div>
           <Toggle isActive={darkMode} toggle={onToggleDarkMode} />
         </AutoColumn>
-        {/* <SideNavTimer /> */}
-      </DesktopWrapper>
+      </div>
+      <SideNavTimer />
       <Dialog
         maxWidth="sm"
         open={dialogOpen}
@@ -332,25 +306,3 @@ export default function AppNavigation() {
     </div>
   );
 }
-
-const DesktopWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-`;
-
-const HeaderText = styled.div`
-  margin-right: 0.75rem;
-  font-size: 0.825rem;
-  font-weight: 500;
-  display: inline-box;
-  display: -webkit-inline-box;
-  opacity: 0.8;
-  :hover {
-    opacity: 1;
-  }
-  a {
-    color: white;
-  }
-`;

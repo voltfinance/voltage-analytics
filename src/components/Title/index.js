@@ -1,30 +1,31 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
+import { Box, makeStyles } from '@material-ui/core'
 
-import { Flex } from 'rebass'
-import { RowFixed } from '../Row'
+import { RowFixed } from '../Row';
 
-const TitleWrapper = styled.div`
-  text-decoration: none;
 
-  &:hover {
-    cursor: pointer;
-  }
-
-  z-index: 10;
-`
+const useStyles = makeStyles(() => ({
+  root: {
+    textDecoration: "none",
+    zIndex: 10,
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
+}));
 
 export default function Title() {
+  const classes = useStyles();
   const { push } = useRouter();
 
   return (
-    <TitleWrapper onClick={() => push('/')}>
-      <Flex alignItems="center">
+    <div className={classes.root} onClick={() => push('/')}>
+      <Box display="flex" alignItems="center">
         <RowFixed>
-          <img width="125px" style={{ marginLeft: '8px', marginTop: '0px' }} src="/voltage-wordmark.svg" alt={process.env.NEXT_PUBLIC_APP_NAME || "logo"} />
+          <img width="125px" style={{ marginLeft: '8px', paddingTop: '8px' }} src="/voltage-wordmark.svg" alt={process.env.NEXT_PUBLIC_APP_NAME || "logo"} />
         </RowFixed>
-      </Flex>
-    </TitleWrapper>
+      </Box>
+    </div>
   )
 }

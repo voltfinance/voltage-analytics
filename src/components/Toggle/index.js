@@ -4,24 +4,14 @@ import { Sun, Moon } from "react-feather";
 import { makeStyles, Typography } from "@material-ui/core";
 import clsx from "clsx";
 
-const IconWrapper = styled.div`
-  color: inherit;
-  opacity: ${({ isActive }) => (isActive ? 0.8 : 0.4)};
-
-  :hover {
-    opacity: 1;
-  }
-`;
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     width: "fit-content",
     cursor: "pointer",
     textDecoration: "none",
-    marginTop: "1rem",
+    marginTop: theme.spacing(2),
     color: "white",
-
     "&:hover": {
       textDecoration: "none",
     },
@@ -53,7 +43,7 @@ export default function Toggle({ isActive, toggle }) {
       <Typography style={{ padding: "0 .5rem" }} color="inherit">
         {" / "}
       </Typography>
-      <div className={clsx({ [classes.iconWrapper]: true, [classes.active]: isActive })}>
+      <div className={clsx(classes.iconWrapper, { [classes.active]: isActive })}>
         <Moon size={20} />
       </div>
     </div>
