@@ -77,23 +77,7 @@ function PoolPage() {
     },
   });
 
-  const {
-    data: { bundles },
-  } = useQuery(avaxPriceQuery, {
-    pollInterval: 1800000,
-  });
-
-  const token_address = JOE_TOKEN_ADDDRESS;
-  const {
-    data: { token },
-  } = useQuery(tokenQuery, {
-    variables: {
-      id: token_address,
-    },
-  });
-
-  const joePrice =
-    parseFloat(token?.derivedAVAX) * parseFloat(bundles[0].avaxPrice);
+  console.log(pool);
 
   const {
     flpAge,
@@ -143,10 +127,10 @@ function PoolPage() {
 
       previousValue.tvl.push({
         date,
-        value:
+        value: pool.liquidityPair ?
           (parseFloat(pool.liquidityPair.reserveUSD) /
             parseFloat(pool.liquidityPair.totalSupply)) *
-          parseFloat(currentValue.flpBalance),
+          parseFloat(currentValue.flpBalance) : 0,
       });
 
       previousValue.userCount.push({
@@ -187,18 +171,18 @@ function PoolPage() {
           <Grid item xs={12} sm="auto" className={classes.title}>
             <Box display="flex" alignItems="center">
               <PairIcon
-                base={pool.liquidityPair.token0.symbol}
-                quote={pool.liquidityPair.token1.symbol}
+                base={pool.liquidityPair?.token0.symbol}
+                quote={pool.liquidityPair?.token1.symbol}
               />
               <Typography variant="h5" component="h1">
-                {pool.liquidityPair.token0.symbol}-
-                {pool.liquidityPair.token1.symbol} POOL
+                {pool.liquidityPair?.token0.symbol}-
+                {pool.liquidityPair?.token1.symbol} POOL
               </Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://app.voltage.finance/#/add/${pool.liquidityPair.token0.id}/${pool.liquidityPair.token1.id}`}
+              href={`https://app.voltage.finance/#/add/${pool.liquidityPair?.token0.id}/${pool.liquidityPair?.token1.id}`}
               target="_blank"
               variant="body1"
             >
@@ -452,7 +436,7 @@ export async function getStaticProps({ params: { id } }) {
 export async function getStaticPaths() {
   const client = getApollo();
   const { pools } = await getPoolIds(client);
-  const paths = pools.filter(pool => !["24", "66", "67"].includes(pool.id)).map((pool) => ({
+  const paths = pools.filter(pool => !["24", "66", "67"].includes(pool.id) || pool.pair === null).map((pool) => ({
     params: { id: pool.id },
   }));
 
