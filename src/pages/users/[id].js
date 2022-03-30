@@ -54,6 +54,7 @@ import Head from "next/head";
 import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { JOE_TOKEN_ADDDRESS } from "config";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -93,7 +94,6 @@ function UserPage() {
       clientName: "bar",
     },
   });
-  console.log(barData);
 
   const { data: poolData } = useQuery(poolUserQuery, {
     variables: {
@@ -103,13 +103,12 @@ function UserPage() {
       clientName: "masterchef",
     },
   });
-  console.log(poolData);
 
   const {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x34ef2cc892a88415e9f02b91bfa9c91fc0be6bd4",
+      id: JOE_TOKEN_ADDDRESS,
     },
   });
 
@@ -143,8 +142,8 @@ function UserPage() {
   const xVolt = parseFloat(barData?.user?.xVolt);
 
   const barPending =
-    (xVolt * parseFloat(barData?.user?.bar?.joeStaked)) /
-    parseFloat(barData?.user?.bar?.totalSupply);
+    (xVolt * parseFloat(barData?.user?.volt?.voltStaked)) /
+    parseFloat(barData?.user?.volt?.totalSupply);
 
   const xVoltTransfered =
     barData?.user?.xVoltIn > barData?.user?.xVoltOut
@@ -248,7 +247,7 @@ function UserPage() {
         Bar
       </Typography>
 
-      {!barData?.user?.bar ? (
+      {!barData?.user?.volt ? (
         <Box mb={4}>
           <Typography>Address isn't in the bar...</Typography>
         </Box>
@@ -268,8 +267,8 @@ function UserPage() {
 
               <Grid item xs={12} sm={6} md={3}>
                 <KPI
-                  title="xJOE"
-                  value={Number(xJoe.toFixed(2)).toLocaleString()}
+                  title="xVolt"
+                  value={Number(xVolt.toFixed(2)).toLocaleString()}
                 />
               </Grid>
 
@@ -315,21 +314,16 @@ function UserPage() {
                         <Avatar
                           className={classes.avatar}
                           imgProps={{ loading: "lazy" }}
-                          alt="JOE"
-                          src={`https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/logos/${toChecksumAddress(
-                            "0x6e84a6216eA6dACC71eE8E6b0a5B7322EEbC0fDd"
-                          )}/logo.png`}
+                          alt="VOLT"
+                          src="https://fuselogo.s3.eu-central-1.amazonaws.com/volt_icon.png"
                         />
                         <Link
-                          href={`/tokens/0x6e84a6216ea6dacc71ee8e6b0a5b7322eebc0fdd`}
+                          href={`/tokens/${JOE_TOKEN_ADDDRESS}`}
                           variant="body2"
                           noWrap
                         >
-                          JOE
+                          Volt
                         </Link>
-                        {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
-                        xJOE
-                      </Link> */}
                       </Box>
                     </TableCell>
                     <TableCell align="right">
@@ -477,8 +471,8 @@ function UserPage() {
                         <TableCell component="th" scope="row">
                           <Box display="flex" alignItems="center">
                             <PairIcon
-                              base={pair.token0.id}
-                              quote={pair.token1.id}
+                              base={pair.token0.symbol}
+                              quote={pair.token1.symbol}
                             />
                             <Link
                               href={`/pools/${user.pool.id}`}
