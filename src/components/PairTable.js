@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Paper } from "@material-ui/core";
 import Link from "./Link";
 import { PAIR_DENY } from "app/core/constants";
 import PairIcon from "./PairIcon";
@@ -52,10 +52,9 @@ export default function PairTable({ pairs, title, ...rest }) {
     });
 
   return (
-    <div className={classes.root}>
+    <Paper variant="outlined" className={classes.root}>
       <SortableTable
         orderBy="reserveUSD"
-        title={title}
         {...rest}
         columns={[
           {
@@ -110,6 +109,6 @@ export default function PairTable({ pairs, title, ...rest }) {
         ]}
         rows={rows}
       />
-    </div>
+    </Paper>
   );
 }

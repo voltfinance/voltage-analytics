@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Paper, Typography } from "@material-ui/core";
 import { Sparklines, SparklinesLine } from "react-sparklines";
 import {
   avaxPriceQuery,
@@ -71,9 +71,8 @@ export default function TokenTable({ tokens, title }) {
     });
 
   return (
-    <div className={classes.root}>
+    <Paper variant="outlined" className={classes.root}>
       <SortableTable
-        title={title}
         orderBy="liquidityUSD"
         columns={[
           {
@@ -153,6 +152,6 @@ export default function TokenTable({ tokens, title }) {
         ]}
         rows={rows}
       />
-    </div>
+    </Paper>
   );
 }

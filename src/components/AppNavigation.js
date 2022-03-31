@@ -88,6 +88,28 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
     },
   },
+  dialogContent: {
+    text: "white",
+  },
+  dialogField: {
+    '& label.Mui-focused': {
+      color: theme.palette.text.primary,
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: theme.palette.text.primary,
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'red',
+      },
+      '&:hover fieldset': {
+        borderColor: 'yellow',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: theme.palette.text.primary,
+      },
+    },
+  },
 }));
 
 export default function AppNavigation() {
@@ -271,7 +293,7 @@ export default function AppNavigation() {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Portfolio</DialogTitle>
-        <DialogContent>
+        <DialogContent className={classes.dialogContent}>
           <DialogContentText>
             Enter an address and click load.
           </DialogContentText>
@@ -281,6 +303,8 @@ export default function AppNavigation() {
             id="address"
             label="Address"
             type="text"
+            color="textPrimary"
+            className={classes.dialogField}
             onChange={(event) => {
               setAddress(event.target.value);
             }}
@@ -288,7 +312,7 @@ export default function AppNavigation() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color="textPrimary">
             Cancel
           </Button>
           <Button
@@ -297,7 +321,7 @@ export default function AppNavigation() {
               router.push("/users/" + address);
               handleClose();
             }}
-            color="primary"
+            color="textPrimary"
           >
             Load
           </Button>

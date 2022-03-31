@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import React from "react";
+import React, { useMemo } from "react";
 import SortableTableHead from "./SortableTableHead";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  title: {
+    padding: theme.spacing(2),
+  }
 }));
 
 function descendingComparator(a, b, orderBy) {
@@ -86,6 +89,7 @@ export default function SortableTable({
 
   const [order, setOrder] = React.useState(props.order || "desc");
   const [orderBy, setOrderBy] = React.useState(props.orderBy);
+  const [filter, setFilter] = React.useState()
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(props.rowsPerPage || 10);
 
@@ -94,6 +98,10 @@ export default function SortableTable({
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
+  const handleRequestFilter = (type) => {
+    setFilter(type);
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -107,10 +115,13 @@ export default function SortableTable({
   // const emptyRows =
   //   rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const filteredRows = useMemo(() => {
+    return filter ? rows.filter(rows => rows.__typename === filter) : rows;
+  }, [rows, filter]);
   return (
     <div className={classes.root}>
       {title && (
-        <Typography variant="h6" component="h2" gutterBottom>
+        <Typography variant="h6" component="h2" className={classes.title}>
           {title}
         </Typography>
       )}
@@ -122,10 +133,11 @@ export default function SortableTable({
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
+            onRequestFilter={handleRequestFilter}
             rowCount={rows.length}
           />
           <TableBody>
-            {stableSort(rows, getComparator(order, orderBy))
+            {stableSort(filteredRows, getComparator(order, orderBy))
               // .filter((row) => {
               //   return !TOKEN_DENY.includes(row.id);
               // })
