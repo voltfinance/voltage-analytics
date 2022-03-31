@@ -122,11 +122,9 @@ export default function SortableTable({
   const sortedRows = useMemo(() => {
     return stableSort(filteredRows, getComparator(order, orderBy))
   }, [filteredRows, order, orderBy]);
-  console.log(sortedRows.length);
 
   const start = page * rowsPerPage;
   const end = page * rowsPerPage + rowsPerPage;
-  console.log(start, end);
   return (
     <div className={classes.root}>
       {title && (
