@@ -409,7 +409,7 @@ export const tokensTimeTravelQuery = gql`
   ${tokenFieldsQuery}
 `;
 
-export const allTransactionsQuery = gql`
+export const ALL_TRANSACTIONS = gql`
   query allTransactionsQuery($first: Int! = 200) {
     swaps(
       first: $first

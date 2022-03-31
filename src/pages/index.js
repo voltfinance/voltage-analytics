@@ -6,7 +6,7 @@ import React, { useMemo, useState } from "react";
 import { transparentize } from "polished";
 
 import {
-  allTransactionsQuery,
+  ALL_TRANSACTIONS,
   dayDatasQuery,
   getApollo,
   getDayData,
@@ -52,7 +52,9 @@ function IndexPage() {
     },
   });
 
-  const { data: { swaps, mints, burns } } = useQuery(allTransactionsQuery);
+  const { data: { swaps, mints, burns } } = useQuery(ALL_TRANSACTIONS, {
+    pollInterval: 5000,
+  });
 
   const {
     data: { tokenDayDatas: dayDatas },

@@ -8,7 +8,7 @@ import {
   tokensTimeTravelQuery,
   userQuery,
   userIdsQuery,
-  allTransactionsQuery
+  ALL_TRANSACTIONS
 } from "../queries/exchange";
 import {
   getOneDayBlock,
@@ -208,17 +208,20 @@ export async function getTokens(client = getApollo()) {
 }
 
 export async function getTransactions(client = getApollo()) {
-  const { data: { transactions } } = await client.query({ query: allTransactionsQuery });
-
+  const { data: transactions } = await client.query({ query: ALL_TRANSACTIONS });
+  const { swaps, mints, burns } = transactions;
+  
   await client.cache.writeQuery({
-    query: allTransactionsQuery,
+    query: ALL_TRANSACTIONS,
     data: {
-      transactions
+      swaps,
+      mints,
+      burns,
     }
   });
 
   return await client.cache.readQuery({
-    query: allTransactionsQuery,
+    query: ALL_TRANSACTIONS,
   });
 }
 

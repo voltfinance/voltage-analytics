@@ -118,6 +118,15 @@ export default function SortableTable({
   const filteredRows = useMemo(() => {
     return filter ? rows.filter(rows => rows.__typename === filter) : rows;
   }, [rows, filter]);
+
+  const sortedRows = useMemo(() => {
+    return stableSort(filteredRows, getComparator(order, orderBy))
+  }, [filteredRows, order, orderBy]);
+  console.log(sortedRows.length);
+
+  const start = page * rowsPerPage;
+  const end = page * rowsPerPage + rowsPerPage;
+  console.log(start, end);
   return (
     <div className={classes.root}>
       {title && (
@@ -134,14 +143,14 @@ export default function SortableTable({
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
             onRequestFilter={handleRequestFilter}
-            rowCount={rows.length}
+            rowCount={filteredRows.length}
           />
           <TableBody>
-            {stableSort(filteredRows, getComparator(order, orderBy))
+            {sortedRows
               // .filter((row) => {
               //   return !TOKEN_DENY.includes(row.id);
               // })
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .slice(start, end)
               .map((row, index) => {
                 return (
                   <TableRow key={row.id}>
@@ -175,7 +184,7 @@ export default function SortableTable({
       <TablePagination
         rowsPerPageOptions={[5, 10, 25, , { label: "All", value: -1 }]}
         component="div"
-        count={rows.length}
+        count={filteredRows.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
