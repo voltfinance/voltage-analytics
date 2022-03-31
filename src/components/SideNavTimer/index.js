@@ -83,13 +83,13 @@ function useSessionStart() {
   useEffect(() => {
     let interval = null
     interval = setInterval(() => {
-      setSeconds(Date.now() - sessionStart ?? Date.now())
-    }, 1000)
+      setSeconds(seconds => seconds === 5 ? 0 : seconds + 1);
+    }, 1000);
 
     return () => clearInterval(interval)
-  }, [seconds, sessionStart])
+  }, []);
 
-  return parseInt(seconds / 1000)
+  return seconds;
 }
 
 export default SideNavTimer
