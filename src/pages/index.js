@@ -1,11 +1,12 @@
 import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import { useQuery } from "@apollo/client";
-import { Box, Grid, Paper } from "@material-ui/core";
+import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import React, { useMemo, useState } from "react";
 import { transparentize } from "polished";
 
 import {
+  allTransactionsQuery,
   dayDatasQuery,
   getApollo,
   getDayData,
@@ -19,6 +20,7 @@ import {
   poolsQuery,
   tokensQuery,
   useInterval,
+  getTransactions,
 } from "app/core";
 import {
   AppShell,
@@ -28,6 +30,7 @@ import {
   PoolTable,
   Search,
   TokenTable,
+  Transactions,
 } from "app/components";
 
 import { TYPE, ThemedBackground } from "../theme";
@@ -49,6 +52,8 @@ function IndexPage() {
     },
   });
 
+  const { data: { swaps, mints, burns } } = useQuery(allTransactionsQuery);
+
   const {
     data: { tokenDayDatas: dayDatas },
   } = useQuery(dayDatasQuery);
@@ -59,6 +64,7 @@ function IndexPage() {
         getPairs,
         getPools,
         getTokens,
+        getTransactions,
         getAvaxPrice,
         getDayData,
         getOneDayAvaxPrice,
@@ -160,8 +166,10 @@ function IndexPage() {
         </Grid>
 
         <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Top Pools
+          </Typography>
           <PoolTable
-            title="Joe Reward Pools"
             pools={pools}
             orderBy="tvl"
             order="desc"
@@ -170,11 +178,24 @@ function IndexPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <PairTable title="Top Joe Liquidity Pairs" pairs={pairs} />
+          <Typography variant="h6" component="h2" gutterBottom>
+            Top Pairs
+          </Typography>
+          <PairTable pairs={pairs} />
         </Grid>
 
         <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Top Tokens
+          </Typography>
           <TokenTable title="Top Tokens" tokens={tokens} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Transactions
+          </Typography>
+          <Transactions transactions={{ swaps, mints, burns }} txCount={swaps.length + mints.length + burns.length} />
         </Grid>
       </Grid>
     </AppShell>
@@ -197,6 +218,8 @@ export async function getStaticProps() {
   await getPairs(client);
 
   await getPools(client);
+
+  await getTransactions(client);
 
   return {
     props: {

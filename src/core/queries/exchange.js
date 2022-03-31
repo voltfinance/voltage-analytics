@@ -409,6 +409,76 @@ export const tokensTimeTravelQuery = gql`
   ${tokenFieldsQuery}
 `;
 
+export const allTransactionsQuery = gql`
+  query allTransactionsQuery($first: Int! = 200) {
+    swaps(
+      first: $first
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0In
+      amount0Out
+      amount1In
+      amount1Out
+      amountUSD
+      to
+    }
+    mints(
+      first: $first
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0
+      amount1
+      amountUSD
+      to
+    }
+    burns(
+      first: $first
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0
+      amount1
+      amountUSD
+      to
+    }
+  }
+`
+
 // Transactions...
 export const transactionsQuery = gql`
   query transactionsQuery($pairAddresses: [Bytes]!) {

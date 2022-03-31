@@ -3,7 +3,7 @@ import { currencyFormatter, decimalFormatter } from "app/core";
 import Link from "./Link";
 import React from "react";
 import SortableTable from "./SortableTable";
-import { Typography } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 import formatDistance from "date-fns/formatDistance";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -40,9 +40,8 @@ export default function Transactions({ transactions, txCount }) {
   const now = new Date();
 
   return (
-    <div className={classes.root}>
+    <Paper variant="outlined" className={classes.root}>
       <SortableTable
-        title="Transactions"
         orderBy="timestamp"
         columns={[
           {
@@ -122,6 +121,6 @@ export default function Transactions({ transactions, txCount }) {
         ]}
         rows={rows}
       />
-    </div>
+    </Paper>
   );
 }
