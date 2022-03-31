@@ -56,6 +56,7 @@ function IndexPage() {
     pollInterval: 5000,
     fetchPolicy: "network-only"
   });
+  const { swaps, mints, burns } = transactions;
 
   const {
     data: { tokenDayDatas: dayDatas },
