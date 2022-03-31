@@ -17,26 +17,19 @@ import {
   useTheme,
 } from "@material-ui/core";
 import {
-  currencyFormatter,
-  avaxPriceQuery,
   getApollo,
   getAvaxPrice,
   getPool,
   getPoolHistories,
   getPoolIds,
-  getPools,
-  getJoeToken,
   poolHistoryQuery,
   poolQuery,
-  tokenQuery,
 } from "app/core";
 
 import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
-import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { JOE_TOKEN_ADDDRESS } from "../../config/index.ts";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -420,7 +413,6 @@ function PoolPage() {
 export async function getStaticProps({ params: { id } }) {
   const client = getApollo();
   await getAvaxPrice(client);
-  await getJoeToken(client);
   await getPool(id, client);
   await getPoolHistories(id, client);
   return {

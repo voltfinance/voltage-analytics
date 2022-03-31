@@ -1,25 +1,28 @@
+import { Box, Grid, Paper, Typography } from "@material-ui/core";
+import Head from "next/head";
+import { ParentSize } from "@visx/responsive";
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
+
 import {
   AppShell,
   AreaChart,
   BarChart,
   BasicTable,
-  Chart,
-  IntoTheBlock,
   KPI,
   Link,
   PageHeader,
   PairIcon,
-  Percent,
   TokenIcon,
   Transactions,
 } from "app/components";
-import { Avatar, Box, Chip, Grid, Paper, Typography } from "@material-ui/core";
 import {
   avaxPriceQuery,
   formatCurrency,
   formatDecimal,
   getApollo,
-  getAvaxPrice,
   getPair,
   getPairDayDatas,
   pairDayDatasQuery,
@@ -29,13 +32,6 @@ import {
   useInterval,
 } from "app/core";
 
-import Head from "next/head";
-import { ParentSize } from "@visx/responsive";
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { toChecksumAddress } from "web3-utils";
-import { useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
 
 /*
  * TODO: disabled IntoTheBlock window widget

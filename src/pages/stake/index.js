@@ -1,5 +1,10 @@
-import { AppShell, Curves, KPI, RemittanceTable } from "app/components";
+import React from "react";
 import { Grid, Paper } from "@material-ui/core";
+import { useQuery } from "@apollo/client";
+import { JOE_TOKEN_ADDDRESS } from "config";
+import Head from "next/head";
+import { ParentSize } from "@visx/responsive";
+
 import {
   barQuery,
   barHistoriesQuery,
@@ -14,25 +19,9 @@ import {
   getJoeToken,
   tokenQuery,
   useInterval,
-  stableJoeQuery,
-  getStableJoe,
-  getMoneyMaker,
-  moneyMakerQuery,
-  getMoneyMakerDayDatas,
-  moneyMakerDayDatasQuery,
-  getStableJoeDayDatas,
-  stableJoeDayDatasQuery,
-  getRemittances,
-  remittancesQuery,
   getBar,
 } from "app/core";
-
-import Head from "next/head";
-import { ParentSize } from "@visx/responsive";
-import React from "react";
-import { useQuery } from "@apollo/client";
-import { JOE_TOKEN_ADDDRESS } from "config";
-import dayjs from "dayjs";
+import { AppShell, Curves, KPI } from "app/components";
 
 const FEE_RATE = 0.0005; // 0.05%
 

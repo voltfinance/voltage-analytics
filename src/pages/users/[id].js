@@ -10,7 +10,6 @@ import {
   Avatar,
   Box,
   Grid,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -22,7 +21,6 @@ import {
 } from "@material-ui/core";
 import {
   barUserQuery,
-  blockQuery,
   currencyFormatter,
   decimalFormatter,
   avaxPriceQuery,
@@ -34,24 +32,13 @@ import {
   getPairs,
   getPoolUser,
   getJoeToken,
-  getToken,
-  getUser,
-  getUsers,
   latestBlockQuery,
-  lockupUserQuery,
-  pairSubsetQuery,
   pairsQuery,
   poolUserQuery,
   tokenQuery,
-  useInterval,
-  userIdsQuery,
-  userQuery,
 } from "app/core";
-import { getUnixTime, startOfMinute, startOfSecond } from "date-fns";
 
-import { AvatarGroup } from "@material-ui/lab";
 import Head from "next/head";
-import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { JOE_TOKEN_ADDDRESS } from "config";
