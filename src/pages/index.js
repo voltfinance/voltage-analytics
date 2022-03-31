@@ -52,8 +52,9 @@ function IndexPage() {
     },
   });
 
-  const { data: { swaps, mints, burns } } = useQuery(ALL_TRANSACTIONS, {
+  const { data: transactions = {} } = useQuery(ALL_TRANSACTIONS, {
     pollInterval: 5000,
+    fetchPolicy: "network-only"
   });
 
   const {
@@ -197,7 +198,7 @@ function IndexPage() {
           <Typography variant="h6" component="h2" gutterBottom>
             Transactions
           </Typography>
-          <Transactions transactions={{ swaps, mints, burns }} txCount={swaps.length + mints.length + burns.length} />
+          {Object.keys(transactions).length && <Transactions transactions={transactions} txCount={swaps.length + mints.length + burns.length} />}
         </Grid>
       </Grid>
     </AppShell>

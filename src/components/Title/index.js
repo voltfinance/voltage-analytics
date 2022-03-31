@@ -13,6 +13,9 @@ const useStyles = makeStyles(() => ({
       cursor: "pointer",
     },
   },
+  row: {
+    width: "fit-content",
+  }
 }));
 
 export default function Title() {
@@ -22,9 +25,9 @@ export default function Title() {
   return (
     <div className={classes.root} onClick={() => push('/')}>
       <Box display="flex" alignItems="center">
-        <RowFixed>
+        <div className={classes.row}>
           <img width="125px" style={{ marginLeft: '8px', paddingTop: '8px' }} src="/voltage-wordmark.svg" alt={process.env.NEXT_PUBLIC_APP_NAME || "logo"} />
-        </RowFixed>
+        </div>
       </Box>
     </div>
   )

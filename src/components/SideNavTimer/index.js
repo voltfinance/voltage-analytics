@@ -66,7 +66,7 @@ function SideNavTimer() {
     !below1180 && (
       <div className={classes.polling}>
         <div className={classes.dot} />
-        <Link href="/" color="white">
+        <Link href="/" color="inherit">
           <TYPE.small style={{ color: "white"}}>
             Updated {!!seconds ? seconds + 's' : '-'} ago <br />
           </TYPE.small>

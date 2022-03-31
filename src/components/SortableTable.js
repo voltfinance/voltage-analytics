@@ -91,7 +91,7 @@ export default function SortableTable({
   const [orderBy, setOrderBy] = React.useState(props.orderBy);
   const [filter, setFilter] = React.useState()
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(props.rowsPerPage || 10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -115,16 +115,9 @@ export default function SortableTable({
   // const emptyRows =
   //   rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-  const filteredRows = useMemo(() => {
-    return filter ? rows.filter(rows => rows.__typename === filter) : rows;
-  }, [rows, filter]);
+  const filteredRows = filter ? rows.filter(rows => rows.__typename === filter) : rows;
+  const sortedRows = stableSort(filteredRows, getComparator(order, orderBy));
 
-  const sortedRows = useMemo(() => {
-    return stableSort(filteredRows, getComparator(order, orderBy))
-  }, [filteredRows, order, orderBy]);
-
-  const start = page * rowsPerPage;
-  const end = page * rowsPerPage + rowsPerPage;
   return (
     <div className={classes.root}>
       {title && (
@@ -141,14 +134,14 @@ export default function SortableTable({
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
             onRequestFilter={handleRequestFilter}
-            rowCount={filteredRows.length}
+            rowCount={sortedRows.length}
           />
           <TableBody>
             {sortedRows
               // .filter((row) => {
               //   return !TOKEN_DENY.includes(row.id);
               // })
-              .slice(start, end)
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 return (
                   <TableRow key={row.id}>
@@ -182,7 +175,7 @@ export default function SortableTable({
       <TablePagination
         rowsPerPageOptions={[5, 10, 25, , { label: "All", value: -1 }]}
         component="div"
-        count={filteredRows.length}
+        count={sortedRows.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}

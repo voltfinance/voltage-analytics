@@ -1,10 +1,23 @@
 import React, { forwardRef } from "react";
 
 import MuiLink from "@material-ui/core/Link";
+import { makeStyles } from "@material-ui/core";
 import NextLink from "next/link";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+
+const useStyles = makeStyles(() => ({
+  root: {
+    textDecoration: "none",
+    color: "inherit",
+    "&:hover": {
+      cursor: "pointer",
+      textDecoration: "none",
+      underline: "none",
+    },
+  },
+}));
 
 const NextComposed = forwardRef(function NextComposed(props, ref) {
   const { as, href, ...other } = props;
@@ -57,14 +70,13 @@ function Link(props) {
   );
 }
 
-export const BasicLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  &:hover {
-    cursor: pointer;
-    text-decoration: none;
-    underline: none;
-  }
-`;
+export const BasicLink = ({ className, children, ...rest }) => {
+  const classes = useStyles();
+  return (
+    <Link className={clsx(className, classes.root)} {...rest}>
+      {children}
+    </Link>
+  );
+};
 
 export default forwardRef((props, ref) => <Link {...props} innerRef={ref} />);
