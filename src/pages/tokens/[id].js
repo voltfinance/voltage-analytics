@@ -147,23 +147,23 @@ function TokenPage() {
     return result.sort((a, b) => b > a);
   }, [tokenDayDatas]);
 
-  const volumeDayData = useMemo(() => {
-    let volumeByDay = {};
-    for (const day of tokenDayDatas) {
-      if (volumeByDay.hasOwnProperty(day.date)) {
-        volumeByDay[day.date] =
-          volumeByDay[day.date] + parseFloat(day.dailyVolumeUSD);
-      } else {
-        volumeByDay[day.date] = parseFloat(day.dailyVolumeUSD);
-      }
-    }
+  // const volumeDayData = useMemo(() => {
+  //   let volumeByDay = {};
+  //   for (const day of tokenDayDatas) {
+  //     if (volumeByDay.hasOwnProperty(day.date)) {
+  //       volumeByDay[day.date] =
+  //         volumeByDay[day.date] + parseFloat(day.dailyVolumeUSD);
+  //     } else {
+  //       volumeByDay[day.date] = parseFloat(day.dailyVolumeUSD);
+  //     }
+  //   }
 
-    let result = [];
-    for (const date in volumeByDay) {
-      result.push({ date: parseInt(date), value: volumeByDay[date] });
-    }
-    return result.sort((a, b) => b > a);
-  }, [tokenDayDatas]);
+  //   let result = [];
+  //   for (const date in volumeByDay) {
+  //     result.push({ date: parseInt(date), value: volumeByDay[date] });
+  //   }
+  //   return result.sort((a, b) => b > a);
+  // }, [tokenDayDatas]);
 
   const totalLiquidityUSD =
     parseFloat(token?.totalLiquidity) *
@@ -211,13 +211,13 @@ function TokenPage() {
         >
           <Grid item xs={12} sm="auto" className={classes.title}>
             <Box display="flex" alignItems="center">
-              <TokenIcon id={token.symbol} />
-              <Typography variant="h5" component="h1" noWrap>
+              <TokenIcon id={token.symbol} width="40px" height="40px" />
+              <Typography variant="h4" component="h1" noWrap>
                 {token.name} ({token.symbol}){" "}
               </Typography>
             </Box>
-            <Box display="flex" alignItems="center" className={classes.price}>
-              <Typography variant="h6" component="div">
+            <Box display="flex" alignItems="flex-end" className={classes.price}>
+              <Typography variant="h5" component="div">
                 {currencyFormatter.format(price || 0)}
               </Typography>
               <Percent percent={priceChange} ml={1} />
@@ -322,7 +322,7 @@ function TokenPage() {
       </Grid>
       <Box my={2}>
         <Typography variant="h6" component="h2" gutterBottom>
-          Pairs
+          Top Pairs
         </Typography>
         <PairTable title="Pairs" pairs={pairs} />
       </Box>

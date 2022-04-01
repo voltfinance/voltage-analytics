@@ -13,13 +13,13 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     // background: "transparent",
     color: theme.palette.text.secondary,
-    width: "24px",
-    height: "24px",
+    width: (props) => props.width || "24px",
+    height: (props) => props.height || "24px",
   },
 }));
 
-export default function TokenIcon({ id, ...rest }) {
-  const classes = useStyles();
+export default function TokenIcon({ id, width, height, ...rest }) {
+  const classes = useStyles({ width, height });
   const src = useMemo(
     () => voltTokenListLogos[id],
     [id]
