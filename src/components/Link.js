@@ -1,11 +1,10 @@
 import React, { forwardRef } from "react";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 
 import MuiLink from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core";
-import NextLink from "next/link";
 import clsx from "clsx";
-import { useRouter } from "next/router";
-import styled from "styled-components";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,10 +19,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NextComposed = forwardRef(function NextComposed(props, ref) {
-  const { as, href, ...other } = props;
+  const { as, href = "", ...other } = props;
 
   return (
-    <NextLink href={href} as={as}>
+    <NextLink href={href} as={as} passHref>
       <a ref={ref} {...other} />
     </NextLink>
   );
@@ -41,10 +40,9 @@ function Link(props) {
     ...other
   } = props;
 
-  const router = useRouter();
-  const pathname = typeof href === "string" ? href : href.pathname;
+  const { pathname } = useRouter();
   const className = clsx(classNameProps, {
-    [activeClassName]: router.pathname === pathname && activeClassName,
+    [activeClassName]: pathname === href && activeClassName,
   });
 
   if (naked) {

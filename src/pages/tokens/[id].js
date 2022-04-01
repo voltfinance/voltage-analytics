@@ -30,6 +30,9 @@ import {
   transactionsQuery,
   useInterval,
 } from "app/core";
+import { AutoRow } from "components/Row";
+import NextLink from "components/Link";
+import { TYPE } from "app/theme";
 
 import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
@@ -50,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
       },
     },
+  },
+  backgroundColor: {
+    color: "rgb(120, 134, 134)",
   },
   links: {
     "& > a:first-of-type": {
@@ -187,8 +193,8 @@ function TokenPage() {
   const volumeYesterday =
     token?.oneDay?.tradeVolumeUSD - token?.twoDay?.tradeVolumeUSD;
 
-  const txCount = token?.dailyTxns - token?.oneDay?.dailyTxns;
-  const txCountYesterday = token?.oneDay?.dailyTxns - token?.twoDay?.dailyTxns;
+  const txCount = token?.txCount - token?.oneDay?.txCount;
+  const txCountYesterday = token?.oneDay?.txCount - token?.twoDay?.txCount;
 
   const fees = volume * FEE_RATE;
   const feesYesterday = volumeYesterday * FEE_RATE;
@@ -203,6 +209,21 @@ function TokenPage() {
         </title>
       </Head>
       <PageHeader>
+        <AutoRow align="flex-end" pb={3} style={{ width: 'fit-content' }}>
+          <TYPE.body>
+            <NextLink href="/tokens">{'Tokens '}</NextLink>→ {token.symbol}
+            {'  '}
+          </TYPE.body>
+          <Link
+            style={{ width: 'fit-content', color: "rgb(120, 134, 134)" }}
+            external
+            href={'https://explorer.fuse.io/address/' + id}
+          >
+            <Typography style={{ marginLeft: '.15rem' }} fontSize={'14px'} fontWeight={400}>
+              ({token.id.slice(0, 8) + '...' + token.id.slice(36, 42)})
+            </Typography>
+          </Link>
+        </AutoRow>
         <Grid
           container
           direction="row"
@@ -210,7 +231,7 @@ function TokenPage() {
           alignItems="center"
         >
           <Grid item xs={12} sm="auto" className={classes.title}>
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" mt={2}>
               <TokenIcon id={token.symbol} width="40px" height="40px" />
               <Typography variant="h4" component="h1" noWrap>
                 {token.name} ({token.symbol}){" "}
@@ -248,7 +269,7 @@ function TokenPage() {
             <Grid item xs={12}>
               <KPI
                 className={classes.kpi}
-                title="Liquidity (24h)"
+                title="Total Liquidity"
                 value={currencyFormatter.format(totalLiquidityUSD || 0)}
                 difference={
                   ((totalLiquidityUSD - totalLiquidityUSDYesterday) /
@@ -260,7 +281,7 @@ function TokenPage() {
             <Grid item xs={12}>
               <KPI
                 className={classes.kpi}
-                title="Volume (24h)"
+                title="Volume (24hrs)"
                 value={currencyFormatter.format(volume || 0)}
                 difference={
                   ((volume - volumeYesterday) / volumeYesterday) * 100
@@ -270,9 +291,9 @@ function TokenPage() {
             <Grid item xs={12}>
               <KPI
                 className={classes.kpi}
-                title="Fees (24h)"
-                value={currencyFormatter.format(fees)}
-                difference={((fees - feesYesterday) / feesYesterday) * 100}
+                title="Transactions (24hrs)"
+                value={txCount}
+                difference={((txCount - txCountYesterday) / txCountYesterday) * 100}
               />
             </Grid>
           </Grid>
