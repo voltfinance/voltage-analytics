@@ -68,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
       margin: 0,
     },
   },
+  kpi: {
+    height: "95px"
+  }
 }));
 
 function TokenPage() {
@@ -244,6 +247,7 @@ function TokenPage() {
           <Grid container alignItems="stretch" spacing={1}>
             <Grid item xs={12}>
               <KPI
+                className={classes.kpi}
                 title="Liquidity (24h)"
                 value={currencyFormatter.format(totalLiquidityUSD || 0)}
                 difference={
@@ -255,6 +259,7 @@ function TokenPage() {
             </Grid>
             <Grid item xs={12}>
               <KPI
+                className={classes.kpi}
                 title="Volume (24h)"
                 value={currencyFormatter.format(volume || 0)}
                 difference={
@@ -264,6 +269,7 @@ function TokenPage() {
             </Grid>
             <Grid item xs={12}>
               <KPI
+                className={classes.kpi}
                 title="Fees (24h)"
                 value={currencyFormatter.format(fees)}
                 difference={((fees - feesYesterday) / feesYesterday) * 100}
@@ -314,6 +320,18 @@ function TokenPage() {
 
         
       </Grid>
+      <Box my={2}>
+        <Typography variant="h6" component="h2" gutterBottom>
+          Pairs
+        </Typography>
+        <PairTable title="Pairs" pairs={pairs} />
+      </Box>
+      <Box my={2}>
+        <Typography variant="h6" component="h2" gutterBottom>
+          Transactions
+        </Typography>
+        <Transactions transactions={transactions} txCount={token.dailyTxns} />
+      </Box>
 
       <Box my={4}>
         <BasicTable
@@ -334,16 +352,6 @@ function TokenPage() {
           ]}
         />
       </Box>
-      <Box mb={2}>
-        <Typography variant="h6" component="h2" gutterBottom>
-          Pairs
-        </Typography>
-        <PairTable title="Pairs" pairs={pairs} />
-      </Box>
-      <Typography variant="h6" component="h2" gutterBottom>
-        Transactions
-      </Typography>
-      <Transactions transactions={transactions} txCount={token.dailyTxns} />
     </AppShell>
   );
 }
