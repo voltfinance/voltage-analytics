@@ -193,8 +193,8 @@ function TokenPage() {
   const volumeYesterday =
     token?.oneDay?.tradeVolumeUSD - token?.twoDay?.tradeVolumeUSD;
 
-  const txCount = token?.txCount - token?.oneDay?.txCount;
-  const txCountYesterday = token?.oneDay?.txCount - token?.twoDay?.txCount;
+  const txCount = parseInt(token?.txCount) - parseInt(token?.oneDay?.txCount);
+  const txCountYesterday = parseInt(token?.oneDay?.txCount) - parseInt(token?.twoDay?.txCount);
 
   const fees = volume * FEE_RATE;
   const feesYesterday = volumeYesterday * FEE_RATE;
