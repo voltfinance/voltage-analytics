@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   AppShell,
   AreaChart,
@@ -125,20 +126,41 @@ function TokenPage() {
     pollInterval: 1800000,
   });
 
-  const chartDatas = tokenDayDatas.reduce(
-    (previousValue, currentValue) => {
-      previousValue["liquidity"].unshift({
-        date: currentValue.date,
-        value: parseFloat(currentValue.totalLiquidityUSD),
-      });
-      previousValue["volume"].unshift({
-        date: currentValue.date,
-        value: parseFloat(currentValue.dailyVolumeUSD),
-      });
-      return previousValue;
-    },
-    { liquidity: [], volume: [] }
-  );
+  const liquidityDayData = useMemo(() => {
+    let liquidityByDay = {};
+    for (const day of tokenDayDatas) {
+      const value = parseFloat(day.totalLiquidityUSD);
+      if (liquidityByDay.hasOwnProperty(day.date)) {
+        liquidityByDay[day.date] = liquidityByDay[day.date] + value;
+      } else {
+        liquidityByDay[day.date] = value;
+      }
+    }
+
+    let result = [];
+    for (const date in liquidityByDay) {
+      result.push({ date: parseInt(date), value: liquidityByDay[date] });
+    }
+    return result.sort((a, b) => b > a);
+  }, [tokenDayDatas]);
+
+  const volumeDayData = useMemo(() => {
+    let volumeByDay = {};
+    for (const day of tokenDayDatas) {
+      if (volumeByDay.hasOwnProperty(day.date)) {
+        volumeByDay[day.date] =
+          volumeByDay[day.date] + parseFloat(day.dailyVolumeUSD);
+      } else {
+        volumeByDay[day.date] = parseFloat(day.dailyVolumeUSD);
+      }
+    }
+
+    let result = [];
+    for (const date in volumeByDay) {
+      result.push({ date: parseInt(date), value: volumeByDay[date] });
+    }
+    return result.sort((a, b) => b > a);
+  }, [tokenDayDatas]);
 
   const totalLiquidityUSD =
     parseFloat(token?.totalLiquidity) *
@@ -150,8 +172,7 @@ function TokenPage() {
     parseFloat(token.oneDay?.derivedETH) *
     parseFloat(oneDayAvaxPriceData?.ethPrice);
 
-  const price =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+  const price = parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const priceYesterday =
     parseFloat(token.oneDay?.derivedETH) *
@@ -160,7 +181,8 @@ function TokenPage() {
   const priceChange = ((price - priceYesterday) / priceYesterday) * 100;
 
   const volume = token?.tradeVolumeUSD - token?.oneDay?.tradeVolumeUSD;
-  const volumeYesterday = token?.oneDay?.tradeVolumeUSD - token?.twoDay?.tradeVolumeUSD;
+  const volumeYesterday =
+    token?.oneDay?.tradeVolumeUSD - token?.twoDay?.tradeVolumeUSD;
 
   const txCount = token?.dailyTxns - token?.oneDay?.dailyTxns;
   const txCountYesterday = token?.oneDay?.dailyTxns - token?.twoDay?.dailyTxns;
@@ -172,7 +194,8 @@ function TokenPage() {
     <AppShell>
       <Head>
         <title>
-          {currencyFormatter.format(price || 0)} | {token.symbol} | {process.env.NEXT_PUBLIC_APP_NAME}
+          {currencyFormatter.format(price || 0)} | {token.symbol} |{" "}
+          {process.env.NEXT_PUBLIC_APP_NAME}
           Analytics
         </title>
       </Head>
@@ -216,8 +239,39 @@ function TokenPage() {
         </Grid>
       </PageHeader>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={12} md={6}>
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={12} md={4}>
+          <Grid container alignItems="stretch" spacing={1}>
+            <Grid item xs={12}>
+              <KPI
+                title="Liquidity (24h)"
+                value={currencyFormatter.format(totalLiquidityUSD || 0)}
+                difference={
+                  ((totalLiquidityUSD - totalLiquidityUSDYesterday) /
+                    totalLiquidityUSDYesterday) *
+                  100
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <KPI
+                title="Volume (24h)"
+                value={currencyFormatter.format(volume || 0)}
+                difference={
+                  ((volume - volumeYesterday) / volumeYesterday) * 100
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <KPI
+                title="Fees (24h)"
+                value={currencyFormatter.format(fees)}
+                difference={((fees - feesYesterday) / feesYesterday) * 100}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} sm={12} md={8}>
           <Paper
             variant="outlined"
             style={{ height: 300, position: "relative" }}
@@ -226,7 +280,7 @@ function TokenPage() {
               {({ width, height }) => (
                 <AreaChart
                   title="Liquidity"
-                  data={chartDatas.liquidity}
+                  data={liquidityDayData}
                   width={width}
                   height={height}
                   margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
@@ -237,7 +291,7 @@ function TokenPage() {
             </ParentSize>
           </Paper>
         </Grid>
-        <Grid item xs={12} sm={12} md={6}>
+        {/* <Grid item xs={12} sm={12} md={6}>
           <Paper
             variant="outlined"
             style={{ height: 300, position: "relative" }}
@@ -246,7 +300,7 @@ function TokenPage() {
               {({ width, height }) => (
                 <BarChart
                   title="Volume"
-                  data={chartDatas.volume}
+                  data={volumeDayData}
                   width={width}
                   height={height}
                   margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
@@ -256,33 +310,9 @@ function TokenPage() {
               )}
             </ParentSize>
           </Paper>
-        </Grid>
+        </Grid> */}
 
-        <Grid item xs={12} md={4}>
-          <KPI
-            title="Liquidity (24h)"
-            value={currencyFormatter.format(totalLiquidityUSD || 0)}
-            difference={
-              ((totalLiquidityUSD - totalLiquidityUSDYesterday) /
-                totalLiquidityUSDYesterday) *
-              100
-            }
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <KPI
-            title="Volume (24h)"
-            value={currencyFormatter.format(volume || 0)}
-            difference={((volume - volumeYesterday) / volumeYesterday) * 100}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <KPI
-            title="Fees (24h)"
-            value={currencyFormatter.format(fees)}
-            difference={((fees - feesYesterday) / feesYesterday) * 100}
-          />
-        </Grid>
+        
       </Grid>
 
       <Box my={4}>
@@ -298,17 +328,21 @@ function TokenPage() {
             token.name,
             token.symbol,
             token.id,
-            <Link
-              href={`https://explorer.fuse.io/address/${token.id}`}
-            >
+            <Link href={`https://explorer.fuse.io/address/${token.id}`}>
               View
             </Link>,
           ]}
         />
       </Box>
-
-      <PairTable title="Pairs" pairs={pairs} />
-
+      <Box mb={2}>
+        <Typography variant="h6" component="h2" gutterBottom>
+          Pairs
+        </Typography>
+        <PairTable title="Pairs" pairs={pairs} />
+      </Box>
+      <Typography variant="h6" component="h2" gutterBottom>
+        Transactions
+      </Typography>
       <Transactions transactions={transactions} txCount={token.dailyTxns} />
     </AppShell>
   );
@@ -363,8 +397,8 @@ export async function getStaticPaths() {
   const { data } = await apollo.query({
     query: tokenIdsQuery,
     variables: {
-      first: 100
-    }
+      first: 100,
+    },
   });
 
   const paths = data.tokens.map(({ id }) => ({

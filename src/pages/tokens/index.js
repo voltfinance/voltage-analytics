@@ -12,6 +12,9 @@ import Head from "next/head";
 import React from "react";
 import { useQuery } from "@apollo/client";
 
+import { TYPE } from "../../theme";
+import { Box } from "@material-ui/core";
+
 function TokensPage() {
   const {
     data: { tokens },
@@ -26,6 +29,9 @@ function TokensPage() {
       <Head>
         <title>Tokens | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
+      <Box pb={3}>
+        <TYPE.largeHeader>Tokens</TYPE.largeHeader>
+      </Box>
       <TokenTable title="Tokens" tokens={tokens} />
     </AppShell>
   );
