@@ -5,6 +5,9 @@ import Head from "next/head";
 import React from "react";
 import { useQuery } from "@apollo/client";
 
+import { TYPE } from "../../theme";
+import { Box } from "@material-ui/core";
+
 function PairsPage() {
   const {
     data: { pairs },
@@ -15,6 +18,9 @@ function PairsPage() {
       <Head>
         <title>Pairs | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
+      <Box pb={3}>
+        <TYPE.largeHeader>Top Pairs</TYPE.largeHeader>
+      </Box>
       <PairTable title="Pairs" pairs={pairs} />
     </AppShell>
   );

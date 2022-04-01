@@ -30,7 +30,7 @@ function TokensPage() {
         <title>Tokens | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
       <Box pb={3}>
-        <TYPE.largeHeader>Tokens</TYPE.largeHeader>
+        <TYPE.largeHeader>Top Tokens</TYPE.largeHeader>
       </Box>
       <TokenTable title="Tokens" tokens={tokens} />
     </AppShell>
