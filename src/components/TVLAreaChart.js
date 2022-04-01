@@ -1,4 +1,4 @@
-import { AreaClosed, Bar } from "@visx/shape";
+import { AreaClosed, Bar, Line } from "@visx/shape";
 import { AxisBottom, AxisLeft, AxisRight } from "@visx/axis";
 import { Grid, GridColumns, GridRows } from "@visx/grid";
 import {
@@ -12,7 +12,7 @@ import { scaleLinear, scaleTime } from "@visx/scale";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import ChartOverlay from "./ChartOverlay";
-import { GradientTealBlue } from "@visx/gradient";
+import { GradientLightgreenGreen, GradientTealBlue, LinearGradient } from "@visx/gradient";
 import { Group } from "@visx/group";
 import { bisector } from "d3-array";
 import { deepPurple } from "@material-ui/core/colors";
@@ -176,7 +176,7 @@ function TVLAreaChart({
         </>
       )}
       <svg width={width} height={height}>
-        <GradientTealBlue id="teal" fromOffset={0.5} />
+        <LinearGradient id="yellow" from="#f3fc1f" to="#f6f37c00" fromOffset={0.3} />
         <rect x={0} y={0} width={width} height={height} fill="transparent" />
 
         <Group top={margin.top} left={margin.left}>
@@ -185,7 +185,7 @@ function TVLAreaChart({
             x={(d) => xScale(getDate(d))}
             y={(d) => yScale(getValue(d))}
             yScale={yScale}
-            fill="url(#teal)"
+            fill="url(#yellow)"
           />
         </Group>
         <Bar

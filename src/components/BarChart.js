@@ -133,7 +133,7 @@ export default function BarChart({
       )}
 
       <svg ref={containerRef} width={width} height={height}>
-        <GradientTealBlue id="bar-gradient" />
+        <LinearGradient id="bar-gradient" from="#f3fc1f" to="#f3fc1f" />
         {/* <LinearGradient
           id="bar-gradient"
           from="#37ecba"

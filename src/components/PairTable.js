@@ -10,6 +10,10 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
+  icons: {
+    width: "24px",
+    height: "24px"
+  }
 }));
 
 export default function PairTable({ pairs, title, ...rest }) {

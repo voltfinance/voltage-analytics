@@ -20,6 +20,7 @@ export default function SortableTableHead({
   onRequestSort,
   onRequestFilter,
   columns,
+  cellProps,
 }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -34,6 +35,7 @@ export default function SortableTableHead({
             padding={column.disablePadding ? "none" : "default"}
             // variant="head"
             sortDirection={orderBy === column.key ? order : false}
+            {...cellProps}
           >
             {column.key === "__typename" ? (
               <>

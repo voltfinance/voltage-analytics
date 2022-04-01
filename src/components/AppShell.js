@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     // }),
     // marginLeft: -drawerWidth,
 
-    padding: theme.spacing(3, 0),
+    padding: theme.spacing(4, 0),
     flexGrow: 1,
 
     width: "100%",

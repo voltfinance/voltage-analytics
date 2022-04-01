@@ -13,6 +13,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     // background: "transparent",
     color: theme.palette.text.secondary,
+    width: "24px",
+    height: "24px",
   },
 }));
 

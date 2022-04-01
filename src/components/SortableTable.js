@@ -41,7 +41,10 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     padding: theme.spacing(2),
-  }
+  },
+  cell: {
+    borderBottom: "1px solid rgba(43, 43, 43, 0.435) !important"
+  },
 }));
 
 function descendingComparator(a, b, orderBy) {
@@ -135,6 +138,7 @@ export default function SortableTable({
             onRequestSort={handleRequestSort}
             onRequestFilter={handleRequestFilter}
             rowCount={sortedRows.length}
+            cellProps={{ className: classes.cell }}
           />
           <TableBody>
             {sortedRows
@@ -153,6 +157,7 @@ export default function SortableTable({
                             ? { component: "th", scope: "row" }
                             : {})}
                           align={column.align || "left"}
+                          className={classes.cell}
                           // variant="body"
                         >
                           {typeof column.render === "function"
