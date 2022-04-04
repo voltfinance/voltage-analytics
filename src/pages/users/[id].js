@@ -169,7 +169,7 @@ function UserPage() {
   const blockDifference =
     parseInt(blocksData?.blocks[0].number) - parseInt(barData?.user?.updatedAt);
 
-  const barRoiDailyJoe = (barRoiVolt / blockDifference) * 6440;
+  const barRoiDailyVolt = (barRoiVolt / blockDifference) * 6440;
 
   // POOLS
 
@@ -333,20 +333,20 @@ function UserPage() {
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barRoiDailyJoe * 365)} (
-                        {formatCurrency(barRoiDailyJoe * 365 * voltPrice)})
+                        {decimalFormatter.format(barRoiDailyVolt * 365)} (
+                        {formatCurrency(barRoiDailyVolt * 365 * voltPrice)})
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barRoiDailyJoe * 30)} (
-                        {formatCurrency(barRoiDailyJoe * 30 * voltPrice)})
+                        {decimalFormatter.format(barRoiDailyVolt * 30)} (
+                        {formatCurrency(barRoiDailyVolt * 30 * voltPrice)})
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barRoiDailyJoe)} (
-                        {formatCurrency(barRoiDailyJoe * voltPrice)})
+                        {decimalFormatter.format(barRoiDailyVolt)} (
+                        {formatCurrency(barRoiDailyVolt * voltPrice)})
                       </Typography>
                     </TableCell>
 
