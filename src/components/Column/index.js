@@ -19,12 +19,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Column = ({ children }) => {
-  const classes = useStyles();
-  return <div className={classes.column}>{children}</div>
-};
-export default Column;
-
 export const ColumnCenter = ({ children }) => {
   const classes = useStyles();
   return <div className={clsx(classes.column, "center")}>{children}</div>
@@ -35,3 +29,8 @@ export const AutoColumn = ({ gap, justify, className, children }) => {
   return <div className={clsx(className, classes.column, "auto")}>{children}</div>
 };
 
+const Column = ({ children }) => {
+  const classes = useStyles();
+  return <div className={classes.column}>{children}</div>
+};
+export default Column;
