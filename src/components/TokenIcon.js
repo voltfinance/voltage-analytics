@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 export default function TokenIcon({ id, width, height, ...rest }) {
   const classes = useStyles({ width, height });
   const src = useMemo(
-    () => voltTokenListLogos[id.toLowerCase()],
+    () => voltTokenListLogos[id],
     [id]
   );
   return <Avatar classes={{ root: classes.root }} src={src} {...rest} />;
