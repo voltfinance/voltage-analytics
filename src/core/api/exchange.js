@@ -17,7 +17,7 @@ import {
 } from "../api/blocks";
 
 import { getApollo } from "../apollo";
-import { FACTORY_ADDRESS, JOE_TOKEN_ADDDRESS } from "../../config/index.ts";
+import { VOLT_TOKEN_ADDRESS } from "../../config/index.ts";
 
 export async function getFactory(client = getApollo()) {
   const {
@@ -67,7 +67,7 @@ export async function getFactory(client = getApollo()) {
 }
 
 export async function getJoeToken(client = getApollo()) {
-  return await getToken(JOE_TOKEN_ADDDRESS, client);
+  return await getToken(VOLT_TOKEN_ADDRESS, client);
 }
 
 export async function getDayData(client = getApollo()) {

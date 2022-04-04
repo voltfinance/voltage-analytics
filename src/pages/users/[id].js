@@ -41,7 +41,7 @@ import {
 import Head from "next/head";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { JOE_TOKEN_ADDDRESS } from "config";
+import { VOLT_TOKEN_ADDRESS } from "config";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -95,7 +95,7 @@ function UserPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: JOE_TOKEN_ADDDRESS,
+      id: VOLT_TOKEN_ADDRESS,
     },
   });
 
@@ -305,7 +305,7 @@ function UserPage() {
                           src="https://fuselogo.s3.eu-central-1.amazonaws.com/volt_icon.png"
                         />
                         <Link
-                          href={`/tokens/${JOE_TOKEN_ADDDRESS}`}
+                          href={`/tokens/${VOLT_TOKEN_ADDRESS}`}
                           variant="body2"
                           noWrap
                         >

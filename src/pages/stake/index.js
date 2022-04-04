@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Paper } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
-import { JOE_TOKEN_ADDDRESS } from "config";
+import { VOLT_TOKEN_ADDRESS } from "config";
 import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 
@@ -50,7 +50,7 @@ function BarPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: JOE_TOKEN_ADDDRESS,
+      id: VOLT_TOKEN_ADDRESS,
     },
   });
 

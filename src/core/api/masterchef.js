@@ -16,7 +16,7 @@ import { FARMS_BLACKLIST } from "app/core/constants";
 import { getApollo } from "../apollo";
 import { sub } from "date-fns";
 
-import { JOE_TOKEN_ADDDRESS, MASTERCHEF_ADDRESS } from "../../config/index.ts";
+import { VOLT_TOKEN_ADDRESS, MASTERCHEF_ADDRESS } from "../../config/index.ts";
 
 export async function getPoolIds(client = getApollo()) {
   const {
@@ -153,7 +153,7 @@ export async function getPools(client = getApollo()) {
       : 0;
 
   // JOE token
-  const token_address = JOE_TOKEN_ADDDRESS;
+  const token_address = VOLT_TOKEN_ADDRESS;
   const { token } = await getToken(token_address);
   const joePrice = ethPrice * token.derivedETH;
 
