@@ -30,12 +30,12 @@ export default function PoolTable({ pools, ...rest }) {
             key: "name",
             label: "Name",
             render: (row, index) => {
-              const name = `${row.liquidityPair?.token0?.symbol}-${row.liquidityPair?.token1?.symbol}`;
+              const name = `${row.liquidityPair?.token0?.symbol.replace("WFUSE", "FUSE")}-${row.liquidityPair?.token1?.symbol.replace("WFUSE", "FUSE")}`;
               return (
                 <Box display="flex" alignItems="center">
                   <PairIcon
-                    base={row.liquidityPair?.token0?.symbol}
-                    quote={row.liquidityPair?.token1?.symbol}
+                    base={row.liquidityPair?.token0?.id}
+                    quote={row.liquidityPair?.token1?.id}
                   />
                   <Link href={`/pools/${row.id}`} variant="body2" noWrap>
                     {name}
@@ -79,7 +79,7 @@ export default function PoolTable({ pools, ...rest }) {
             render: (row) => (
               <Box display="flex">
                 <TokenIcon
-                  id={row.liquidityPair?.token0?.symbol}
+                  id={row.liquidityPair?.token0?.id}
                   className={classes.small}
                 />
                 <Typography variant="subtitle2" noWrap>
@@ -95,7 +95,7 @@ export default function PoolTable({ pools, ...rest }) {
             render: (row) => (
               <Box display="flex">
                 <TokenIcon
-                  id={row.liquidityPair?.token1?.symbol}
+                  id={row.liquidityPair?.token1?.id}
                   className={classes.small}
                 />
                 <Typography variant="subtitle2" noWrap>

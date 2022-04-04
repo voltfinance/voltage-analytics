@@ -196,7 +196,7 @@ function PairPage(props) {
       <PageHeader>
         <Box display="flex" alignItems="center" className={classes.pageHeader}>
           <Box display="flex" alignItems="center" flex={1} flexWrap="nowrap">
-            <PairIcon base={pair.token0.symbol} quote={pair.token1.symbol} />
+            <PairIcon base={pair.token0.id} quote={pair.token1.id} />
             <Typography variant="h5" component="h1" noWrap>
               {pair.token0.symbol}-{pair.token1.symbol}
             </Typography>
