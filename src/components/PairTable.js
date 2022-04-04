@@ -46,7 +46,7 @@ export default function PairTable({ pairs, title, ...rest }) {
 
       return {
         ...pair,
-        displayName: `${pair.token0.symbol}-${pair.token1.symbol}`,
+        displayName: `${pair.token0.symbol.replace("WFUSE", "FUSE")}-${pair.token1.symbol.replace("WFUSE", "FUSE")}`,
         oneDayVolume: !Number.isNaN(oneDayVolume) ? oneDayVolume : 0,
         sevenDayVolume: !Number.isNaN(sevenDayVolume) ? sevenDayVolume : 0,
         oneDayFees: !Number.isNaN(oneDayFees) ? oneDayFees : 0,
