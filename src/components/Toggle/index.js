@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { Sun, Moon } from "react-feather";
 import { makeStyles, Typography } from "@material-ui/core";
 import clsx from "clsx";
@@ -27,11 +26,6 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0.8,
   }
 }));
-
-// export interface ToggleProps {
-//   isActive: boolean
-//   toggle: () => void
-// }
 
 export default function Toggle({ isActive, toggle }) {
   const classes = useStyles();
