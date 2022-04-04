@@ -40,13 +40,13 @@ export default function TokenTable({ tokens, title }) {
         parseFloat(token.derivedETH) * parseFloat(bundles[0]?.ethPrice);
 
       const priceYesterday =
-        parseFloat(token.oneDay?.derivedAVAX) *
+        parseFloat(token.oneDay?.derivedETH) *
         parseFloat(oneDayAvaxPriceData?.ethPrice);
 
       const priceChange = ((price - priceYesterday) / priceYesterday) * 100;
 
       const priceLastWeek =
-        parseFloat(token.sevenDay?.derivedAVAX) *
+        parseFloat(token.sevenDay?.derivedETH) *
         parseFloat(sevenDayAvaxPriceData?.ethPrice);
 
       const sevenDayPriceChange =

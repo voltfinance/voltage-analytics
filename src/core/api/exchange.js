@@ -189,12 +189,12 @@ export async function getTokens(client = getApollo()) {
           ...token,
           oneDay: {
             volumeUSD: String(oneDayToken?.tradeVolumeUSD),
-            derivedAVAX: String(oneDayToken?.derivedETH),
+            derivedETH: String(oneDayToken?.derivedETH),
             liquidity: String(oneDayToken?.totalLiquidity),
           },
           sevenDay: {
             volumeUSD: String(sevenDayToken?.tradeVolumeUSD),
-            derivedAVAX: String(sevenDayToken?.derivedETH),
+            derivedETH: String(sevenDayToken?.derivedETH),
             liquidity: String(sevenDayToken?.totalLiquidity),
           },
         };
