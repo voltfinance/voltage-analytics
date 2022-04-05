@@ -21,6 +21,7 @@ import {
   tokensQuery,
   useInterval,
   getTransactions,
+  GLOBAL_TXNS,
 } from "app/core";
 import {
   AppShell,
@@ -52,11 +53,11 @@ function IndexPage() {
     },
   });
 
-  const { data: transactions = {} } = useQuery(ALL_TRANSACTIONS, {
-    pollInterval: 5000,
-    fetchPolicy: "network-only"
-  });
-  const { swaps, mints, burns } = transactions;
+  const {
+    data: transactions,
+  } = useQuery(ALL_TRANSACTIONS);
+
+  const { data: globalTransactions } = useQuery(GLOBAL_TXNS);
 
   const {
     data: { tokenDayDatas: dayDatas },
@@ -122,7 +123,7 @@ function IndexPage() {
       <Head>
         <title>Dashboard | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
-      <ThemedBackground backgroundColor={transparentize(0.8, '#f3fc1f')} />
+      <ThemedBackground backgroundColor={transparentize(0.8, "#f3fc1f")} />
       <TYPE.largeHeader>{process.env.NEXT_PUBLIC_APP_NAME}</TYPE.largeHeader>
       <Box mt={3} mb={3}>
         <Search pairs={pairs} tokens={tokens} />
@@ -199,7 +200,7 @@ function IndexPage() {
           <Typography variant="h6" component="h2" gutterBottom>
             Transactions
           </Typography>
-          {Object.keys(transactions).length && <Transactions transactions={transactions} txCount={swaps.length + mints.length + burns.length} />}
+          <Transactions transactions={transactions} />
         </Grid>
       </Grid>
     </AppShell>

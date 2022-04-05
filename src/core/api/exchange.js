@@ -8,7 +8,8 @@ import {
   tokensTimeTravelQuery,
   userQuery,
   userIdsQuery,
-  ALL_TRANSACTIONS
+  ALL_TRANSACTIONS,
+  GLOBAL_TXNS
 } from "../queries/exchange";
 import {
   getOneDayBlock,
@@ -208,21 +209,49 @@ export async function getTokens(client = getApollo()) {
 }
 
 export async function getTransactions(client = getApollo()) {
-  const { data: transactions } = await client.query({ query: ALL_TRANSACTIONS });
-  const { swaps, mints, burns } = transactions;
-  
+  const { data: { transactions } } = await client.query({
+    query: ALL_TRANSACTIONS,
+  });
+
   await client.cache.writeQuery({
     query: ALL_TRANSACTIONS,
     data: {
-      swaps,
-      mints,
-      burns,
+      transactions
     }
   });
 
   return await client.cache.readQuery({
-    query: ALL_TRANSACTIONS,
+    query: ALL_TRANSACTIONS
   });
+}
+
+export async function getGlobalTransaction(client = getApollo()) {
+  const result = await client.query({
+    query: GLOBAL_TXNS,
+  });
+  let transactions;
+
+  result?.data?.transactions &&
+      result.data.transactions.map((transaction) => {
+        if (transaction.mints.length > 0) {
+          transaction.mints.map((mint) => {
+            return transactions.mints.push(mint)
+          })
+        }
+        if (transaction.burns.length > 0) {
+          transaction.burns.map((burn) => {
+            return transactions.burns.push(burn)
+          })
+        }
+        if (transaction.swaps.length > 0) {
+          transaction.swaps.map((swap) => {
+            return transactions.swaps.push(swap)
+          })
+        }
+        return true
+      })
+
+  return transactions;
 }
 
 // Users
