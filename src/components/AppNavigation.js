@@ -124,6 +124,7 @@ export default function AppNavigation() {
   const darkMode = useReactiveVar(darkModeVar);
   function onToggleDarkMode() {
     const value = !darkModeVar();
+    setIsActive(value);
     darkModeVar(value);
     if (!value) {
       document.documentElement.classList.remove(["dark-theme"]);
@@ -141,6 +142,8 @@ export default function AppNavigation() {
     // Last
     localStorage.setItem("darkMode", value);
   }
+  // avoid SSR warnings when differing client to server state
+  const [isActive, setIsActive] = useState(darkMode || true);
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -282,7 +285,7 @@ export default function AppNavigation() {
               Telegram
             </BasicLink>
           </div>
-          <Toggle isActive={darkMode} toggle={onToggleDarkMode} />
+          <Toggle isActive={isActive} toggle={onToggleDarkMode} />
         </AutoColumn>
       </div>
       <SideNavTimer />
