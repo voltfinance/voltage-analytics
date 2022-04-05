@@ -1,4 +1,4 @@
-import { AppShell, TokenTable } from "app/components";
+import { AppShell, TokenTable, Search } from "app/components";
 import {
   avaxPriceQuery,
   getApollo,
@@ -13,7 +13,7 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 
 import { TYPE } from "../../theme";
-import { Box } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 
 function TokensPage() {
   const {
@@ -29,9 +29,16 @@ function TokensPage() {
       <Head>
         <title>Tokens | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
-      <Box pb={3}>
-        <TYPE.largeHeader>Top Tokens</TYPE.largeHeader>
-      </Box>
+      <Grid container>
+        <Grid item xs>
+          <Box pb={3}>
+            <TYPE.largeHeader>Top Tokens</TYPE.largeHeader>
+          </Box>
+        </Grid>
+        <Grid item xs={3}>
+          <Search placeholder="" tokens={tokens} />
+        </Grid>
+      </Grid>
       <TokenTable title="Tokens" tokens={tokens} />
     </AppShell>
   );

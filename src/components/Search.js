@@ -83,7 +83,7 @@ const renderGroup = (params) => [
   params.children,
 ];
 
-export default function Search({ pairs, tokens }) {
+export default function Search({ pairs = [], tokens = [], ...props }) {
   const router = useRouter();
 
   const options = [
@@ -123,7 +123,7 @@ export default function Search({ pairs, tokens }) {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Looking for something?"
+          label={props.placeholder !== undefined ? props.placeholder : "Looking for something?"}
           variant="outlined"
           size="small"
         />
