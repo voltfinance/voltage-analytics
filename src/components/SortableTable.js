@@ -47,7 +47,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const liquidityPairOverrides = ['reserve0', 'reserve1'];
 function descendingComparator(a, b, orderBy) {
+  if (a.__typename === 'Pool') {
+    if (liquidityPairOverrides.includes(orderBy)) {
+      a = a.liquidityPair;
+      b = b.liquidityPair;
+    }
+    if (orderBy === 'name') {
+      a = { name: `${a.liquidityPair.token0.symbol}-${a.liquidityPair.token1.symbol}` };
+      b = { name: `${b.liquidityPair.token0.symbol}-${b.liquidityPair.token1.symbol}` };
+    }
+  }
   a = Number.isNaN(parseFloat(a[orderBy]))
     ? a[orderBy]
     : parseFloat(a[orderBy]);

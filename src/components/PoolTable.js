@@ -51,7 +51,7 @@ export default function PoolTable({ pools, ...rest }) {
               `${Number(row.rewardPerSec).toFixed(2)} VOLT per sec`,
           },
           {
-            key: "roi",
+            key: "roiPerDay",
             label: "Daily / Monthly / Yearly ROI",
             render: (row) => (
               <Typography variant="subtitle2" noWrap>
