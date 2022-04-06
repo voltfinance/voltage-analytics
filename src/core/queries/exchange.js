@@ -8,6 +8,8 @@ export const factoryQuery = gql`
     uniswapFactory(id: $id) {
       id
       totalVolumeUSD
+      txCount
+      pairCount
       oneDay @client
       twoDay @client
     }
@@ -22,6 +24,7 @@ export const factoryTimeTravelQuery = gql`
     uniswapFactory(id: $id, block: $block) {
       id
       totalVolumeUSD
+      txCount
     }
   }
 `;
@@ -407,6 +410,20 @@ export const tokensTimeTravelQuery = gql`
     }
   }
   ${tokenFieldsQuery}
+`;
+
+export const TOP_LPS_PER_PAIRS = gql`
+  query lps($pair: Bytes!) {
+    liquidityPositions(where: { pair: $pair }, orderBy: liquidityTokenBalance, orderDirection: desc, first: 10) {
+      user {
+        id
+      }
+      pair {
+        id
+      }
+      liquidityTokenBalance
+    }
+  }
 `;
 
 export const ALL_TRANSACTIONS = gql`

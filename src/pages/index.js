@@ -22,6 +22,8 @@ import {
   useInterval,
   getTransactions,
   GLOBAL_TXNS,
+  getFactory,
+  factoryQuery,
 } from "app/core";
 import {
   AppShell,
@@ -33,6 +35,7 @@ import {
   TokenTable,
   Transactions,
 } from "app/components";
+import GlobalStats from "components/GlobalStats";
 
 import { TYPE, ThemedBackground } from "../theme";
 
@@ -52,6 +55,8 @@ function IndexPage() {
       clientName: "masterchef",
     },
   });
+  
+  const { data: { uniswapFactory } } = useQuery(factoryQuery);
 
   const {
     data: transactions,
@@ -66,6 +71,7 @@ function IndexPage() {
   useInterval(
     () =>
       Promise.all([
+        getFactory,
         getPairs,
         getPools,
         getTokens,
@@ -127,6 +133,7 @@ function IndexPage() {
       <TYPE.largeHeader>{process.env.NEXT_PUBLIC_APP_NAME}</TYPE.largeHeader>
       <Box mt={3} mb={3}>
         <Search pairs={pairs} tokens={tokens} />
+        {uniswapFactory && <GlobalStats factory={uniswapFactory} />}
       </Box>
 
       <Grid container spacing={3}>
@@ -209,6 +216,8 @@ function IndexPage() {
 
 export async function getStaticProps() {
   const client = getApollo();
+
+  await getFactory(client);
 
   await getDayData(client);
 
