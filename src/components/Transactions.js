@@ -17,12 +17,12 @@ export default function Transactions({ transactions, txCount }) {
   const classes = useStyles();
   const { swaps, mints, burns } = transactions;
   const rows = useMemo(() => {
-    // const uniqueTxns = [...swaps, ...mints, ...burns].reduce((catalog, tx) => {
-    //   if (catalog[tx.id]) return catalog;
-    //   catalog[tx.id] = tx;
-    //   return catalog;
-    // }, {});
-    return [...swaps, ...mints, ...burns].map((transaction) => {
+    const uniqueTxns = [...swaps, ...mints, ...burns].reduce((catalog, tx) => {
+      if (catalog[tx.id]) return catalog;
+      catalog[tx.id] = tx;
+      return catalog;
+    }, {});
+    return Object.values(uniqueTxns).map((transaction) => {
       if (transaction.__typename === "Swap") {
         return {
           ...transaction,
