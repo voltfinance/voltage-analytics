@@ -6,7 +6,7 @@ import MuiLink from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     textDecoration: "none",
     color: "inherit",
@@ -16,6 +16,21 @@ const useStyles = makeStyles(() => ({
       underline: "none",
     },
   },
+  custom: {
+    textDecoration: "none",
+    fontSize: "14px",
+    fontWeight: 500,
+    color: ({ color }) => (color ? color : theme.palette.text.primary),
+    // "&:visited": {
+    //   color: ({ color, theme }) => (color ? lighten(0.1, color) : lighten(0.1, theme.link)),
+    // },
+    // "&:hover": {
+    //   cursor: "pointer",
+    //   textDecoration: "none",
+    //   underline: "none",
+    //   color: ({ color, theme }) => (color ? darken(0.1, color) : darken(0.1, theme.link)),
+    // }
+  }
 }));
 
 const NextComposed = forwardRef(function NextComposed(props, ref) {
@@ -76,5 +91,14 @@ export const BasicLink = ({ className, children, ...rest }) => {
     </Link>
   );
 };
+
+export const CustomLink = ({ className, children, ...rest }) => {
+  const classes = useStyles();
+  return (
+    <Link className={clsx(className, classes.custom)} {...rest}>
+      {children}
+    </Link>
+  );
+}
 
 export default forwardRef((props, ref) => <Link {...props} innerRef={ref} />);
