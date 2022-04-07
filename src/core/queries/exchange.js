@@ -252,8 +252,9 @@ export const pairsQuery = gql`
     $first: Int! = 1000
     $orderBy: String! = "trackedReserveETH"
     $orderDirection: String! = "desc"
+    $skip: Int = 0
   ) {
-    pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection) {
+    pairs(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
       ...pairFields
       oneDay @client
       sevenDay @client
