@@ -197,18 +197,4 @@ export async function getStaticProps({ params }) {
   };
 }
 
-export async function getStaticPaths() {
-  // const client = getApollo();
-
-  // const { data: { users } } = await client.query({
-  //   query: userIdsQuery,
-  // });
-
-  // const paths = users.map(user => ({
-  //   params: { id: user.id }
-  // }));
-
-  return { paths: [], fallback: true };
-}
-
 export default UsersPage;
