@@ -5,6 +5,7 @@ import {
   Loading,
   PageHeader,
   PairIcon,
+  Search
 } from "app/components";
 import {
   Avatar,
@@ -18,6 +19,7 @@ import {
   TableRow,
   Typography,
   makeStyles,
+  useMediaQuery,
 } from "@material-ui/core";
 import {
   barUserQuery,
@@ -46,6 +48,9 @@ import { useRouter } from "next/router";
 import { VOLT_TOKEN_ADDRESS } from "config";
 import LPList from "components/LPList";
 import { useEffect, useMemo, useState } from "react";
+import { TYPE } from "app/theme";
+import { RowBetween } from "components/Row";
+import AccountSearch from "components/AccountSearch";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -287,6 +292,7 @@ function UserPage(props) {
   const investments =
     poolEntriesUSD + barPendingUSD + poolsPendingUSD + poolExitsUSD;
   
+  const below600 = useMediaQuery('(max-width: 600px)');
 
   return (
     <AppShell>
@@ -295,9 +301,13 @@ function UserPage(props) {
       </Head>
 
       <PageHeader>
-        <Typography variant="h5" component="h1" gutterBottom noWrap>
+        <Box mb={4}>
+          <TYPE.largeHeader>Wallet analytics</TYPE.largeHeader>
+        </Box>
+        <AccountSearch />
+        {/* <Typography variant="h5" component="h1" gutterBottom noWrap>
           Portfolio {id}
-        </Typography>
+        </Typography> */}
       </PageHeader>
 
       <Typography
@@ -610,10 +620,10 @@ function UserPage(props) {
         <Typography variant="h6" component="h2" gutterBottom noWrap>
           Top Liquidity Positions
         </Typography>
+        <Box padding={1}>
+          <LPList lps={topLps} maxItems={100} />
+        </Box>
       </PageHeader>
-      <Box padding={1}>
-        <LPList lps={topLps} maxItems={100} />
-      </Box>
     </AppShell>
   );
 }

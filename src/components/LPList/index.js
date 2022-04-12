@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 // import LocalLoader from '../LocalLoader'
 // import utc from 'dayjs/plugin/utc'
 import styled from 'styled-components'
-import { Box, useMediaQuery, withStyles } from '@material-ui/core';
+import { Box, useMediaQuery, withStyles, makeStyles } from '@material-ui/core';
 
 import { CustomLink } from '../Link'
 // import { formattedNum } from '../../utils'
@@ -14,13 +14,20 @@ import { formatCurrency } from 'app/core';
 
 // dayjs.extend(utc)
 
-const PageButtons = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 2em;
-  margin-bottom: 0.5em;
-`
+const useButtonStyles = makeStyles(() => ({
+  root: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "2em",
+    marginBottom: "0.5em",
+  }
+}));
+
+const PageButtons = ({ children }) => {
+  const classes = useButtonStyles();
+  return <div className={classes.root}>{children}</div>;
+};
 
 const Arrow = styled.div`
   color: ${({ theme }) => theme.primary1};
@@ -38,27 +45,33 @@ const List = withStyles(() => ({
   }
 }))(Box);
 
-const DashGrid = styled.div`
-  display: grid;
-  grid-gap: 1em;
-  grid-template-columns: 10px 1.5fr 1fr 1fr;
-  grid-template-areas: 'number name pair value';
-  padding: 0 4px;
-
-  > * {
-    justify-content: flex-end;
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "grid",
+    "grid-gap": "1em",
+    "grid-template-columns": "10px 1.5fr 1fr 1fr",
+    "grid-template-areas": 'number name pair value',
+    padding: theme.spacing(0, 0.5),
+    "& > *": {
+      "justify-content": "flex-end",
+    },
+  
+    "@media screen and (max-width: 1080px)": {
+      "grid-template-columns": "10px 1.5fr 1fr 1fr",
+      "grid-template-areas": 'number name pair value',
+    },
+  
+    "@media screen and (max-width: 600px)": {
+      "grid-template-columns": "1fr 1fr 1fr",
+      "grid-template-areas": 'name pair value',
+    }
   }
+}))
 
-  @media screen and (max-width: 1080px) {
-    grid-template-columns: 10px 1.5fr 1fr 1fr;
-    grid-template-areas: 'number name pair value';
-  }
-
-  @media screen and (max-width: 600px) {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-areas: 'name pair value';
-  }
-`
+const DashGrid = ({ children, ...props }) => {
+  const classes = useStyles();
+  return <div className={classes.root} {...props}>{children}</div>
+}
 
 const Flex = ({ children }) => {
   return <Box display="flex">{children}</Box>

@@ -241,14 +241,15 @@ export default function AppNavigation() {
               button
               className={classes.listItem}
               key="/portfolio"
-              selected={router.pathname.includes("/portfolio")}
+              selected={router.pathname.includes("/users")}
               onClick={() => {
-                const defaultAddress = localStorage.getItem("defaultAddress");
-                if (defaultAddress) {
-                  router.push("/users/" + defaultAddress);
-                } else {
-                  handleClickOpen();
-                }
+                router.push("/users");
+                // const defaultAddress = localStorage.getItem("defaultAddress");
+                // if (defaultAddress) {
+                //   router.push("/users/" + defaultAddress);
+                // } else {
+                //   handleClickOpen();
+                // }
               }}
             >
               <ListIcon size={20} style={{ marginRight: ".75rem" }} />
