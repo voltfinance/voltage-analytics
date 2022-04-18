@@ -177,18 +177,9 @@ function UsersPage(props) {
   );
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps() {
   const client = getApollo();
-
-
-  await getAvaxPrice(client);
-
-  await getJoeToken(client);
-
   await getPairs(client);
-
-  await getLatestBlock(client);
-
   return {
     props: {
       initialApolloState: client.cache.extract(),
