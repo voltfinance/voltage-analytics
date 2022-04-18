@@ -24,31 +24,31 @@ const TypographyWrapper = withStyles((theme) => ({
 
 export const TYPE = {
   main(props) {
-    return <TypographyWrapper fontWeight={500} fontSize={14} color={'text1'} {...props} />
+    return <TypographyWrapper fontWeight={500} fontSize={14} {...props} />
   },
 
   body(props) {
-    return <TypographyWrapper fontWeight={400} fontSize={14} color={'text1'} {...props} />
+    return <TypographyWrapper fontWeight={400} fontSize={14} {...props} />
   },
 
   small(props) {
-    return <TypographyWrapper fontWeight={500} fontSize={11} color={'text1'} {...props} />
+    return <TypographyWrapper fontWeight={500} fontSize={11} {...props} />
   },
 
   header(props) {
-    return <TypographyWrapper fontWeight={600} color={'text1'} {...props} />
+    return <TypographyWrapper fontWeight={600} {...props} />
   },
 
   largeHeader(props) {
-    return <TypographyWrapper fontWeight={500} color={'text1'} fontSize={24} {...props} />
+    return <TypographyWrapper fontWeight={500} fontSize={24} {...props} />
   },
 
   light(props) {
-    return <TypographyWrapper fontWeight={400} color={'text3'} fontSize={14} {...props} />
+    return <TypographyWrapper fontWeight={400} fontSize={14} {...props} />
   },
 
   pink(props) {
-    return <TypographyWrapper fontWeight={props.faded ? 400 : 600} color={props.faded ? 'text1' : 'text1'} {...props} />
+    return <TypographyWrapper fontWeight={props.faded ? 400 : 600} {...props} />
   },
 }
 
