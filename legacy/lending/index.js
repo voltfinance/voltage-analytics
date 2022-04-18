@@ -12,11 +12,11 @@ import {
 } from "@material-ui/core";
 import { ParentSize } from "@visx/responsive";
 import { withStyles } from "@material-ui/core/styles";
-import TokenIcon from "../../components/TokenIcon";
-import BorrowBar from "../../components/BorrowBar";
-import SupplyBar from "../../components/SupplyBar";
+import TokenIcon from "../../src/components/TokenIcon";
+import BorrowBar from "../../src/components/BorrowBar";
+import SupplyBar from "../../src/components/SupplyBar";
 
-import MarketTable from "../../components/MarketTable";
+import MarketTable from "../../src/components/MarketTable";
 
 import {
   marketsQuery,

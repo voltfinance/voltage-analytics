@@ -20,7 +20,7 @@ import {
 import {
   getMarket
 } from "app/core/api";
-import ProgressBar from "../../components/ProgressBar";
+import ProgressBar from "../../src/components/ProgressBar";
 import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import { useQuery } from "@apollo/client";
