@@ -11,39 +11,44 @@ import {
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 import styled from 'styled-components'
-import { Text } from 'rebass'
+import { Typography, withStyles } from "@material-ui/core";
 
-const TextWrapper = styled(Text)`
-  color: ${({ color, theme }) => theme[color]};
-`
+const TypographyWrapper = withStyles((theme) => ({
+  root: {
+    fontWeight: props => props.fontWeight || 500,
+    fontSize: props => props.fontSize || "14px",
+    color: props => props.color || theme.palette.text.primary,
+    marginRight: props => props.mr,
+  }
+}))(Typography);
 
 export const TYPE = {
   main(props) {
-    return <TextWrapper fontWeight={500} fontSize={14} color={'text1'} {...props} />
+    return <TypographyWrapper fontWeight={500} fontSize={14} color={'text1'} {...props} />
   },
 
   body(props) {
-    return <TextWrapper fontWeight={400} fontSize={14} color={'text1'} {...props} />
+    return <TypographyWrapper fontWeight={400} fontSize={14} color={'text1'} {...props} />
   },
 
   small(props) {
-    return <TextWrapper fontWeight={500} fontSize={11} color={'text1'} {...props} />
+    return <TypographyWrapper fontWeight={500} fontSize={11} color={'text1'} {...props} />
   },
 
   header(props) {
-    return <TextWrapper fontWeight={600} color={'text1'} {...props} />
+    return <TypographyWrapper fontWeight={600} color={'text1'} {...props} />
   },
 
   largeHeader(props) {
-    return <TextWrapper fontWeight={500} color={'text1'} fontSize={24} {...props} />
+    return <TypographyWrapper fontWeight={500} color={'text1'} fontSize={24} {...props} />
   },
 
   light(props) {
-    return <TextWrapper fontWeight={400} color={'text3'} fontSize={14} {...props} />
+    return <TypographyWrapper fontWeight={400} color={'text3'} fontSize={14} {...props} />
   },
 
   pink(props) {
-    return <TextWrapper fontWeight={props.faded ? 400 : 600} color={props.faded ? 'text1' : 'text1'} {...props} />
+    return <TypographyWrapper fontWeight={props.faded ? 400 : 600} color={props.faded ? 'text1' : 'text1'} {...props} />
   },
 }
 
