@@ -1047,11 +1047,6 @@
     prop-types "^15.5.10"
     react-use-measure "2.0.1"
 
-"@voltage-finance/swap-default-token-list@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@voltage-finance/swap-default-token-list/-/swap-default-token-list-1.0.2.tgz#9276112fee821649a386a9e4a27610f0ff8a84cc"
-  integrity sha512-DSG6kDhEDT7rBai2X/Cu6piEA8Kz/jF1bTOKbZY0m3knQNx/obUjfWiCT5dfP0xJT82mq8/sTXgGlexNspcSNw==
-
 "@wry/context@^0.5.2":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@wry/context/-/context-0.5.2.tgz#f2a5d5ab9227343aa74c81e06533c1ef84598ec7"
@@ -1465,11 +1460,6 @@ date-fns@^2.16.1:
   version "2.16.1"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.16.1.tgz#05775792c3f3331da812af253e1a935851d3834b"
   integrity sha512-sAJVKx/FqrLYHAQeN7VpJrPhagZc9R4ImZIWYRFZaaohR3KzmuK88touwsSwSVT8Qcbd4zoDsnGfX4GFB4imyQ==
-
-dayjs@^1.10.5:
-  version "1.10.7"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.7.tgz#2cf5f91add28116748440866a0a1d26f3a6ce468"
-  integrity sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig==
 
 debounce@^1.2.0:
   version "1.2.0"
