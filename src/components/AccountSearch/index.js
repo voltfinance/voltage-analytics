@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import { ethers } from "ethers";
 import {
   Button,
   makeStyles,
@@ -11,9 +12,8 @@ import { AutoRow } from "../Row";
 
 const isAddress = (value) => {
   try {
-    // return ethers.utils.getAddress(value.toLowerCase())
-    return true;
-  } catch {
+    return ethers.utils.getAddress(value.toLowerCase())
+  } catch (e) {
     return false;
   }
 };
@@ -58,14 +58,10 @@ function AccountSearch() {
   
   const [accountValue, setAccountValue] = useState();
   const router = useRouter();
-  // const [savedAccounts, addAccount, removeAccount] = useSavedAccounts()
 
   function handleAccountSearch() {
     if (isAddress(accountValue)) {
       router.push("/users/" + accountValue);
-      // if (!savedAccounts.includes(accountValue)) {
-      //   addAccount(accountValue)
-      // }
     }
   }
 
