@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { RowFixed, RowBetween } from "./Row";
 
 import { TYPE } from "../theme";
@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
   },
 }));
-const localNumber = (num) => num;
 
 export default function GlobalStats(props) {
   const classes = useStyles();
@@ -27,8 +26,6 @@ export default function GlobalStats(props) {
   const below816 = useMediaQuery("(max-width: 816px)");
 
   const [{ circSupply, totalSupply }] = useSupplyStats();
-
-  // const [showPriceCard, setShowPriceCard] = useState(false)
 
   const { oneDay, pairCount } = props.factory;
   const { totalVolumeUSD: oneDayVolumeUSD, txCount: oneDayTxns } = oneDay;
