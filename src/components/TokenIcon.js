@@ -1,10 +1,10 @@
 import { Avatar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useMemo } from "react";
-import { tokens } from "@voltage-finance/swap-default-token-list/build/voltage-swap-default.tokenlist.json";
+import tokenlist from "https://raw.githubusercontent.com/voltfinance/swap-default-token-list/master/build/voltage-swap-default.tokenlist.json";
 import { VOLT_TOKEN_ADDRESS } from "config";
 
-const voltTokenListLogos = tokens.reduce(
+const voltTokenListLogos = tokenlist.tokens.reduce(
   (acc, token) => ({ ...acc, [token.address.toLowerCase()]: token.logoURI }),
   { [VOLT_TOKEN_ADDRESS]: "https://fuselogo.s3.eu-central-1.amazonaws.com/volt_icon.png" }
 );
