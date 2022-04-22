@@ -49,7 +49,6 @@ import { VOLT_TOKEN_ADDRESS } from "config";
 import LPList from "components/LPList";
 import { useEffect, useMemo, useState } from "react";
 import { TYPE } from "app/theme";
-import { RowBetween } from "components/Row";
 import AccountSearch from "components/AccountSearch";
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function UserPage(props) {
+function UserPage() {
   const router = useRouter();
 
   if (router.isFallback) {
@@ -189,18 +188,6 @@ function UserPage(props) {
       pairs.find((pair) => pair?.id === user.pool.pair)
   );
 
-  // useInterval(
-  //   () =>
-  //     Promise.all([
-  //       getPairs,
-  //       getJoeToken,
-  //       getPoolUser(id.toLowerCase()),
-  //       getBarUser(id.toLocaleLowerCase()),
-  //       getAvaxPrice,
-  //     ]),
-  //   1800000
-  // );
-
   const voltPrice =
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
@@ -284,16 +271,6 @@ function UserPage(props) {
       [0, 0, 0]
     );
 
-  // Global
-
-  // const originalInvestments =
-  //   parseFloat(barData?.user?.joeStakedUSD) + parseFloat(poolEntriesUSD);
-
-  const investments =
-    poolEntriesUSD + barPendingUSD + poolsPendingUSD + poolExitsUSD;
-  
-  const below600 = useMediaQuery('(max-width: 600px)');
-
   return (
     <AppShell>
       <Head>
@@ -305,9 +282,6 @@ function UserPage(props) {
           <TYPE.largeHeader>Wallet analytics</TYPE.largeHeader>
         </Box>
         <AccountSearch />
-        {/* <Typography variant="h5" component="h1" gutterBottom noWrap>
-          Portfolio {id}
-        </Typography> */}
       </PageHeader>
 
       <Typography
@@ -516,9 +490,6 @@ function UserPage(props) {
                     <TableCell key="pl" align="right">
                       Profit/Loss
                     </TableCell>
-                    {/* <TableCell key="apy" align="right">
-                      APY
-                    </TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -606,7 +577,6 @@ function UserPage(props) {
                             )}
                           </Typography>
                         </TableCell>
-                        {/* <TableCell align="right">23.76%</TableCell> */}
                       </TableRow>
                     );
                   })}
