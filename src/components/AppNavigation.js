@@ -220,23 +220,6 @@ export default function AppNavigation() {
               Stake
             </ListItem>
 
-            {/* <ListItem
-              button
-              className={classes.listItem}
-              key="/lending"
-              selected={router.pathname.includes("/lending")}
-              onClick={() => router.push("/lending")}
-            >
-              <AccountBalanceOutlined
-                style={{
-                  marginRight: ".75rem",
-                  width: "20px",
-                  height: "20px",
-                }}
-              />
-              Lending
-            </ListItem> */}
-
             <ListItem
               button
               className={classes.listItem}
@@ -244,12 +227,6 @@ export default function AppNavigation() {
               selected={router.pathname.includes("/users")}
               onClick={() => {
                 router.push("/users");
-                // const defaultAddress = localStorage.getItem("defaultAddress");
-                // if (defaultAddress) {
-                //   router.push("/users/" + defaultAddress);
-                // } else {
-                //   handleClickOpen();
-                // }
               }}
             >
               <ListIcon size={20} style={{ marginRight: ".75rem" }} />
