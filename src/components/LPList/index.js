@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react'
-// import dayjs from 'dayjs'
-// import LocalLoader from '../LocalLoader'
-// import utc from 'dayjs/plugin/utc'
 import styled from 'styled-components'
 import { Box, useMediaQuery, withStyles, makeStyles } from '@material-ui/core';
 
 import { CustomLink } from '../Link'
-// import { formattedNum } from '../../utils'
 import { TYPE } from '../../theme'
 import { RowFixed } from '../Row'
 import { PairIcon } from '..';
 import { formatCurrency } from 'app/core';
-
-// dayjs.extend(utc)
 
 const useButtonStyles = makeStyles(() => ({
   root: {
@@ -127,12 +121,6 @@ function LPList({ lps, maxItems = 10 }) {
           </CustomLink>
         </Text>
 
-        {/* {!below1080 && (
-          <Text area="type" justifyContent="flex-end">
-            {lp.type}
-          </Text>
-        )} */}
-
         <Text>
           <CustomLink area="pair" to={'/pair/' + lp.pairAddress}>
             <RowFixed>
@@ -168,11 +156,6 @@ function LPList({ lps, maxItems = 10 }) {
         <Flex alignItems="center" justifyContent="flex-start">
           <TYPE.main area="name">Account</TYPE.main>
         </Flex>
-        {/* {!below1080 && (
-          <Flex alignItems="center" justifyContent="flexEnd">
-            <TYPE.main area="type">Type</TYPE.main>
-          </Flex>
-        )} */}
         <Flex alignItems="center" justifyContent="flexEnd">
           <TYPE.main area="pair">Pair</TYPE.main>
         </Flex>
