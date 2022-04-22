@@ -253,7 +253,7 @@ function TokenPage() {
               Add Liquidity
             </Link>
             <Link
-              href={`https://app.voltage.finance/trade`}
+              href={`https://app.voltage.finance/swap`}
               target="_blank"
               variant="body1"
             >
