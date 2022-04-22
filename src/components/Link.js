@@ -21,15 +21,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "14px",
     fontWeight: 500,
     color: ({ color }) => (color ? color : theme.palette.text.primary),
-    // "&:visited": {
-    //   color: ({ color, theme }) => (color ? lighten(0.1, color) : lighten(0.1, theme.link)),
-    // },
-    // "&:hover": {
-    //   cursor: "pointer",
-    //   textDecoration: "none",
-    //   underline: "none",
-    //   color: ({ color, theme }) => (color ? darken(0.1, color) : darken(0.1, theme.link)),
-    // }
   }
 }));
 
