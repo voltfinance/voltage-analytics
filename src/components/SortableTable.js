@@ -21,9 +21,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     marginBottom: theme.spacing(2),
   },
-  // table: {
-  //   minWidth: 750,
-  // },
   avatar: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
@@ -92,8 +89,6 @@ function stableSort(array, comparator) {
 }
 
 export default function SortableTable({
-  // order = "desc",
-  // orderBy = "totalLiquidityUSD",
   columns,
   rows,
   title,
@@ -126,9 +121,6 @@ export default function SortableTable({
     setPage(0);
   };
 
-  // const emptyRows =
-  //   rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
   const filteredRows = filter ? rows.filter(rows => rows.__typename === filter) : rows;
   const sortedRows = stableSort(filteredRows, getComparator(order, orderBy));
 
@@ -153,9 +145,6 @@ export default function SortableTable({
           />
           <TableBody>
             {sortedRows
-              // .filter((row) => {
-              //   return !TOKEN_DENY.includes(row.id);
-              // })
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 return (
@@ -169,7 +158,6 @@ export default function SortableTable({
                             : {})}
                           align={column.align || "left"}
                           className={classes.cell}
-                          // variant="body"
                         >
                           {typeof column.render === "function"
                             ? column.render(row, index)
@@ -180,11 +168,6 @@ export default function SortableTable({
                   </TableRow>
                 );
               })}
-            {/* {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )} */}
           </TableBody>
         </Table>
       </TableContainer>
