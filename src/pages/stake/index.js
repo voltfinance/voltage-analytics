@@ -16,7 +16,7 @@ import {
   getDayData,
   getAvaxPrice,
   getFactory,
-  getJoeToken,
+  getVoltToken,
   tokenQuery,
   useInterval,
   getBar,
@@ -88,7 +88,7 @@ function BarPage() {
   useInterval(async () => {
     await Promise.all([
       getFactory,
-      getJoeToken,
+      getVoltToken,
       getAvaxPrice,
       getBar,
       getBarHistories,
@@ -350,7 +350,7 @@ export async function getStaticProps() {
   await getBarHistories(client);
   await getFactory(client);
   await getDayData(client);
-  await getJoeToken(client);
+  await getVoltToken(client);
   await getAvaxPrice(client);
   // await getMoneyMaker(client);
   // await getStableJoe(client);

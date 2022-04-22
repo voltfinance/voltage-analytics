@@ -33,7 +33,7 @@ import {
   getLatestBlock,
   getPairs,
   getPoolUser,
-  getJoeToken,
+  getVoltToken,
   latestBlockQuery,
   pairsQuery,
   poolUserQuery,
@@ -635,7 +635,7 @@ export async function getStaticProps({ params }) {
 
   await getAvaxPrice(client);
 
-  await getJoeToken(client);
+  await getVoltToken(client);
 
   await getBarUser(id.toLowerCase(), client);
 

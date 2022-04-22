@@ -67,7 +67,7 @@ export async function getFactory(client = getApollo()) {
   });
 }
 
-export async function getJoeToken(client = getApollo()) {
+export async function getVoltToken(client = getApollo()) {
   return await getToken(VOLT_TOKEN_ADDRESS, client);
 }
 

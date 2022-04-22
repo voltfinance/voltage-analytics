@@ -33,7 +33,7 @@ import {
   getLatestBlock,
   getPairs,
   getPoolUser,
-  getJoeToken,
+  getVoltToken,
   latestBlockQuery,
   pairsQuery,
   poolUserQuery,
