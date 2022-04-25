@@ -27,10 +27,11 @@ export default function GlobalStats(props) {
 
   const [{ circSupply, totalSupply }] = useSupplyStats();
 
-  const { oneDay, pairCount } = props.factory;
-  const { totalVolumeUSD: oneDayVolumeUSD, txCount: oneDayTxns } = oneDay;
-  const oneDayFees = oneDayVolumeUSD
-    ? formatCurrency(oneDayVolumeUSD * 0.003)
+  const { oneDay, pairCount, totalVolumeUSD, txCount } = props.factory;
+  const { totalVolumeUSD: oneDayVolumeUSD, txCount: oneDayTxCount } = oneDay;
+  const oneDayTxns = txCount && oneDayTxCount ? parseFloat(txCount) - parseFloat(oneDayTxCount) : "";
+  const oneDayFees = totalVolumeUSD && oneDayVolumeUSD
+    ? formatCurrency((parseFloat(totalVolumeUSD) - parseFloat(oneDayVolumeUSD)) * 0.003)
     : "";
 
   return (
