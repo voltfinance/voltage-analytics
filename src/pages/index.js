@@ -57,13 +57,13 @@ function IndexPage() {
   });
   
   const { data: { uniswapFactory } } = useQuery(factoryQuery, {
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'cache-first'
   });
 
   const {
     data: transactions,
   } = useQuery(ALL_TRANSACTIONS, {
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'cache-first'
   });
 
   const { data: globalTransactions } = useQuery(GLOBAL_TXNS);
