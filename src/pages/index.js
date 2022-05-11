@@ -56,11 +56,15 @@ function IndexPage() {
     },
   });
   
-  const { data: { uniswapFactory } } = useQuery(factoryQuery);
+  const { data: { uniswapFactory } } = useQuery(factoryQuery, {
+    fetchPolicy: 'network-only'
+  });
 
   const {
     data: transactions,
-  } = useQuery(ALL_TRANSACTIONS);
+  } = useQuery(ALL_TRANSACTIONS, {
+    fetchPolicy: 'network-only'
+  });
 
   const { data: globalTransactions } = useQuery(GLOBAL_TXNS);
 
