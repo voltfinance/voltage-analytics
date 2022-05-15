@@ -1,4 +1,8 @@
-import { currencyFormatter, decimalFormatter } from "app/core";
+import {
+  ALL_TRANSACTIONS,
+  currencyFormatter,
+  decimalFormatter,
+} from "app/core";
 
 import Link from "./Link";
 import React, { useMemo } from "react";
@@ -6,40 +10,49 @@ import SortableTable from "./SortableTable";
 import { Paper, Typography } from "@material-ui/core";
 import formatDistance from "date-fns/formatDistance";
 import { makeStyles } from "@material-ui/core/styles";
+import { useQuery } from "@apollo/client";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: "100%",
   },
 }));
 
-export default function Transactions({ transactions, txCount }) {
+export default function Transactions() {
   const classes = useStyles();
-  const { swaps, mints, burns } = transactions;
+
+  const { data: transactions } = useQuery(ALL_TRANSACTIONS);
   const rows = useMemo(() => {
-    const uniqueTxns = [...swaps, ...mints, ...burns].reduce((catalog, tx) => {
-      if (catalog[tx.id]) return catalog;
-      catalog[tx.id] = tx;
-      return catalog;
-    }, {});
-    return Object.values(uniqueTxns).map((transaction) => {
-      if (transaction.__typename === "Swap") {
-        return {
-          ...transaction,
-          amount0:
-            transaction.amount0In === "0"
-              ? transaction.amount1In
-              : transaction.amount0In,
-          amount1:
-            transaction.amount1Out === "0"
-              ? transaction.amount0Out
-              : transaction.amount1Out,
-        };
-      }
-  
-      return transaction;
-    });
-  }, [swaps, mints, burns]);
+    if (transactions) {
+      const { swaps, mints, burns } = transactions;
+      const uniqueTxns = [...swaps, ...mints, ...burns].reduce(
+        (catalog, tx) => {
+          if (catalog[tx.id]) return catalog;
+          catalog[tx.id] = tx;
+          return catalog;
+        },
+        {}
+      );
+      return Object.values(uniqueTxns).map((transaction) => {
+        if (transaction.__typename === "Swap") {
+          return {
+            ...transaction,
+            amount0:
+              transaction.amount0In === "0"
+                ? transaction.amount1In
+                : transaction.amount0In,
+            amount1:
+              transaction.amount1Out === "0"
+                ? transaction.amount0Out
+                : transaction.amount1Out,
+          };
+        }
+
+        return transaction;
+      });
+    }
+    return []
+  }, [transactions]);
 
   const now = new Date();
 
@@ -105,9 +118,7 @@ export default function Transactions({ transactions, txCount }) {
             key: "to",
             label: "To",
             render: (row) => (
-              <Link
-                href={`https://explorer.fuse.io/tx/${row.to}`}
-              >
+              <Link href={`https://explorer.fuse.io/tx/${row.to}`}>
                 {row.to}
               </Link>
             ),

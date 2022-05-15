@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { RowFixed, RowBetween } from "./Row";
 
 import { TYPE } from "../theme";
 import { makeStyles, useMediaQuery } from "@material-ui/core";
 import { formatCurrency, formatDecimal } from "app/core";
 import useSupplyStats from "core/hooks/useSupplyStats";
+import useFactory from "core/hooks/useFactory";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: "100%",
     position: "sticky",
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function GlobalStats(props) {
+export default function GlobalStats() {
   const classes = useStyles();
 
   const below1295 = useMediaQuery("(max-width: 1295px)");
@@ -26,13 +27,20 @@ export default function GlobalStats(props) {
   const below816 = useMediaQuery("(max-width: 816px)");
 
   const [{ circSupply, totalSupply }] = useSupplyStats();
-
-  const { oneDay, pairCount, totalVolumeUSD, txCount } = props.factory;
-  const { totalVolumeUSD: oneDayVolumeUSD, txCount: oneDayTxCount } = oneDay;
-  const oneDayTxns = txCount && oneDayTxCount ? parseFloat(txCount) - parseFloat(oneDayTxCount) : "";
-  const oneDayFees = totalVolumeUSD && oneDayVolumeUSD
-    ? formatCurrency((parseFloat(totalVolumeUSD) - parseFloat(oneDayVolumeUSD)) * 0.003)
-    : "";
+  const [{ uniswapFactory }, { isLoading }] = useFactory();
+  
+  const { oneDayFees, oneDayTxns, pairCount } = useMemo(() => {
+    if (uniswapFactory && uniswapFactory.oneDay) {
+      const { oneDay, pairCount, totalVolumeUSD, txCount } = uniswapFactory;
+      const { totalVolumeUSD: oneDayVolumeUSD, txCount: oneDayTxCount } = oneDay;
+      const oneDayTxns = txCount && oneDayTxCount ? parseFloat(txCount) - parseFloat(oneDayTxCount) : "";
+      const oneDayFees = totalVolumeUSD && oneDayVolumeUSD
+        ? formatCurrency((parseFloat(totalVolumeUSD) - parseFloat(oneDayVolumeUSD)) * 0.003)
+        : "";
+      return { oneDayFees, oneDayTxns, pairCount };
+    }
+    return {}
+  }, [uniswapFactory])
 
   return (
     <div className={classes.root}>
@@ -50,7 +58,7 @@ export default function GlobalStats(props) {
               </TYPE.main>
             </>
           )}
-          {!below1180 && (
+          {!below1180 && !isLoading && (
             <TYPE.main mr={"1rem"}>
               Transactions (24H):{" "}
               <span className={classes.medium}>{formatDecimal(oneDayTxns)}</span>
@@ -62,7 +70,7 @@ export default function GlobalStats(props) {
               <span className={classes.medium}>{pairCount}</span>
             </TYPE.main>
           )}
-          {!below1295 && (
+          {!below1295 && !isLoading && (
             <TYPE.main mr={"1rem"}>
               Fees (24H): <span className={classes.medium}>{oneDayFees}</span>
               &nbsp;

@@ -6,7 +6,6 @@ import React, { useMemo, useState } from "react";
 import { transparentize } from "polished";
 
 import {
-  ALL_TRANSACTIONS,
   dayDatasQuery,
   getApollo,
   getDayData,
@@ -20,10 +19,6 @@ import {
   poolsQuery,
   tokensQuery,
   useInterval,
-  getTransactions,
-  GLOBAL_TXNS,
-  getFactory,
-  factoryQuery,
 } from "app/core";
 import {
   AppShell,
@@ -36,6 +31,7 @@ import {
   Transactions,
 } from "app/components";
 import GlobalStats from "components/GlobalStats";
+import ClientOnly from "components/ClientOnly";
 
 import { TYPE, ThemedBackground } from "../theme";
 
@@ -55,18 +51,6 @@ function IndexPage() {
       clientName: "masterchef",
     },
   });
-  
-  const { data: { uniswapFactory } } = useQuery(factoryQuery, {
-    fetchPolicy: 'cache-first'
-  });
-
-  const {
-    data: transactions,
-  } = useQuery(ALL_TRANSACTIONS, {
-    fetchPolicy: 'cache-first'
-  });
-
-  const { data: globalTransactions } = useQuery(GLOBAL_TXNS);
 
   const {
     data: { tokenDayDatas: dayDatas },
@@ -75,11 +59,9 @@ function IndexPage() {
   useInterval(
     () =>
       Promise.all([
-        getFactory,
         getPairs,
         getPools,
         getTokens,
-        getTransactions,
         getAvaxPrice,
         getDayData,
         getOneDayAvaxPrice,
@@ -137,7 +119,9 @@ function IndexPage() {
       <TYPE.largeHeader>{process.env.NEXT_PUBLIC_APP_NAME}</TYPE.largeHeader>
       <Box mt={3} mb={3}>
         <Search pairs={pairs} tokens={tokens} />
-        {uniswapFactory && <GlobalStats factory={uniswapFactory} />}
+        <ClientOnly>
+          <GlobalStats />
+        </ClientOnly>
       </Box>
 
       <Grid container spacing={3}>
@@ -211,7 +195,9 @@ function IndexPage() {
           <Typography variant="h6" component="h2" gutterBottom>
             Transactions
           </Typography>
-          <Transactions transactions={transactions} />
+          <ClientOnly>
+            <Transactions />
+          </ClientOnly>
         </Grid>
       </Grid>
     </AppShell>
@@ -220,8 +206,6 @@ function IndexPage() {
 
 export async function getStaticProps() {
   const client = getApollo();
-
-  await getFactory(client);
 
   await getDayData(client);
 
@@ -236,8 +220,6 @@ export async function getStaticProps() {
   await getPairs(client);
 
   await getPools(client);
-
-  await getTransactions(client);
 
   return {
     props: {
