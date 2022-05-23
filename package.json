@@ -31,7 +31,7 @@
     "graphql": "^15.3.0",
     "lodash.merge": "^4.6.2",
     "millify": "^3.3.0",
-    "next": "12",
+    "next": "12.1.0",
     "numeral": "^2.0.6",
     "polished": "^4.1.4",
     "react": "^17.0.2",
