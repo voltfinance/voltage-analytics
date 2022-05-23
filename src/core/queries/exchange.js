@@ -29,6 +29,20 @@ export const factoryTimeTravelQuery = gql`
   }
 `;
 
+export const GLOBAL_CHART = gql`
+  query uniswapDayDatas($first: Int! = 1000) {
+    uniswapDayDatas(first: $first, orderBy: date, orderDirection: asc) {
+      id
+      date
+      totalVolumeUSD
+      dailyVolumeUSD
+      dailyVolumeETH
+      totalLiquidityUSD
+      totalLiquidityETH
+    }
+  }
+`
+
 export const userIdsQuery = gql`
   query userIdsQuery($first: Int! = 1000, $skip: Int! = 0) {
     users(first: $first, skip: $skip) {

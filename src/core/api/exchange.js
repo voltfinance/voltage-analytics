@@ -86,6 +86,21 @@ export async function getDayData(client = getApollo()) {
   });
 }
 
+export async function getGlobalDayData(client = getApollo()) {
+  const { data } = await client.query({
+    query: GLOBAL_CHART,
+  });
+
+  await client.cache.writeQuery({
+    query: GLOBAL_CHART,
+    data,
+  });
+
+  return await client.cache.readQuery({
+    query: GLOBAL_CHART,
+  });
+}
+
 // Tokens
 
 export async function getToken(id, client = getApollo()) {

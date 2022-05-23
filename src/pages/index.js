@@ -6,9 +6,7 @@ import React, { useMemo, useState } from "react";
 import { transparentize } from "polished";
 
 import {
-  dayDatasQuery,
   getApollo,
-  getDayData,
   getAvaxPrice,
   getOneDayAvaxPrice,
   getPairs,
@@ -19,6 +17,8 @@ import {
   poolsQuery,
   tokensQuery,
   useInterval,
+  GLOBAL_CHART,
+  getGlobalDayData,
 } from "app/core";
 import {
   AppShell,
@@ -53,8 +53,8 @@ function IndexPage() {
   });
 
   const {
-    data: { tokenDayDatas: dayDatas },
-  } = useQuery(dayDatasQuery);
+    data: { uniswapDayDatas: dayDatas },
+  } = useQuery(GLOBAL_CHART);
 
   useInterval(
     () =>
@@ -62,8 +62,8 @@ function IndexPage() {
         getPairs,
         getPools,
         getTokens,
+        getGlobalDayData,
         getAvaxPrice,
-        getDayData,
         getOneDayAvaxPrice,
         getSevenDayAvaxPrice,
       ]),
@@ -207,7 +207,7 @@ function IndexPage() {
 export async function getStaticProps() {
   const client = getApollo();
 
-  await getDayData(client);
+  await getGlobalDayData(client);
 
   await getAvaxPrice(client);
 
@@ -225,7 +225,7 @@ export async function getStaticProps() {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 900,
   };
 }
 
