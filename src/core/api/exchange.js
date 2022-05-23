@@ -9,7 +9,8 @@ import {
   userQuery,
   userIdsQuery,
   ALL_TRANSACTIONS,
-  GLOBAL_TXNS
+  GLOBAL_TXNS,
+  GLOBAL_CHART
 } from "../queries/exchange";
 import {
   getOneDayBlock,
