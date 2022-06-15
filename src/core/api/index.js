@@ -13,6 +13,7 @@ import {
   sevenDayAvaxPriceQuery,
   tokenPairsQuery,
 } from "app/core";
+import { pairDayDatasQuery } from "../queries";
 
 export * from "./bar";
 export * from "./blocks";
@@ -74,7 +75,7 @@ export async function getOneDayAvaxPrice(client = getApollo()) {
   await client.cache.writeQuery({
     query: oneDayAvaxPriceQuery,
     data: {
-      avaxPrice: bundles[0]?.avaxPrice,
+      ethPrice: bundles[0]?.ethPrice,
     },
   });
 }
@@ -95,7 +96,7 @@ export async function getSevenDayAvaxPrice(client = getApollo()) {
   await client.cache.writeQuery({
     query: sevenDayAvaxPriceQuery,
     data: {
-      avaxPrice: bundles[0]?.avaxPrice,
+      ethPrice: bundles[0]?.ethPrice,
     },
   });
 }
@@ -165,6 +166,30 @@ export async function getPair(id, client = getApollo()) {
     query: pairQuery,
     variables: {
       id,
+    },
+  });
+}
+
+export async function getPairDayDatas(id, client = getApollo()) {
+  const { data } = await client.query({
+    query: pairDayDatasQuery,
+    variables: {
+      pairs: [id],
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: pairDayDatasQuery,
+    variables: {
+      pairs: [id],
+    },
+    data,
+  });
+
+  return await client.cache.readQuery({
+    query: pairDayDatasQuery,
+    variables: {
+      pairs: [id],
     },
   });
 }

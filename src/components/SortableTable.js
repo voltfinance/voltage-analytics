@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import React from "react";
+import React, { useMemo } from "react";
 import SortableTableHead from "./SortableTableHead";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -21,9 +21,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     marginBottom: theme.spacing(2),
   },
-  // table: {
-  //   minWidth: 750,
-  // },
   avatar: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
@@ -39,9 +36,26 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  title: {
+    padding: theme.spacing(2),
+  },
+  cell: {
+    borderBottom: "1px solid rgba(43, 43, 43, 0.435) !important"
+  },
 }));
 
+const liquidityPairOverrides = ['reserve0', 'reserve1'];
 function descendingComparator(a, b, orderBy) {
+  if (a.__typename === 'Pool') {
+    if (liquidityPairOverrides.includes(orderBy)) {
+      a = a.liquidityPair;
+      b = b.liquidityPair;
+    }
+    if (orderBy === 'name') {
+      a = { name: `${a.liquidityPair.token0.symbol}-${a.liquidityPair.token1.symbol}` };
+      b = { name: `${b.liquidityPair.token0.symbol}-${b.liquidityPair.token1.symbol}` };
+    }
+  }
   a = Number.isNaN(parseFloat(a[orderBy]))
     ? a[orderBy]
     : parseFloat(a[orderBy]);
@@ -75,8 +89,6 @@ function stableSort(array, comparator) {
 }
 
 export default function SortableTable({
-  // order = "desc",
-  // orderBy = "totalLiquidityUSD",
   columns,
   rows,
   title,
@@ -86,14 +98,19 @@ export default function SortableTable({
 
   const [order, setOrder] = React.useState(props.order || "desc");
   const [orderBy, setOrderBy] = React.useState(props.orderBy);
+  const [filter, setFilter] = React.useState()
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(props.rowsPerPage || 10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
+  const handleRequestFilter = (type) => {
+    setFilter(type);
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -104,13 +121,13 @@ export default function SortableTable({
     setPage(0);
   };
 
-  // const emptyRows =
-  //   rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const filteredRows = filter ? rows.filter(rows => rows.__typename === filter) : rows;
+  const sortedRows = stableSort(filteredRows, getComparator(order, orderBy));
 
   return (
     <div className={classes.root}>
       {title && (
-        <Typography variant="h6" component="h2" gutterBottom>
+        <Typography variant="h6" component="h2" className={classes.title}>
           {title}
         </Typography>
       )}
@@ -122,13 +139,12 @@ export default function SortableTable({
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
-            rowCount={rows.length}
+            onRequestFilter={handleRequestFilter}
+            rowCount={sortedRows.length}
+            cellProps={{ className: classes.cell }}
           />
           <TableBody>
-            {stableSort(rows, getComparator(order, orderBy))
-              // .filter((row) => {
-              //   return !TOKEN_DENY.includes(row.id);
-              // })
+            {sortedRows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 return (
@@ -141,7 +157,7 @@ export default function SortableTable({
                             ? { component: "th", scope: "row" }
                             : {})}
                           align={column.align || "left"}
-                          // variant="body"
+                          className={classes.cell}
                         >
                           {typeof column.render === "function"
                             ? column.render(row, index)
@@ -152,18 +168,13 @@ export default function SortableTable({
                   </TableRow>
                 );
               })}
-            {/* {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )} */}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[5, 10, 25, , { label: "All", value: -1 }]}
         component="div"
-        count={rows.length}
+        count={sortedRows.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}

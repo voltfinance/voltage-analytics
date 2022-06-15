@@ -33,9 +33,10 @@ function MyApp({ Component, pageProps }) {
 
   const darkMode = useReactiveVar(darkModeVar);
 
-  const theme = React.useMemo(() => (darkMode ? darkTheme : lightTheme), [
-    darkMode,
-  ]);
+  const theme = React.useMemo(
+    () => (darkMode ? darkTheme : lightTheme),
+    [darkMode]
+  );
 
   return (
     <>
@@ -47,15 +48,7 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
       <ApolloProvider client={client}>
-        <ThemeProvider
-          theme={{
-            ...theme,
-            // props: {
-            //   // Change the default options of useMediaQuery
-            //   MuiUseMediaQuery: { ssrMatchMedia },
-            // },
-          }}
-        >
+        <ThemeProvider theme={theme}>
           <CssBaseline />
           <Component {...pageProps} />
         </ThemeProvider>

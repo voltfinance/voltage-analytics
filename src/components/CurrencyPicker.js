@@ -41,13 +41,13 @@ export default function CurrencyPicker({ useUSD, onCurrencySwitch }) {
           <Button
             type="button"
             value="AVAX"
-            aria-label="AVAX currency"
+            aria-label="FUSE currency"
             variant={useUSD ? "outlined" : "contained"}
             size="small"
             color="default"
             onClick={onCurrencySwitch}
           >
-            AVAX
+            FUSE
           </Button>
         </div>
       </div>

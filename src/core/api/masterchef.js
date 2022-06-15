@@ -16,7 +16,7 @@ import { FARMS_BLACKLIST } from "app/core/constants";
 import { getApollo } from "../apollo";
 import { sub } from "date-fns";
 
-import { JOE_TOKEN_ADDDRESS, MASTERCHEF_ADDRESS } from "../../config/index.ts";
+import { VOLT_TOKEN_ADDRESS, MASTERCHEF_ADDRESS } from "../../config/index.ts";
 
 export async function getPoolIds(client = getApollo()) {
   const {
@@ -147,15 +147,15 @@ export async function getPools(client = getApollo()) {
 
   // AVAX price
   const { bundles } = await getAvaxPrice();
-  const avaxPrice =
-    bundles[0] && bundles[0].hasOwnProperty("avaxPrice")
-      ? bundles[0].avaxPrice
+  const ethPrice =
+    bundles[0] && bundles[0].hasOwnProperty("ethPrice")
+      ? bundles[0].ethPrice
       : 0;
 
   // JOE token
-  const token_address = JOE_TOKEN_ADDDRESS;
+  const token_address = VOLT_TOKEN_ADDRESS;
   const { token } = await getToken(token_address);
-  const joePrice = avaxPrice * token.derivedAVAX;
+  const joePrice = ethPrice * token.derivedETH;
 
   // MASTERCHEF
   const {
@@ -173,7 +173,7 @@ export async function getPools(client = getApollo()) {
           (pool) =>
             !FARMS_BLACKLIST.includes(pool.id) &&
             pool.allocPoint !== "0" &&
-            pool.accJoePerShare !== "0" &&
+            pool.accVoltPerShare !== "0" &&
             pairs.find((pair) => pair?.id === pool.pair)
         )
         .map((pool) => {
@@ -188,7 +188,7 @@ export async function getPools(client = getApollo()) {
             (balance / Number(totalSupply)) * Number(reserveUSD);
           const rewardPerSec =
             ((pool.allocPoint / pool.owner.totalAllocPoint) *
-              pool.owner.joePerSec) /
+              pool.owner.voltPerSec) /
             2 /
             1e18;
 

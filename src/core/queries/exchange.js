@@ -5,9 +5,11 @@ export const factoryQuery = gql`
   query factoryQuery(
     $id: String! = "${FACTORY_ADDRESS}"
   ) {
-    factory(id: $id) {
+    uniswapFactory(id: $id) {
       id
-      volumeUSD
+      totalVolumeUSD
+      txCount
+      pairCount
       oneDay @client
       twoDay @client
     }
@@ -19,12 +21,27 @@ export const factoryTimeTravelQuery = gql`
     $id: String! = "${FACTORY_ADDRESS}"
     $block: Block_height!
   ) {
-    factory(id: $id, block: $block) {
+    uniswapFactory(id: $id, block: $block) {
       id
-      volumeUSD
+      totalVolumeUSD
+      txCount
     }
   }
 `;
+
+export const GLOBAL_CHART = gql`
+  query uniswapDayDatas($first: Int! = 1000) {
+    uniswapDayDatas(first: $first, orderBy: date, orderDirection: asc) {
+      id
+      date
+      totalVolumeUSD
+      dailyVolumeUSD
+      dailyVolumeETH
+      totalLiquidityUSD
+      totalLiquidityETH
+    }
+  }
+`
 
 export const userIdsQuery = gql`
   query userIdsQuery($first: Int! = 1000, $skip: Int! = 0) {
@@ -44,20 +61,20 @@ export const userQuery = gql`
 
 export const oneDayAvaxPriceQuery = gql`
   query OneDayAvaxPrice {
-    avaxPrice @client
+    ethPrice @client
   }
 `;
 
 export const sevenDayAvaxPriceQuery = gql`
   query sevenDayAvaxPrice {
-    avaxPrice @client
+    ethPrice @client
   }
 `;
 
 export const bundleFields = gql`
   fragment bundleFields on Bundle {
     id
-    avaxPrice
+    ethPrice
   }
 `;
 
@@ -80,22 +97,23 @@ export const avaxPriceTimeTravelQuery = gql`
 `;
 
 export const dayDataFieldsQuery = gql`
-  fragment dayDataFields on DayData {
+  fragment dayDataFields on TokenDayData {
     id
     date
-    volumeAVAX
-    volumeUSD
-    untrackedVolume
-    liquidityAVAX
-    liquidityUSD
-    txCount
+    dailyVolumeETH
+    dailyVolumeUSD
+    totalLiquidityETH
+    totalLiquidityUSD
+    dailyTxns
+    # TODO: confirm equivalent of untracked
+    # untrackedVolume 
   }
 `;
 
 // Dashboard...
 export const dayDatasQuery = gql`
   query dayDatasQuery($first: Int! = 1000, $date: Int! = 0) {
-    dayDatas(first: $first, orderBy: date, orderDirection: desc) {
+    tokenDayDatas(first: $first, orderBy: date, orderDirection: desc) {
       ...dayDataFields
     }
   }
@@ -110,7 +128,7 @@ export const pairTokenFieldsQuery = gql`
     name
     symbol
     totalSupply
-    derivedAVAX
+    derivedETH
   }
 `;
 
@@ -118,10 +136,10 @@ export const pairFieldsQuery = gql`
   fragment pairFields on Pair {
     id
     reserveUSD
-    reserveAVAX
+    reserveETH
     volumeUSD
     untrackedVolumeUSD
-    trackedReserveAVAX
+    trackedReserveETH
     token0 {
       ...pairTokenFields
     }
@@ -134,7 +152,7 @@ export const pairFieldsQuery = gql`
     token1Price
     totalSupply
     txCount
-    timestamp
+    createdAtTimestamp
   }
   ${pairTokenFieldsQuery}
 `;
@@ -163,7 +181,7 @@ export const pairIdsQuery = gql`
   query pairIdsQuery($first: Int! = 1000) {
     pairs(
       first: $first
-      orderBy: volumeUSD
+      orderBy: untrackedVolumeUSD
       orderDirection: desc) {
         id
     }
@@ -188,23 +206,21 @@ export const pairDayDatasQuery = gql`
       first: $first
       orderBy: date
       orderDirection: desc
-      where: { pair_in: $pairs, date_gt: $date }
+      where: { pairAddress_in: $pairs, date_gt: $date }
     ) {
       date
-      pair {
-        id
-      }
+      pairAddress
       token0 {
-        derivedAVAX
+        derivedETH
       }
       token1 {
-        derivedAVAX
+        derivedETH
       }
       reserveUSD
-      volumeToken0
-      volumeToken1
-      volumeUSD
-      txCount
+      dailyVolumeToken0
+      dailyVolumeToken1
+      dailyVolumeUSD
+      dailyTxns
     }
   }
 `;
@@ -228,7 +244,7 @@ export const pairSubsetQuery = gql`
   query pairSubsetQuery(
     $first: Int! = 1000
     $pairAddresses: [Bytes]!
-    $orderBy: String! = "trackedReserveAVAX"
+    $orderBy: String! = "trackedReserveETH"
     $orderDirection: String! = "desc"
   ) {
     pairs(
@@ -248,10 +264,11 @@ export const pairSubsetQuery = gql`
 export const pairsQuery = gql`
   query pairsQuery(
     $first: Int! = 1000
-    $orderBy: String! = "trackedReserveAVAX"
+    $orderBy: String! = "trackedReserveETH"
     $orderDirection: String! = "desc"
+    $skip: Int = 0
   ) {
-    pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection) {
+    pairs(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
       ...pairFields
       oneDay @client
       sevenDay @client
@@ -269,13 +286,13 @@ export const pairsTimeTravelQuery = gql`
     pairs(
       first: $first
       block: $block
-      orderBy: trackedReserveAVAX
+      orderBy: trackedReserveETH
       orderDirection: desc
       where: { id_in: $pairAddresses }
     ) {
       id
       reserveUSD
-      trackedReserveAVAX
+      trackedReserveETH
       volumeUSD
       untrackedVolumeUSD
       txCount
@@ -291,12 +308,12 @@ export const tokenFieldsQuery = gql`
     name
     decimals
     totalSupply
-    volume
-    volumeUSD
+    tradeVolume
+    tradeVolumeUSD
     untrackedVolumeUSD
     txCount
-    liquidity
-    derivedAVAX
+    totalLiquidity
+    derivedETH
   }
 `;
 
@@ -325,7 +342,7 @@ export const tokenIdsQuery = gql`
 query tokenIdsQuery($first: Int! = 1000) {
   tokens(
     first: $first
-    orderBy: volumeUSD
+    orderBy: tradeVolumeUSD
     orderDirection: desc) {
     id
   }
@@ -348,10 +365,10 @@ export const tokenDayDatasQuery = gql`
       token {
         id
       }
-      volumeUSD
-      liquidityUSD
+      dailyVolumeUSD
+      totalLiquidityUSD
       priceUSD
-      txCount
+      dailyTxns
     }
   }
 `;
@@ -384,11 +401,11 @@ export const tokenPairsQuery = gql`
 
 export const tokensQuery = gql`
   query tokensQuery($first: Int! = 1000) {
-    tokens(first: $first, orderBy: volumeUSD, orderDirection: desc) {
+    tokens(first: $first, orderBy: tradeVolumeUSD, orderDirection: desc) {
       ...tokenFields
-      dayData(first: 7, skip: 0, orderBy: date, order: asc) {
-        id
-        priceUSD
+      tokenDayData(first: 7, skip: 0, orderBy: date, order: asc) {
+         id
+         priceUSD
       }
       # hourData(first: 168, skip: 0, orderBy: date, order: asc) {
       #   priceUSD
@@ -403,12 +420,167 @@ export const tokensQuery = gql`
 // block @client @export(as: "block")
 export const tokensTimeTravelQuery = gql`
   query tokensTimeTravelQuery($first: Int! = 1000, $block: Block_height!) {
-    tokens(first: $first, block: $block, orderBy: volumeUSD, orderDirection: desc) {
+    tokens(first: $first, block: $block, orderBy: tradeVolumeUSD, orderDirection: desc) {
       ...tokenFields
     }
   }
   ${tokenFieldsQuery}
 `;
+
+export const TOP_LPS_PER_PAIRS = gql`
+  query lps($pair: Bytes!) {
+    liquidityPositions(where: { pair: $pair }, orderBy: liquidityTokenBalance, orderDirection: desc, first: 10) {
+      user {
+        id
+      }
+      pair {
+        id
+      }
+      liquidityTokenBalance
+    }
+  }
+`;
+
+export const ALL_TRANSACTIONS = gql`
+  query allTransactionsQuery($first: Int! = 200) {
+    swaps(
+      first: $first
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0In
+      amount0Out
+      amount1In
+      amount1Out
+      amountUSD
+      to
+    }
+    mints(
+      first: $first
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0
+      amount1
+      amountUSD
+      to
+    }
+    burns(
+      first: $first
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0
+      amount1
+      amountUSD
+      to
+    }
+  }
+`
+
+export const GLOBAL_TXNS = gql`
+  query transactions {
+    transactions(first: 100, orderBy: timestamp, orderDirection: desc) {
+      mints(orderBy: timestamp, orderDirection: desc) {
+        transaction {
+          id
+          timestamp
+        }
+        pair {
+          token0 {
+            id
+            symbol
+          }
+          token1 {
+            id
+            symbol
+          }
+        }
+        to
+        liquidity
+        amount0
+        amount1
+        amountUSD
+      }
+      burns(orderBy: timestamp, orderDirection: desc) {
+        transaction {
+          id
+          timestamp
+        }
+        pair {
+          token0 {
+            id
+            symbol
+          }
+          token1 {
+            id
+            symbol
+          }
+        }
+        sender
+        liquidity
+        amount0
+        amount1
+        amountUSD
+      }
+      swaps(orderBy: timestamp, orderDirection: desc) {
+        transaction {
+          id
+          timestamp
+        }
+        pair {
+          token0 {
+            id
+            symbol
+          }
+          token1 {
+            id
+            symbol
+          }
+        }
+        amount0In
+        amount0Out
+        amount1In
+        amount1Out
+        amountUSD
+        to
+      }
+    }
+  }
+`
 
 // Transactions...
 export const transactionsQuery = gql`

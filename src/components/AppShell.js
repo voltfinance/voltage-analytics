@@ -1,13 +1,14 @@
 import { Container, Drawer, Hidden, useMediaQuery } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import styled from "styled-components";
 
 import AppBar from "./AppBar";
 import AppFooter from "./AppFooter";
 import AppNavigation from "./AppNavigation";
 import clsx from "clsx";
 
-const drawerWidth = 240;
+const drawerWidth = 220;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     // }),
     // marginLeft: -drawerWidth,
 
-    padding: theme.spacing(3, 0),
+    padding: theme.spacing(4, 0),
     flexGrow: 1,
 
     width: "100%",
@@ -72,6 +73,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
     width: `calc(100% - ${drawerWidth}px)`,
   },
+  container: {
+    maxWidth: "1440px"
+  }
 }));
 
 function AppShell(props) {
@@ -96,14 +100,14 @@ function AppShell(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar
+      {/* <AppBar
         onToggleSidebar={onToggleSidebar}
         open={open}
         mobileOpen={mobileOpen}
-      />
+      /> */}
+      {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
       <nav className={classes.drawer} aria-label="navigation">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="js">
+        <Hidden smUp implementation="css">
           <Drawer
             container={container}
             variant="temporary"
@@ -140,8 +144,9 @@ function AppShell(props) {
           [classes.contentShift]: open || !matches,
         })}
       >
-        <div className={classes.toolbar} />
-        <Container maxWidth="xl">{children}</Container>
+        <Container className={classes.container}>
+          {children}
+        </Container>
         {/* <AppFooter /> */}
       </main>
     </div>

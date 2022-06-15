@@ -5,6 +5,7 @@ import React from "react";
 import clsx from "clsx";
 import { formatCurrency } from "app/core";
 import { makeStyles } from "@material-ui/styles";
+import { RowBetween } from "./Row";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,11 +20,6 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontWeight: 500,
-  },
-  content: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
   },
 }));
 
@@ -61,17 +57,21 @@ function KPI({
         >
           {title}
         </Typography>
-        <div className={classes.content}>
-          <Typography variant="h6" color="textPrimary" noWrap>
-            {/* {!Number.isNaN(value) ? value : 0} */}
-            {formatters[format](value)}
-          </Typography>
-          <Typography variant="subtitle2" color="textSecondary" noWrap>
-            {difference && !Number.isNaN(difference) ? (
-              <Percent marginLeft={1} percent={difference} />
-            ) : null}
-          </Typography>
-        </div>
+        <RowBetween alignItems="baseline">
+          <Box flex={0.5}>
+            <Typography variant="h6" color="textPrimary" noWrap>
+              {/* {!Number.isNaN(value) ? value : 0} */}
+              {formatters[format](value)}
+            </Typography>
+          </Box>
+          <Box flex={0.5}>
+            <Typography variant="subtitle2" color="textSecondary" align="right" noWrap>
+              {difference && !Number.isNaN(difference) ? (
+                <Percent marginLeft={1} percent={difference} />
+              ) : null}
+            </Typography>
+          </Box>
+        </RowBetween>
       </CardContent>
     </Card>
   );

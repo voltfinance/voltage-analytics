@@ -68,21 +68,21 @@ export const lockup = from([
   }),
 ]);
 
-export const moneyMaker = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: GRAPH_MONEY_MAKER_URI,
-    shouldBatch: true,
-  }),
-])
+// export const moneyMaker = from([
+//   new RetryLink(),
+//   new HttpLink({
+//     uri: GRAPH_MONEY_MAKER_URI,
+//     shouldBatch: true,
+//   }),
+// ])
 
-export const sjoe = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: GRAPH_SJOE_URI,
-    shouldBatch: true,
-  }),
-])
+// export const sjoe = from([
+//   new RetryLink(),
+//   new HttpLink({
+//     uri: GRAPH_SJOE_URI,
+//     shouldBatch: true,
+//   }),
+// ])
 
 export default split(
   (operation) => {
@@ -104,19 +104,20 @@ export default split(
           return operation.getContext().clientName === "lockup";
         },
         lockup,
-        split(
-          (operation) => {
-            return operation.getContext().clientName === "moneymaker";
-          },
-          moneyMaker,
-          split(
-            (operation) => {
-              return operation.getContext().clientName === "sjoe";
-            },
-            sjoe,
-            exchange
-          )
-        )
+        exchange
+        // split(
+        //   (operation) => {
+        //     return operation.getContext().clientName === "moneymaker";
+        //   },
+        //   moneyMaker,
+        //   split(
+        //     (operation) => {
+        //       return operation.getContext().clientName === "sjoe";
+        //     },
+        //     sjoe,
+        //     exchange
+        //   )
+        // )
       )
     )
   )

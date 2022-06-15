@@ -45,7 +45,7 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
             aria-label="1 week timespan"
             variant="text"
             size="small"
-            color="primary"
+            color="textPrimary"
             onClick={onTimespanChange}
           >
             1W
@@ -56,7 +56,7 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
             aria-label="1 month timespan"
             variant="text"
             size="small"
-            color="primary"
+            color="textPrimary"
             onClick={onTimespanChange}
           >
             1M
@@ -67,7 +67,7 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
             aria-label="ALL timespan"
             variant="text"
             size="small"
-            color="primary"
+            color="textPrimary"
             onClick={onTimespanChange}
           >
             ALL

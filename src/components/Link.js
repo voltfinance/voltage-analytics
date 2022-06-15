@@ -1,15 +1,34 @@
 import React, { forwardRef } from "react";
-
-import MuiLink from "@material-ui/core/Link";
 import NextLink from "next/link";
-import clsx from "clsx";
 import { useRouter } from "next/router";
 
+import MuiLink from "@material-ui/core/Link";
+import { makeStyles } from "@material-ui/core";
+import clsx from "clsx";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    textDecoration: "none",
+    color: "inherit",
+    "&:hover": {
+      cursor: "pointer",
+      textDecoration: "none",
+      underline: "none",
+    },
+  },
+  custom: {
+    textDecoration: "none",
+    fontSize: "14px",
+    fontWeight: 500,
+    color: ({ color }) => (color ? color : theme.palette.text.primary),
+  }
+}));
+
 const NextComposed = forwardRef(function NextComposed(props, ref) {
-  const { as, href, ...other } = props;
+  const { as, href = "", ...other } = props;
 
   return (
-    <NextLink href={href} as={as}>
+    <NextLink href={href} as={as} passHref>
       <a ref={ref} {...other} />
     </NextLink>
   );
@@ -27,10 +46,9 @@ function Link(props) {
     ...other
   } = props;
 
-  const router = useRouter();
-  const pathname = typeof href === "string" ? href : href.pathname;
+  const { pathname } = useRouter();
   const className = clsx(classNameProps, {
-    [activeClassName]: router.pathname === pathname && activeClassName,
+    [activeClassName]: pathname === href && activeClassName,
   });
 
   if (naked) {
@@ -50,8 +68,27 @@ function Link(props) {
       className={className}
       ref={innerRef}
       href={href}
+      color="textPrimary"
       {...other}
     />
+  );
+}
+
+export const BasicLink = ({ className, children, ...rest }) => {
+  const classes = useStyles();
+  return (
+    <Link className={clsx(className, classes.root)} {...rest}>
+      {children}
+    </Link>
+  );
+};
+
+export const CustomLink = ({ className, children, ...rest }) => {
+  const classes = useStyles();
+  return (
+    <Link className={clsx(className, classes.custom)} {...rest}>
+      {children}
+    </Link>
   );
 }
 

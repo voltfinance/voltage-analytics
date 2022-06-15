@@ -1,4 +1,4 @@
-import { AppShell, TokenTable } from "app/components";
+import { AppShell, TokenTable, Search } from "app/components";
 import {
   avaxPriceQuery,
   getApollo,
@@ -12,6 +12,9 @@ import Head from "next/head";
 import React from "react";
 import { useQuery } from "@apollo/client";
 
+import { TYPE } from "../../theme";
+import { Box, Grid } from "@material-ui/core";
+
 function TokensPage() {
   const {
     data: { tokens },
@@ -24,8 +27,18 @@ function TokensPage() {
   return (
     <AppShell>
       <Head>
-        <title>Tokens | Trader Joe Analytics</title>
+        <title>Tokens | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
+      <Grid container>
+        <Grid item xs>
+          <Box pb={3}>
+            <TYPE.largeHeader>Top Tokens</TYPE.largeHeader>
+          </Box>
+        </Grid>
+        <Grid item xs={3}>
+          <Search placeholder="" tokens={tokens} />
+        </Grid>
+      </Grid>
       <TokenTable title="Tokens" tokens={tokens} />
     </AppShell>
   );

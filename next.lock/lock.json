@@ -1,0 +1,4 @@
+{
+  "https://raw.githubusercontent.com/voltfinance/swap-default-token-list/master/build/voltage-swap-default.tokenlist.json": { "integrity": "sha512-/PTxJxRqPTPEVBI5OCcjCJd/4LnOBtbwWITAm+WIFLtZoFXVt10Rdmiu3aXIFlUbNHi+EQQpvd6q3DBbUFYVsA==", "contentType": "text/plain; charset=utf-8" },
+  "version": 1
+}

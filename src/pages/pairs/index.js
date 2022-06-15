@@ -1,9 +1,12 @@
-import { AppShell, PairTable, SortableTable } from "app/components";
+import { AppShell, PairTable, Search } from "app/components";
 import { getApollo, getPairs, pairsQuery, useInterval } from "app/core";
 
 import Head from "next/head";
 import React from "react";
 import { useQuery } from "@apollo/client";
+
+import { TYPE } from "../../theme";
+import { Box, Grid } from "@material-ui/core";
 
 function PairsPage() {
   const {
@@ -13,8 +16,18 @@ function PairsPage() {
   return (
     <AppShell>
       <Head>
-        <title>Pairs | Trader Joe Analytics</title>
+        <title>Pairs | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
+      <Grid container>
+        <Grid item xs>
+          <Box pb={3}>
+            <TYPE.largeHeader>Top Pairs</TYPE.largeHeader>
+          </Box>
+        </Grid>
+        <Grid item xs={3}>
+          <Search placeholder="" pairs={pairs} />
+        </Grid>
+      </Grid>
       <PairTable title="Pairs" pairs={pairs} />
     </AppShell>
   );

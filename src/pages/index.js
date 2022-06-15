@@ -1,18 +1,12 @@
+import Head from "next/head";
+import { ParentSize } from "@visx/responsive";
+import { useQuery } from "@apollo/client";
+import { Box, Grid, Paper, Typography } from "@material-ui/core";
+import React, { useMemo, useState } from "react";
+import { transparentize } from "polished";
+
 import {
-  AppShell,
-  TVLAreaChart,
-  BarChart,
-  PairTable,
-  PoolTable,
-  Search,
-  TokenTable,
-} from "app/components";
-import { Box, Grid, Paper } from "@material-ui/core";
-import React, { useState } from "react";
-import {
-  dayDatasQuery,
   getApollo,
-  getDayData,
   getAvaxPrice,
   getOneDayAvaxPrice,
   getPairs,
@@ -23,11 +17,23 @@ import {
   poolsQuery,
   tokensQuery,
   useInterval,
+  GLOBAL_CHART,
+  getGlobalDayData,
 } from "app/core";
+import {
+  AppShell,
+  TVLAreaChart,
+  BarChart,
+  PairTable,
+  PoolTable,
+  Search,
+  TokenTable,
+  Transactions,
+} from "app/components";
+import GlobalStats from "components/GlobalStats";
+import ClientOnly from "components/ClientOnly";
 
-import Head from "next/head";
-import { ParentSize } from "@visx/responsive";
-import { useQuery } from "@apollo/client";
+import { TYPE, ThemedBackground } from "../theme";
 
 function IndexPage() {
   const {
@@ -47,8 +53,8 @@ function IndexPage() {
   });
 
   const {
-    data: { dayDatas },
-  } = useQuery(dayDatasQuery);
+    data: { uniswapDayDatas: dayDatas },
+  } = useQuery(GLOBAL_CHART);
 
   useInterval(
     () =>
@@ -56,7 +62,8 @@ function IndexPage() {
         getPairs,
         getPools,
         getTokens,
-        getDayData,
+        getGlobalDayData,
+        getAvaxPrice,
         getOneDayAvaxPrice,
         getSevenDayAvaxPrice,
       ]),
@@ -65,32 +72,56 @@ function IndexPage() {
 
   const [useUSD, setUseUSD] = useState(true);
 
-  const [liquidity, volume] = dayDatas
-    .filter((d) => d.liquidityUSD !== "0")
-    .reduce(
-      (previousValue, currentValue) => {
-        previousValue[0].unshift({
-          date: currentValue.date,
-          value: parseFloat(
-            useUSD ? currentValue.liquidityUSD : currentValue.liquidityAVAX
-          ),
-        });
-        previousValue[1].unshift({
-          date: currentValue.date,
-          value: parseFloat(currentValue.volumeUSD),
-        });
-        return previousValue;
-      },
-      [[], []]
-    );
+  const liquidity = useMemo(() => {
+    let liquidityByDay = {};
+    for (const day of dayDatas) {
+      const value = parseFloat(
+        useUSD ? day.totalLiquidityUSD : day.totalLiquidityETH
+      );
+      if (liquidityByDay.hasOwnProperty(day.date)) {
+        liquidityByDay[day.date] = liquidityByDay[day.date] + value;
+      } else {
+        liquidityByDay[day.date] = value;
+      }
+    }
+
+    let result = [];
+    for (const date in liquidityByDay) {
+      result.push({ date: parseInt(date), value: liquidityByDay[date] });
+    }
+    return result.sort((a, b) => b > a);
+  }, [dayDatas, useUSD]);
+
+  const volume = useMemo(() => {
+    let volumeByDay = {};
+    for (const day of dayDatas) {
+      if (volumeByDay.hasOwnProperty(day.date)) {
+        volumeByDay[day.date] =
+          volumeByDay[day.date] + parseFloat(day.dailyVolumeUSD);
+      } else {
+        volumeByDay[day.date] = parseFloat(day.dailyVolumeUSD);
+      }
+    }
+
+    let result = [];
+    for (const date in volumeByDay) {
+      result.push({ date: parseInt(date), value: volumeByDay[date] });
+    }
+    return result.sort((a, b) => b > a);
+  }, [dayDatas]);
 
   return (
     <AppShell>
       <Head>
-        <title>Dashboard | Trader Joe Analytics</title>
+        <title>Dashboard | {process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
-      <Box mb={3}>
+      <ThemedBackground backgroundColor={transparentize(0.8, "#f3fc1f")} />
+      <TYPE.largeHeader>{process.env.NEXT_PUBLIC_APP_NAME}</TYPE.largeHeader>
+      <Box mt={3} mb={3}>
         <Search pairs={pairs} tokens={tokens} />
+        <ClientOnly>
+          <GlobalStats />
+        </ClientOnly>
       </Box>
 
       <Grid container spacing={3}>
@@ -135,8 +166,10 @@ function IndexPage() {
         </Grid>
 
         <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Top Pools
+          </Typography>
           <PoolTable
-            title="Joe Reward Pools"
             pools={pools}
             orderBy="tvl"
             order="desc"
@@ -145,11 +178,26 @@ function IndexPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <PairTable title="Top Joe Liquidity Pairs" pairs={pairs} />
+          <Typography variant="h6" component="h2" gutterBottom>
+            Top Pairs
+          </Typography>
+          <PairTable pairs={pairs} />
         </Grid>
 
         <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Top Tokens
+          </Typography>
           <TokenTable title="Top Tokens" tokens={tokens} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Transactions
+          </Typography>
+          <ClientOnly>
+            <Transactions />
+          </ClientOnly>
         </Grid>
       </Grid>
     </AppShell>
@@ -159,7 +207,7 @@ function IndexPage() {
 export async function getStaticProps() {
   const client = getApollo();
 
-  await getDayData(client);
+  await getGlobalDayData(client);
 
   await getAvaxPrice(client);
 
@@ -177,7 +225,7 @@ export async function getStaticProps() {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 900,
   };
 }
 

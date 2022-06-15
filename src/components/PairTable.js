@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Paper } from "@material-ui/core";
 import Link from "./Link";
 import { PAIR_DENY } from "app/core/constants";
 import PairIcon from "./PairIcon";
@@ -10,6 +10,10 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
+  icons: {
+    width: "24px",
+    height: "24px"
+  }
 }));
 
 export default function PairTable({ pairs, title, ...rest }) {
@@ -42,10 +46,7 @@ export default function PairTable({ pairs, title, ...rest }) {
 
       return {
         ...pair,
-        displayName: `${pair.token0.symbol.replace(
-          "WETH",
-          "ETH"
-        )}-${pair.token1.symbol.replace("WETH", "ETH")}`,
+        displayName: `${pair.token0.symbol.replace("WFUSE", "FUSE")}-${pair.token1.symbol.replace("WFUSE", "FUSE")}`,
         oneDayVolume: !Number.isNaN(oneDayVolume) ? oneDayVolume : 0,
         sevenDayVolume: !Number.isNaN(sevenDayVolume) ? sevenDayVolume : 0,
         oneDayFees: !Number.isNaN(oneDayFees) ? oneDayFees : 0,
@@ -55,10 +56,9 @@ export default function PairTable({ pairs, title, ...rest }) {
     });
 
   return (
-    <div className={classes.root}>
+    <Paper variant="outlined" className={classes.root}>
       <SortableTable
         orderBy="reserveUSD"
-        title={title}
         {...rest}
         columns={[
           {
@@ -113,6 +113,6 @@ export default function PairTable({ pairs, title, ...rest }) {
         ]}
         rows={rows}
       />
-    </div>
+    </Paper>
   );
 }

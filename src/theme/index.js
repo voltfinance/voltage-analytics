@@ -10,6 +10,68 @@ import {
 } from "@material-ui/core/colors";
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
+import styled from 'styled-components'
+import { Typography, withStyles } from "@material-ui/core";
+
+const TypographyWrapper = withStyles((theme) => ({
+  root: {
+    fontWeight: props => props.fontWeight || 500,
+    fontSize: props => props.fontSize || "14px",
+    color: props => props.color || theme.palette.text.primary,
+    marginRight: props => props.mr,
+  }
+}))(Typography);
+
+export const TYPE = {
+  main(props) {
+    return <TypographyWrapper fontWeight={500} fontSize={14} {...props} />
+  },
+
+  body(props) {
+    return <TypographyWrapper fontWeight={400} fontSize={14} {...props} />
+  },
+
+  small(props) {
+    return <TypographyWrapper fontWeight={500} fontSize={11} {...props} />
+  },
+
+  header(props) {
+    return <TypographyWrapper fontWeight={600} {...props} />
+  },
+
+  largeHeader(props) {
+    return <TypographyWrapper fontWeight={500} fontSize={24} {...props} />
+  },
+
+  light(props) {
+    return <TypographyWrapper fontWeight={400} fontSize={14} {...props} />
+  },
+
+  pink(props) {
+    return <TypographyWrapper fontWeight={props.faded ? 400 : 600} {...props} />
+  },
+}
+
+export const ThemedBackground = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  max-width: 100vw !important;
+  height: 200vh;
+  mix-blend-mode: color;
+  background: ${({ backgroundColor }) =>
+    `radial-gradient(50% 50% at 50% 50%, ${backgroundColor} 0%, rgba(255, 255, 255, 0) 100%)`};
+  color: ${(theme) => theme.text1}
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 9999;
+
+  transform: translateY(-110vh);
+`;
+
 export const palette = {
   primary: {
     main: "#B93CF6",
@@ -109,8 +171,8 @@ export const darkTheme = responsiveFontSizes(
         disabledBackground: "rgba(255, 255, 255, 0.12)",
       },
       background: {
-        default: "#050709",
-        paper: "#050709",
+        default: "#212429",
+        paper: "#212429",
       },
       divider: "rgba(255, 255, 255, 0.12)",
       ...palette,
@@ -127,7 +189,7 @@ export const lightTheme = responsiveFontSizes(
     palette: {
       type: "light",
       background: {
-        default: "#FEFEFE",
+        default: "#F7F8FA",
         paper: "#FFFFFF",
       },
       text: {
