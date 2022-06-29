@@ -13,7 +13,7 @@ function PairsPage() {
   return (
     <AppShell>
       <Head>
-        <title>Pairs | Trader Joe Analytics</title>
+        <title>Pairs | Voltage Analytics</title>
       </Head>
       <PairTable title="Pairs" pairs={pairs} />
     </AppShell>

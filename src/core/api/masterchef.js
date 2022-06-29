@@ -1,4 +1,4 @@
-import { getAverageBlockTime, getAvaxPrice, getToken } from "../api";
+import { getAverageBlockTime, getFusePrice, getToken } from "../api";
 import {
   liquidityPositionSubsetQuery,
   pairQuery,
@@ -16,7 +16,7 @@ import { FARMS_BLACKLIST } from "app/core/constants";
 import { getApollo } from "../apollo";
 import { sub } from "date-fns";
 
-import { JOE_TOKEN_ADDDRESS, MASTERCHEF_ADDRESS } from "../../config/index.ts";
+import { VOLT_TOKEN_ADDRESS, MASTERCHEF_ADDRESS } from "../../config/index.ts";
 
 export async function getPoolIds(client = getApollo()) {
   const {
@@ -145,17 +145,17 @@ export async function getPools(client = getApollo()) {
     fetchPolicy: "network-only",
   });
 
-  // AVAX price
-  const { bundles } = await getAvaxPrice();
-  const avaxPrice =
-    bundles[0] && bundles[0].hasOwnProperty("avaxPrice")
-      ? bundles[0].avaxPrice
+  // ETH price
+  const { bundles } = await getFusePrice();
+  const ethPrice =
+    bundles[0] && bundles[0].hasOwnProperty("ethPrice")
+      ? bundles[0].ethPrice
       : 0;
 
-  // JOE token
-  const token_address = JOE_TOKEN_ADDDRESS;
+  // VOLT token
+  const token_address = VOLT_TOKEN_ADDRESS;
   const { token } = await getToken(token_address);
-  const joePrice = avaxPrice * token.derivedAVAX;
+  const voltPrice = ethPrice * token.derivedETH;
 
   // MASTERCHEF
   const {
@@ -173,13 +173,13 @@ export async function getPools(client = getApollo()) {
           (pool) =>
             !FARMS_BLACKLIST.includes(pool.id) &&
             pool.allocPoint !== "0" &&
-            pool.accJoePerShare !== "0" &&
+            pool.accVoltPerShare !== "0" &&
             pairs.find((pair) => pair?.id === pool.pair)
         )
         .map((pool) => {
           const pair = pairs.find((pair) => pair.id === pool.pair);
 
-          // JOE rewards issued per sec
+          // VOLT rewards issued per sec
           const balance =
             Number(pool.balance / 1e18) > 0 ? Number(pool.balance / 1e18) : 0.1;
           const totalSupply = pair.totalSupply > 0 ? pair.totalSupply : 0.1;
@@ -188,12 +188,12 @@ export async function getPools(client = getApollo()) {
             (balance / Number(totalSupply)) * Number(reserveUSD);
           const rewardPerSec =
             ((pool.allocPoint / pool.owner.totalAllocPoint) *
-              pool.owner.joePerSec) /
+              pool.owner.voltPerSec) /
             2 /
             1e18;
 
           // calc yields
-          const roiPerSec = (rewardPerSec * joePrice) / balanceUSD;
+          const roiPerSec = (rewardPerSec * voltPrice) / balanceUSD;
           const roiPerHour = roiPerSec * 60 * 60;
           const roiPerDay = roiPerHour * 24;
           const roiPerMonth = roiPerDay * 30;

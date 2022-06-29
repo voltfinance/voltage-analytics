@@ -103,7 +103,7 @@ export default function Transactions({ transactions, txCount }) {
             label: "To",
             render: (row) => (
               <Link
-                href={`https://cchain.explorer.avax.network/address/${row.to}`}
+                href={`https://explorer.fuse.io/address/${row.to}`}
               >
                 {row.to}
               </Link>

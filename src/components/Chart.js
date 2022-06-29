@@ -32,7 +32,7 @@ const tooltipStyles = {
 const brushMargin = { top: 10, bottom: 15, left: 50, right: 20 };
 const chartSeparation = 30;
 const PATTERN_ID = "brush_pattern";
-export const accentColor = "#B93CF6";
+export const accentColor = "#f3fc1f";
 export const background = "#584153";
 export const background2 = "#af8baf";
 const selectedBrushStyle = {
@@ -280,7 +280,7 @@ export function Chart({
               id={PATTERN_ID}
               height={8}
               width={8}
-              stroke={accentColor}
+              stroke="#fff"
               strokeWidth={1}
               orientation={["diagonal"]}
             />

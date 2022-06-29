@@ -15,7 +15,7 @@ export default function TokenIcon({ id, ...rest }) {
   const classes = useStyles();
   const src = useMemo(
     () =>
-      `https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/logos/${toChecksumAddress(
+      `https://raw.githubusercontent.com/voltfinance/token-logos/main/logos/${toChecksumAddress(
         id
       )}/logo.png`,
     [id]

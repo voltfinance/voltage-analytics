@@ -14,7 +14,7 @@ export const decimalFormatter = new Intl.NumberFormat(locales, {
   maximumSignificantDigits: 4,
 });
 
-export const avaxFormatter = new Intl.NumberFormat(locales, {
+export const fuseFormatter = new Intl.NumberFormat(locales, {
   style: "decimal",
   minimumSignificantDigits: 1,
   maximumSignificantDigits: 8,

@@ -146,7 +146,7 @@ function LendingPage() {
     <AppShell>
       <Head>
         <title>
-          Trader Joe Analytics
+          Voltage Analytics
         </title>
       </Head>
       <Box display="flex" alignItems="center" marginBottom="30px">

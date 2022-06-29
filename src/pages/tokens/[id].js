@@ -14,14 +14,14 @@ import {
 import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import {
   currencyFormatter,
-  avaxPriceQuery,
+  fusePriceQuery,
   getApollo,
   getOneDayBlock,
-  getOneDayAvaxPrice,
+  getOneDayFusePrice,
   getToken,
   getTokenPairs,
-  oneDayAvaxPriceQuery,
-  sevenDayAvaxPriceQuery,
+  oneDayFusePriceQuery,
+  sevenDayFusePriceQuery,
   tokenDayDatasQuery,
   tokenIdsQuery,
   tokenPairsQuery,
@@ -90,15 +90,15 @@ function TokenPage() {
 
   const {
     data: { bundles },
-  } = useQuery(avaxPriceQuery, {
+  } = useQuery(fusePriceQuery, {
     pollInterval: 1800000,
   });
 
-  const { data: oneDayAvaxPriceData } = useQuery(oneDayAvaxPriceQuery);
+  const { data: oneDayEthPriceData } = useQuery(oneDayFusePriceQuery);
 
   useInterval(async () => {
     await getToken(id);
-    await getOneDayAvaxPrice();
+    await getOneDayFusePrice();
   }, 1800000);
 
   const {
@@ -142,20 +142,20 @@ function TokenPage() {
 
   const totalLiquidityUSD =
     parseFloat(token?.liquidity) *
-    parseFloat(token?.derivedAVAX) *
-    parseFloat(bundles[0].avaxPrice);
+    parseFloat(token?.derivedETH) *
+    parseFloat(bundles[0].ethPrice);
 
   const totalLiquidityUSDYesterday =
     parseFloat(token.oneDay?.liquidity) *
-    parseFloat(token.oneDay?.derivedAVAX) *
-    parseFloat(oneDayAvaxPriceData?.avaxPrice);
+    parseFloat(token.oneDay?.derivedETH) *
+    parseFloat(oneDayEthPriceData?.ethPrice);
 
   const price =
-    parseFloat(token?.derivedAVAX) * parseFloat(bundles[0].avaxPrice);
+    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const priceYesterday =
-    parseFloat(token.oneDay?.derivedAVAX) *
-    parseFloat(oneDayAvaxPriceData?.avaxPrice);
+    parseFloat(token.oneDay?.derivedETH) *
+    parseFloat(oneDayEthPriceData?.ethPrice);
 
   const priceChange = ((price - priceYesterday) / priceYesterday) * 100;
 
@@ -172,7 +172,7 @@ function TokenPage() {
     <AppShell>
       <Head>
         <title>
-          {currencyFormatter.format(price || 0)} | {token.symbol} | Trader Joe
+          {currencyFormatter.format(price || 0)} | {token.symbol} | Voltage
           Analytics
         </title>
       </Head>
@@ -199,14 +199,14 @@ function TokenPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://traderjoexyz.com/pool/${token.id}/AVAX`}
+              href={`https://app.voltage.finance/#/pool/${token.id}/AVAX`}
               target="_blank"
               variant="body1"
             >
               Add Liquidity
             </Link>
             <Link
-              href={`https://traderjoexyz.com/trade`}
+              href={`https://app.voltage.finance/#/swap`}
               target="_blank"
               variant="body1"
             >
@@ -320,7 +320,7 @@ export async function getStaticProps({ params }) {
   const id = params.id.toLowerCase();
 
   await client.query({
-    query: avaxPriceQuery,
+    query: fusePriceQuery,
   });
 
   await getToken(id, client);
@@ -347,7 +347,7 @@ export async function getStaticProps({ params }) {
     },
   });
 
-  await getOneDayAvaxPrice(client);
+  await getOneDayFusePrice(client);
 
   return {
     props: {

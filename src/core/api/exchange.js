@@ -16,7 +16,7 @@ import {
 } from "../api/blocks";
 
 import { getApollo } from "../apollo";
-import { FACTORY_ADDRESS, JOE_TOKEN_ADDDRESS } from "../../config/index.ts";
+import { FACTORY_ADDRESS, VOLT_TOKEN_ADDRESS } from "../../config/index.ts";
 
 export async function getFactory(client = getApollo()) {
   const {
@@ -59,8 +59,8 @@ export async function getFactory(client = getApollo()) {
   });
 }
 
-export async function getJoeToken(client = getApollo()) {
-  return await getToken(JOE_TOKEN_ADDDRESS, client);
+export async function getVoltToken(client = getApollo()) {
+  return await getToken(VOLT_TOKEN_ADDRESS, client);
 }
 
 export async function getDayData(client = getApollo()) {
@@ -123,13 +123,13 @@ export async function getToken(id, client = getApollo()) {
         ...token,
         oneDay: {
           volumeUSD: String(oneDayToken?.volumeUSD),
-          derivedAVAX: String(oneDayToken?.derivedAVAX),
+          derivedETH: String(oneDayToken?.derivedETH),
           liquidity: String(oneDayToken?.liquidity),
           txCount: String(oneDayToken?.txCount),
         },
         twoDay: {
           volumeUSD: String(twoDayToken?.volumeUSD),
-          derivedAVAX: String(twoDayToken?.derivedAVAX),
+          derivedETH: String(twoDayToken?.derivedETH),
           liquidity: String(twoDayToken?.liquidity),
           txCount: String(twoDayToken?.txCount),
         },
@@ -182,12 +182,12 @@ export async function getTokens(client = getApollo()) {
           ...token,
           oneDay: {
             volumeUSD: String(oneDayToken?.volumeUSD),
-            derivedAVAX: String(oneDayToken?.derivedAVAX),
+            derivedETH: String(oneDayToken?.derivedETH),
             liquidity: String(oneDayToken?.liquidity),
           },
           sevenDay: {
             volumeUSD: String(sevenDayToken?.volumeUSD),
-            derivedAVAX: String(sevenDayToken?.derivedAVAX),
+            derivedETH: String(sevenDayToken?.derivedETH),
             liquidity: String(sevenDayToken?.liquidity),
           },
         };

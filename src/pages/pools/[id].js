@@ -18,14 +18,14 @@ import {
 } from "@material-ui/core";
 import {
   currencyFormatter,
-  avaxPriceQuery,
+  fusePriceQuery,
   getApollo,
-  getAvaxPrice,
+  getFusePrice,
   getPool,
   getPoolHistories,
   getPoolIds,
   getPools,
-  getJoeToken,
+  getVoltToken,
   poolHistoryQuery,
   poolQuery,
   tokenQuery,
@@ -36,7 +36,7 @@ import { ParentSize } from "@visx/responsive";
 import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { JOE_TOKEN_ADDDRESS } from "../../config/index.ts";
+import { VOLT_TOKEN_ADDRESS } from "../../config/index.ts";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -79,11 +79,11 @@ function PoolPage() {
 
   const {
     data: { bundles },
-  } = useQuery(avaxPriceQuery, {
+  } = useQuery(fusePriceQuery, {
     pollInterval: 1800000,
   });
 
-  const token_address = JOE_TOKEN_ADDDRESS;
+  const token_address = VOLT_TOKEN_ADDRESS;
   const {
     data: { token },
   } = useQuery(tokenQuery, {
@@ -92,53 +92,53 @@ function PoolPage() {
     },
   });
 
-  const joePrice =
-    parseFloat(token?.derivedAVAX) * parseFloat(bundles[0].avaxPrice);
+  const voltPrice =
+    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const {
-    slpAge,
-    slpAgeRemoved,
+    flpAge,
+    flpAgeRemoved,
     userCount,
-    slpDeposited,
-    slpWithdrawn,
-    slpAgeAverage,
-    slpBalance,
+    flpDeposited,
+    flpWithdrawn,
+    flpAgeAverage,
+    flpBalance,
     tvl,
   } = poolHistories.reduce(
     (previousValue, currentValue) => {
       const date = currentValue.timestamp * 1000;
 
-      previousValue.slpAge.push({
+      previousValue.flpAge.push({
         date,
-        value: currentValue.slpAge,
+        value: currentValue.flpAge,
       });
 
-      const slpAgeAverage =
-        parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
+      const flpAgeAverage =
+        parseFloat(currentValue.flpAge) / parseFloat(currentValue.flpBalance);
 
-      previousValue.slpAgeAverage.push({
+      previousValue.flpAgeAverage.push({
         date,
-        value: !Number.isNaN(slpAgeAverage) ? slpAgeAverage : 0,
+        value: !Number.isNaN(flpAgeAverage) ? flpAgeAverage : 0,
       });
 
-      previousValue.slpAgeRemoved.push({
+      previousValue.flpAgeRemoved.push({
         date,
-        value: currentValue.slpAgeRemoved,
+        value: currentValue.flpAgeRemoved,
       });
 
-      previousValue.slpBalance.push({
+      previousValue.flpBalance.push({
         date,
-        value: parseFloat(currentValue.slpBalance),
+        value: parseFloat(currentValue.flpBalance),
       });
 
-      previousValue.slpDeposited.push({
+      previousValue.flpDeposited.push({
         date,
-        value: parseFloat(currentValue.slpDeposited),
+        value: parseFloat(currentValue.flpDeposited),
       });
 
-      previousValue.slpWithdrawn.push({
+      previousValue.flpWithdrawn.push({
         date,
-        value: parseFloat(currentValue.slpWithdrawn),
+        value: parseFloat(currentValue.flpWithdrawn),
       });
 
       previousValue.tvl.push({
@@ -146,7 +146,7 @@ function PoolPage() {
         value:
           (parseFloat(pool.liquidityPair.reserveUSD) /
             parseFloat(pool.liquidityPair.totalSupply)) *
-          parseFloat(currentValue.slpBalance),
+          parseFloat(currentValue.flpBalance),
       });
 
       previousValue.userCount.push({
@@ -159,12 +159,12 @@ function PoolPage() {
     {
       entries: [],
       exits: [],
-      slpAge: [],
-      slpAgeAverage: [],
-      slpAgeRemoved: [],
-      slpBalance: [],
-      slpDeposited: [],
-      slpWithdrawn: [],
+      flpAge: [],
+      flpAgeAverage: [],
+      flpAgeRemoved: [],
+      flpBalance: [],
+      flpDeposited: [],
+      flpWithdrawn: [],
       tvl: [],
       userCount: [],
     }
@@ -173,7 +173,7 @@ function PoolPage() {
   return (
     <AppShell>
       <Head>
-        <title>Pool {id} | Trader Joe Analytics</title>
+        <title>Pool {id} | Voltage Analytics</title>
       </Head>
 
       <PageHeader mb={3}>
@@ -198,7 +198,7 @@ function PoolPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://traderjoexyz.com/pool/${pool.liquidityPair.token0.id}/${pool.liquidityPair.token1.id}`}
+              href={`https://app.voltage.finance/#/pool/${pool.liquidityPair.token0.id}/${pool.liquidityPair.token1.id}`}
               target="_blank"
               variant="body1"
             >
@@ -224,7 +224,7 @@ function PoolPage() {
           <KPI
             title="~ LP Age"
             value={`${(
-              parseFloat(pool.slpAge) / parseFloat(pool.balance / 1e18)
+              parseFloat(pool.flpAge) / parseFloat(pool.balance / 1e18)
             ).toFixed(2)} Days`}
           />
         </Grid>
@@ -286,7 +286,7 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpAge, slpAgeRemoved]}
+                  data={[flpAge, flpAgeRemoved]}
                   labels={["LP Age", "LP Age Removed"]}
                 />
               )}
@@ -309,7 +309,7 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpDeposited, slpWithdrawn]}
+                  data={[flpDeposited, flpWithdrawn]}
                   labels={["LP Deposited", "LP Age Withdrawn"]}
                 />
               )}
@@ -334,7 +334,7 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpAgeAverage]}
+                  data={[flpAgeAverage]}
                 />
               )}
             </ParentSize>
@@ -382,7 +382,7 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpBalance]}
+                  data={[flpBalance]}
                 />
               )}
             </ParentSize>
@@ -437,8 +437,8 @@ function PoolPage() {
 
 export async function getStaticProps({ params: { id } }) {
   const client = getApollo();
-  await getAvaxPrice(client);
-  await getJoeToken(client);
+  await getFusePrice(client);
+  await getVoltToken(client);
   await getPool(id, client);
   await getPoolHistories(id, client);
   return {

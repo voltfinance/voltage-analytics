@@ -23,7 +23,7 @@ function RecentPoolsPage() {
   return (
     <AppShell>
       <Head>
-        <title>Recently Added Pools | Trader Joe Analytics</title>
+        <title>Recently Added Pools | Voltage Analytics</title>
       </Head>
       <PoolTable
         title="Recently Added Pools"

@@ -1,9 +1,9 @@
 import { Box, Typography } from "@material-ui/core";
 import { Sparklines, SparklinesLine } from "react-sparklines";
 import {
-  avaxPriceQuery,
-  oneDayAvaxPriceQuery,
-  sevenDayAvaxPriceQuery,
+  fusePriceQuery,
+  oneDayFusePriceQuery,
+  sevenDayFusePriceQuery,
 } from "app/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
@@ -25,13 +25,13 @@ export default function TokenTable({ tokens, title }) {
   const theme = useTheme();
   const {
     data: { bundles },
-  } = useQuery(avaxPriceQuery, {
+  } = useQuery(fusePriceQuery, {
     pollInterval: 1800000,
   });
 
-  const { data: oneDayAvaxPriceData } = useQuery(oneDayAvaxPriceQuery);
+  const { data: oneDayFusePriceData } = useQuery(oneDayFusePriceQuery);
 
-  const { data: sevenDayAvaxPriceData } = useQuery(sevenDayAvaxPriceQuery);
+  const { data: sevenDayFusePriceData } = useQuery(sevenDayFusePriceQuery);
 
   const rows = tokens
     .filter(({ id }) => {
@@ -39,25 +39,25 @@ export default function TokenTable({ tokens, title }) {
     })
     .map((token) => {
       const price =
-        parseFloat(token.derivedAVAX) * parseFloat(bundles[0]?.avaxPrice);
+        parseFloat(token.derivedETH) * parseFloat(bundles[0]?.ethPrice);
 
       const priceYesterday =
-        parseFloat(token.oneDay?.derivedAVAX) *
-        parseFloat(oneDayAvaxPriceData?.avaxPrice);
+        parseFloat(token.oneDay?.derivedETH) *
+        parseFloat(oneDayFusePriceData?.ethPrice);
 
       const priceChange = ((price - priceYesterday) / priceYesterday) * 100;
 
       const priceLastWeek =
-        parseFloat(token.sevenDay?.derivedAVAX) *
-        parseFloat(sevenDayAvaxPriceData?.avaxPrice);
+        parseFloat(token.sevenDay?.derivedETH) *
+        parseFloat(sevenDayFusePriceData?.ethPrice);
 
       const sevenDayPriceChange =
         ((price - priceLastWeek) / priceLastWeek) * 100;
 
       const liquidityUSD =
         parseFloat(token?.liquidity) *
-        parseFloat(token?.derivedAVAX) *
-        parseFloat(bundles[0]?.avaxPrice);
+        parseFloat(token?.derivedETH) *
+        parseFloat(bundles[0]?.ethPrice);
 
       const volumeYesterday = token.volumeUSD - token.oneDay?.volumeUSD;
 

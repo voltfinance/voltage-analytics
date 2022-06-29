@@ -9,7 +9,7 @@ import {
 import { scaleLinear, scaleTime } from "@visx/scale";
 
 import { AreaClosed } from "@visx/shape";
-import { GradientTealBlue } from "@visx/gradient";
+import { GradientTealBlue, LinearGradient } from "@visx/gradient";
 import { Group } from "@visx/group";
 import { curveMonotoneX } from "@visx/curve";
 import millify from "millify";
@@ -36,7 +36,7 @@ export default function AreaChart({
   if (width < 10) return null;
   return (
     <Group left={left || margin.left} top={top || margin.top}>
-      <GradientTealBlue id="gradient" />
+      <LinearGradient id="yellow" from="#f3fc1f" to="#f6f37c00" fromOffset={0.3} />
       <AreaClosed
         data={data}
         x={(d) => xScale(getX(d)) || 0}
@@ -44,8 +44,8 @@ export default function AreaChart({
         yScale={yScale}
         xScale={xScale}
         strokeWidth={1}
-        stroke="url(#gradient)"
-        fill="url(#gradient)"
+        stroke="url(#yellow)"
+        fill="url(#yellow)"
         curve={curveMonotoneX}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}

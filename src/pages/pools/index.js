@@ -19,7 +19,7 @@ function PoolsPage() {
   return (
     <AppShell>
       <Head>
-        <title>Pools | Trader Joe Analytics</title>
+        <title>Pools | Voltage Analytics</title>
       </Head>
       <PoolTable pools={pools} orderBy="tvl" order="desc" rowsPerPage={100} />
     </AppShell>

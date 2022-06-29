@@ -12,7 +12,7 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 export const palette = {
   primary: {
-    main: "#B93CF6",
+    main: "#f3fc1f",
   },
   positive: {
     main: green[500],
@@ -95,6 +95,7 @@ const overrides = {
 export const darkTheme = responsiveFontSizes(
   createMuiTheme({
     palette: {
+      ...palette,
       type: "dark",
       text: {
         primary: "#fff",
@@ -113,7 +114,9 @@ export const darkTheme = responsiveFontSizes(
         paper: "#050709",
       },
       divider: "rgba(255, 255, 255, 0.12)",
-      ...palette,
+      primary: {
+        main: "#f3fc1f",
+      }
     },
     typography: {
       fontFamily,
@@ -125,9 +128,10 @@ export const darkTheme = responsiveFontSizes(
 export const lightTheme = responsiveFontSizes(
   createMuiTheme({
     palette: {
+      ...palette,
       type: "light",
       background: {
-        default: "#FEFEFE",
+        default: "#F7F8FA",
         paper: "#FFFFFF",
       },
       text: {
@@ -135,7 +139,9 @@ export const lightTheme = responsiveFontSizes(
         secondary: "rgba(5, 7, 9, 0.7)",
         disabled: "rgba(5, 7, 9, 0.5)",
       },
-      ...palette,
+      primary: {
+        main: "#000",
+      },
     },
     typography: {
       fontFamily,

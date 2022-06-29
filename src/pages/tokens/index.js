@@ -1,8 +1,8 @@
 import { AppShell, TokenTable } from "app/components";
 import {
-  avaxPriceQuery,
+  fusePriceQuery,
   getApollo,
-  getOneDayAvaxPrice,
+  getOneDayFusePrice,
   getTokens,
   tokensQuery,
   useInterval,
@@ -18,13 +18,13 @@ function TokensPage() {
   } = useQuery(tokensQuery);
 
   useInterval(async () => {
-    await Promise.all([getTokens, getOneDayAvaxPrice]);
+    await Promise.all([getTokens, getOneDayFusePrice]);
   }, 1800000);
 
   return (
     <AppShell>
       <Head>
-        <title>Tokens | Trader Joe Analytics</title>
+        <title>Tokens | Voltage Analytics</title>
       </Head>
       <TokenTable title="Tokens" tokens={tokens} />
     </AppShell>
@@ -35,10 +35,10 @@ export async function getStaticProps() {
   const client = getApollo();
 
   await client.query({
-    query: avaxPriceQuery,
+    query: fusePriceQuery,
   });
 
-  await getOneDayAvaxPrice(client);
+  await getOneDayFusePrice(client);
 
   await getTokens(client);
 

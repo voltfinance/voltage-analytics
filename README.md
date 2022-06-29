@@ -1,6 +1,6 @@
-# Trader Joe Analytics
+# Voltage Analytics
 
-Analytics for Trader Joe on Avalanche. 
+Analytics for Voltage. 
 
 Forked from `sushiswap-analytics`. 
 

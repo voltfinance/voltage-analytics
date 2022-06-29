@@ -1,0 +1,13 @@
+{
+    "graph_bar_uri": "https://api.thegraph.com/subgraphs/name/diegofigs/voltfinance-bar",
+    "graph_masterchef_uri": "https://api.thegraph.com/subgraphs/name/voltfinance/masterchef-v3",
+    "graph_exchange_uri": "https://api.thegraph.com/subgraphs/name/voltfinance/voltage-exchange-v2",
+    "graph_blocks_uri": "https://api.thegraph.com/subgraphs/name/fuseio/fuse-blocks", 
+    "graph_lending_uri": "https://api.thegraph.com/subgraphs/name/traderjoe-xyz/lending", 
+  
+    "volt_token_address": "0x34Ef2Cc892a88415e9f02b91BfA9c91fC0bE6bD4",
+    "factory_address": "0x1998e4b0f1f922367d8ec20600ea2b86df55f34e",
+    "masterchef_address": "0xe3e184a7b75d0ae6e17b58f5283b91b4e0a2604f", 
+    "bar_address": "0x97a6e78c9208c21afada67e7e61d7ad27688efd1",
+    "lending_address": "0x3d5BC3c8d13dcB8bF317092d84783c2697AE9258"
+}

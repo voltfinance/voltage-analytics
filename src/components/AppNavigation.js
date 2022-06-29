@@ -52,7 +52,7 @@ import {
 import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import Joe from "./Joe";
+import Volt from "./Joe";
 import { useRouter } from "next/router";
 
 const drawerWidth = 240;
@@ -94,10 +94,10 @@ export default function AppNavigation() {
         <Hidden smUp implementation="css">
           <Box display="flex" alignItems="center" py={0.5}>
             <IconButton edge={false} onClick={() => router.push("/")}>
-              <Joe />
+              <Volt />
             </IconButton>
             <Typography variant="subtitle1" color="textPrimary" noWrap>
-              Trader Joe
+              Voltage
             </Typography>
           </Box>
         </Hidden>
@@ -161,17 +161,6 @@ export default function AppNavigation() {
             <MoneyOutlined />
           </ListItemIcon>
           <ListItemText primary="Tokens" />
-        </ListItem>
-        <ListItem
-          button
-          key="/lending"
-          selected={router.pathname.includes("/lending")}
-          onClick={() => router.push("/lending")}
-        >
-          <ListItemIcon>
-            <AccountBalanceOutlined />
-          </ListItemIcon>
-          <ListItemText primary="Lending" />
         </ListItem>
         <ListItem
           button

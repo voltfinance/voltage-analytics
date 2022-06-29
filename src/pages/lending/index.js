@@ -194,7 +194,7 @@ function LendingsPage() {
   return (
     <AppShell>
       <Head>
-        <title>Lending | Trader Joe Analytics</title>
+        <title>Lending | Voltage Analytics</title>
       </Head>
       <Grid container spacing={6} style={{ marginBottom: "10px" }}>
         <Grid item xs={12} md={6}>

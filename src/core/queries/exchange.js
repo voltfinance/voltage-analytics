@@ -42,27 +42,27 @@ export const userQuery = gql`
   }
 `;
 
-export const oneDayAvaxPriceQuery = gql`
-  query OneDayAvaxPrice {
-    avaxPrice @client
+export const oneDayFusePriceQuery = gql`
+  query OneDayEthPrice {
+    ethPrice @client
   }
 `;
 
-export const sevenDayAvaxPriceQuery = gql`
-  query sevenDayAvaxPrice {
-    avaxPrice @client
+export const sevenDayFusePriceQuery = gql`
+  query sevenDayEthPrice {
+    ethPrice @client
   }
 `;
 
 export const bundleFields = gql`
   fragment bundleFields on Bundle {
     id
-    avaxPrice
+    ethPrice
   }
 `;
 
-export const avaxPriceQuery = gql`
-  query avaxPriceQuery($id: Int! = 1) {
+export const fusePriceQuery = gql`
+  query fusePriceQuery($id: Int! = 1) {
     bundles(id: $id) {
       ...bundleFields
     }
@@ -70,8 +70,8 @@ export const avaxPriceQuery = gql`
   ${bundleFields}
 `;
 
-export const avaxPriceTimeTravelQuery = gql`
-  query avaxPriceTimeTravelQuery($id: Int! = 1, $block: Block_height!) {
+export const fusePriceTimeTravelQuery = gql`
+  query fusePriceTimeTravelQuery($id: Int! = 1, $block: Block_height!) {
     bundles(id: $id, block: $block) {
       ...bundleFields
     }
@@ -83,10 +83,10 @@ export const dayDataFieldsQuery = gql`
   fragment dayDataFields on DayData {
     id
     date
-    volumeAVAX
+    volumeETH
     volumeUSD
     untrackedVolume
-    liquidityAVAX
+    liquidityETH
     liquidityUSD
     txCount
   }
@@ -110,7 +110,7 @@ export const pairTokenFieldsQuery = gql`
     name
     symbol
     totalSupply
-    derivedAVAX
+    derivedETH
   }
 `;
 
@@ -118,10 +118,10 @@ export const pairFieldsQuery = gql`
   fragment pairFields on Pair {
     id
     reserveUSD
-    reserveAVAX
+    reserveETH
     volumeUSD
     untrackedVolumeUSD
-    trackedReserveAVAX
+    trackedReserveETH
     token0 {
       ...pairTokenFields
     }
@@ -195,10 +195,10 @@ export const pairDayDatasQuery = gql`
         id
       }
       token0 {
-        derivedAVAX
+        derivedETH
       }
       token1 {
-        derivedAVAX
+        derivedETH
       }
       reserveUSD
       volumeToken0
@@ -228,7 +228,7 @@ export const pairSubsetQuery = gql`
   query pairSubsetQuery(
     $first: Int! = 1000
     $pairAddresses: [Bytes]!
-    $orderBy: String! = "trackedReserveAVAX"
+    $orderBy: String! = "trackedReserveETH"
     $orderDirection: String! = "desc"
   ) {
     pairs(
@@ -248,7 +248,7 @@ export const pairSubsetQuery = gql`
 export const pairsQuery = gql`
   query pairsQuery(
     $first: Int! = 1000
-    $orderBy: String! = "trackedReserveAVAX"
+    $orderBy: String! = "trackedReserveETH"
     $orderDirection: String! = "desc"
   ) {
     pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection) {
@@ -269,13 +269,13 @@ export const pairsTimeTravelQuery = gql`
     pairs(
       first: $first
       block: $block
-      orderBy: trackedReserveAVAX
+      orderBy: trackedReserveETH
       orderDirection: desc
       where: { id_in: $pairAddresses }
     ) {
       id
       reserveUSD
-      trackedReserveAVAX
+      trackedReserveETH
       volumeUSD
       untrackedVolumeUSD
       txCount
@@ -296,7 +296,7 @@ export const tokenFieldsQuery = gql`
     untrackedVolumeUSD
     txCount
     liquidity
-    derivedAVAX
+    derivedETH
   }
 `;
 

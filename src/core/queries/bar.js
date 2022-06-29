@@ -7,14 +7,14 @@ export const barQuery = gql`
       id
       totalSupply
       ratio
-      xJoeMinted
-      xJoeBurned
-      joeStaked
-      joeStakedUSD
-      joeHarvested
-      joeHarvestedUSD
-      xJoeAge
-      xJoeAgeDestroyed
+      xVoltMinted
+      xVoltBurned
+      voltStaked
+      voltStakedUSD
+      voltHarvested
+      voltHarvestedUSD
+      xVoltAge
+      xVoltAgeDestroyed
     }
   }
 `;
@@ -28,15 +28,15 @@ export const barHistoriesQuery = gql`
       id
       date
       timeframe
-      joeStaked
-      joeStakedUSD
-      joeHarvested
-      joeHarvestedUSD
-      xJoeAge
-      xJoeAgeDestroyed
-      xJoeMinted
-      xJoeBurned
-      xJoeSupply
+      voltStaked
+      voltStakedUSD
+      voltHarvested
+      voltHarvestedUSD
+      xVoltAge
+      xVoltAgeDestroyed
+      xVoltMinted
+      xVoltBurned
+      xVoltSupply
       ratio
     }
   }
@@ -46,22 +46,22 @@ export const barUserQuery = gql`
   query barUserQuery($id: String!) {
     user(id: $id) {
       id
-      bar {
+      volt {
         totalSupply
-        joeStaked
+        voltStaked
       }
-      xJoe
-      joeStaked
-      joeStakedUSD
-      joeHarvested
-      joeHarvestedUSD
-      xJoeIn
-      xJoeOut
-      xJoeOffset
-      xJoeMinted
-      xJoeBurned
-      joeIn
-      joeOut
+      xVolt
+      voltStaked
+      voltStakedUSD
+      voltHarvested
+      voltHarvestedUSD
+      xVoltIn
+      xVoltOut
+      xVoltOffset
+      xVoltMinted
+      xVoltBurned
+      voltIn
+      voltOut
       usdIn
       usdOut
       updatedAt

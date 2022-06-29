@@ -1,16 +1,16 @@
 import {
-  avaxPriceQuery,
-  avaxPriceTimeTravelQuery,
+  fusePriceQuery,
+  fusePriceTimeTravelQuery,
   getApollo,
   getOneDayBlock,
   getSevenDayBlock,
   getTwoDayBlock,
-  oneDayAvaxPriceQuery,
+  oneDayFusePriceQuery,
   pairQuery,
   pairTimeTravelQuery,
   pairsQuery,
   pairsTimeTravelQuery,
-  sevenDayAvaxPriceQuery,
+  sevenDayFusePriceQuery,
   tokenPairsQuery,
 } from "app/core";
 
@@ -42,29 +42,29 @@ export async function getLiquidityPositionSnapshots(
   });
 }
 
-// Avax Price
-export async function getAvaxPrice(client = getApollo()) {
+// Fuse Price
+export async function getFusePrice(client = getApollo()) {
   const { data } = await client.query({
-    query: avaxPriceQuery,
+    query: fusePriceQuery,
   });
 
   await client.cache.writeQuery({
-    query: avaxPriceQuery,
+    query: fusePriceQuery,
     data,
   });
 
   return await client.cache.readQuery({
-    query: avaxPriceQuery,
+    query: fusePriceQuery,
   });
 }
 
-export async function getOneDayAvaxPrice(client = getApollo()) {
+export async function getOneDayFusePrice(client = getApollo()) {
   const block = await getOneDayBlock();
 
   const {
     data: { bundles },
   } = await client.query({
-    query: avaxPriceTimeTravelQuery,
+    query: fusePriceTimeTravelQuery,
     variables: {
       block,
     },
@@ -72,20 +72,20 @@ export async function getOneDayAvaxPrice(client = getApollo()) {
   });
 
   await client.cache.writeQuery({
-    query: oneDayAvaxPriceQuery,
+    query: oneDayFusePriceQuery,
     data: {
-      avaxPrice: bundles[0]?.avaxPrice,
+      ethPrice: bundles[0]?.ethPrice,
     },
   });
 }
 
-export async function getSevenDayAvaxPrice(client = getApollo()) {
+export async function getSevenDayFusePrice(client = getApollo()) {
   const block = await getSevenDayBlock();
 
   const {
     data: { bundles },
   } = await client.query({
-    query: avaxPriceTimeTravelQuery,
+    query: fusePriceTimeTravelQuery,
     variables: {
       block,
     },
@@ -93,9 +93,9 @@ export async function getSevenDayAvaxPrice(client = getApollo()) {
   });
 
   await client.cache.writeQuery({
-    query: sevenDayAvaxPriceQuery,
+    query: sevenDayFusePriceQuery,
     data: {
-      avaxPrice: bundles[0]?.avaxPrice,
+      ethPrice: bundles[0]?.ethPrice,
     },
   });
 }

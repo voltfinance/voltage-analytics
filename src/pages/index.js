@@ -13,11 +13,11 @@ import {
   dayDatasQuery,
   getApollo,
   getDayData,
-  getAvaxPrice,
-  getOneDayAvaxPrice,
+  getFusePrice,
+  getOneDayFusePrice,
   getPairs,
   getPools,
-  getSevenDayAvaxPrice,
+  getSevenDayFusePrice,
   getTokens,
   pairsQuery,
   poolsQuery,
@@ -57,8 +57,8 @@ function IndexPage() {
         getPools,
         getTokens,
         getDayData,
-        getOneDayAvaxPrice,
-        getSevenDayAvaxPrice,
+        getOneDayFusePrice,
+        getSevenDayFusePrice,
       ]),
     1800000
   );
@@ -72,7 +72,7 @@ function IndexPage() {
         previousValue[0].unshift({
           date: currentValue.date,
           value: parseFloat(
-            useUSD ? currentValue.liquidityUSD : currentValue.liquidityAVAX
+            useUSD ? currentValue.liquidityUSD : currentValue.liquidityETH
           ),
         });
         previousValue[1].unshift({
@@ -87,7 +87,7 @@ function IndexPage() {
   return (
     <AppShell>
       <Head>
-        <title>Dashboard | Trader Joe Analytics</title>
+        <title>Dashboard | Voltage Analytics</title>
       </Head>
       <Box mb={3}>
         <Search pairs={pairs} tokens={tokens} />
@@ -136,7 +136,7 @@ function IndexPage() {
 
         <Grid item xs={12}>
           <PoolTable
-            title="Joe Reward Pools"
+            title="Voltage Reward Pools"
             pools={pools}
             orderBy="tvl"
             order="desc"
@@ -145,7 +145,7 @@ function IndexPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <PairTable title="Top Joe Liquidity Pairs" pairs={pairs} />
+          <PairTable title="Top Voltage Liquidity Pairs" pairs={pairs} />
         </Grid>
 
         <Grid item xs={12}>
@@ -161,11 +161,11 @@ export async function getStaticProps() {
 
   await getDayData(client);
 
-  await getAvaxPrice(client);
+  await getFusePrice(client);
 
-  await getOneDayAvaxPrice(client);
+  await getOneDayFusePrice(client);
 
-  await getSevenDayAvaxPrice(client);
+  await getSevenDayFusePrice(client);
 
   await getTokens(client);
 

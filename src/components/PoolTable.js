@@ -49,7 +49,7 @@ export default function PoolTable({ pools, ...rest }) {
             key: "rewardPerSec",
             label: "Rewards",
             render: (row) =>
-              `${Number(row.rewardPerSec).toFixed(2)} JOE per sec`,
+              `${Number(row.rewardPerSec).toFixed(2)} VOLT per sec`,
           },
           {
             key: "roi",

@@ -7,12 +7,12 @@ import {
   defaultStyles,
   withTooltip,
 } from "@visx/tooltip";
-import { currencyFormatter, avaxFormatter, oneMonth, oneWeek } from "app/core";
+import { currencyFormatter, fuseFormatter, oneMonth, oneWeek } from "app/core";
 import { scaleLinear, scaleTime } from "@visx/scale";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import ChartOverlay from "./ChartOverlay";
-import { GradientTealBlue } from "@visx/gradient";
+import { GradientTealBlue, LinearGradient } from "@visx/gradient";
 import { Group } from "@visx/group";
 import { bisector } from "d3-array";
 import { deepPurple } from "@material-ui/core/colors";
@@ -72,7 +72,7 @@ function TVLAreaChart({
   function onCurrencySwitch(e) {
     if (e.currentTarget.value === "USD") {
       setUseUSD(true);
-    } else if (e.currentTarget.value == "AVAX") {
+    } else if (e.currentTarget.value == "FUSE") {
       setUseUSD(false);
     }
   }
@@ -85,7 +85,7 @@ function TVLAreaChart({
     title,
     value: useUSD
       ? currencyFormatter.format(lastDataValue)
-      : avaxFormatter.format(lastDataValue),
+      : fuseFormatter.format(lastDataValue),
     date: lastData ? lastData.date : 0,
   });
 
@@ -97,7 +97,7 @@ function TVLAreaChart({
       title,
       value: useUSD
         ? currencyFormatter.format(lastDataValue)
-        : avaxFormatter.format(lastDataValue),
+        : fuseFormatter.format(lastDataValue),
       date: lastData ? lastData.date : 0,
     });
   }, [useUSD]);
@@ -153,7 +153,7 @@ function TVLAreaChart({
         ...overlay,
         value: useUSD
           ? currencyFormatter.format(lastDataValue)
-          : avaxFormatter.format(lastDataValue),
+          : fuseFormatter.format(lastDataValue),
         date: d && d.hasOwnProperty("date") ? d.date : 0,
       });
       showTooltip({
@@ -176,7 +176,7 @@ function TVLAreaChart({
         </>
       )}
       <svg width={width} height={height}>
-        <GradientTealBlue id="teal" fromOffset={0.5} />
+        <LinearGradient id="yellow" from="#f3fc1f" to="#f6f37c00" fromOffset={0.3} />
         <rect x={0} y={0} width={width} height={height} fill="transparent" />
 
         <Group top={margin.top} left={margin.left}>
@@ -185,7 +185,7 @@ function TVLAreaChart({
             x={(d) => xScale(getDate(d))}
             y={(d) => yScale(getValue(d))}
             yScale={yScale}
-            fill="url(#teal)"
+            fill="url(#yellow)"
           />
         </Group>
         <Bar
@@ -208,7 +208,7 @@ function TVLAreaChart({
               ...overlay,
               value: useUSD
                 ? currencyFormatter.format(lastDataValue)
-                : avaxFormatter.format(lastDataValue),
+                : fuseFormatter.format(lastDataValue),
               date:
                 filteredData && filteredData.length
                   ? filteredData[filteredData.length - 1].date
@@ -234,7 +234,7 @@ function TVLAreaChart({
               cx={tooltipLeft}
               cy={tooltipTop}
               r={4}
-              fill={deepPurple[400]}
+              fill="black"
               stroke="white"
               strokeWidth={2}
               pointerEvents="none"

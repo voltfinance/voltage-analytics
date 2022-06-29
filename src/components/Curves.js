@@ -59,9 +59,9 @@ const axisLeftTickLabelProps = {
   fill: axisColor,
 };
 
-const purple1 = "#6c5efb";
-const purple2 = "#c998ff";
-const purple3 = "#a44afe";
+const purple1 = "#f3fc1f";
+const purple2 = "#aab016";
+const purple3 = "#7a7e10";
 
 const Curves = ({
   compact = false,
@@ -374,7 +374,7 @@ const Curves = ({
             id={PATTERN_ID}
             height={8}
             width={8}
-            stroke={accentColor}
+            stroke="#fff"
             strokeWidth={1}
             orientation={["diagonal"]}
           />
