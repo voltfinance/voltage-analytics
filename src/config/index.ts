@@ -1,6 +1,7 @@
 export const GRAPH_BAR_URI = 'https://api.thegraph.com/subgraphs/name/diegofigs/voltfinance-bar'
 export const GRAPH_MASTERCHEF_URI = 'https://api.thegraph.com/subgraphs/name/voltfinance/masterchef-v3'
 export const GRAPH_EXCHANGE_URI = 'https://api.thegraph.com/subgraphs/name/voltfinance/voltage-exchange-v2'
+export const GRAPH_STABLESWAP_URI = 'https://api.thegraph.com/subgraphs/name/voltfinance/stableswap'
 export const GRAPH_BLOCKS_URI = 'https://api.thegraph.com/subgraphs/name/fuseio/fuse-blocks'
 export const GRAPH_LENDING_URI = 'https://api.thegraph.com/subgraphs/name/traderjoe-xyz/lending'
 
