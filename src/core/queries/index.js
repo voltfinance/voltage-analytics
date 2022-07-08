@@ -6,3 +6,4 @@ export * from "./pages";
 export * from "./lending";
 export * from "./moneymaker";
 export * from './sjoe';
+export * from "./stableswap";
