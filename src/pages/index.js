@@ -11,8 +11,10 @@ import { Box, Grid, Paper } from "@material-ui/core";
 import React, { useState } from "react";
 import {
   dayDatasQuery,
+  dayDataStablesQuery,
   getApollo,
   getDayData,
+  getDayDataStables,
   getFusePrice,
   getOneDayFusePrice,
   getPairs,
@@ -50,6 +52,15 @@ function IndexPage() {
     data: { dayDatas },
   } = useQuery(dayDatasQuery);
 
+  const {
+    data: { dailyVolumes },
+  } = useQuery(dayDataStablesQuery, {
+    context: {
+      clientName: "stableswap"
+    }
+  })
+  console.log(dailyVolumes)
+
   useInterval(
     () =>
       Promise.all([
@@ -57,6 +68,7 @@ function IndexPage() {
         getPools,
         getTokens,
         getDayData,
+        getDayDataStables,
         getOneDayFusePrice,
         getSevenDayFusePrice,
       ]),
@@ -83,6 +95,21 @@ function IndexPage() {
       },
       [[], []]
     );
+  const [stablesLiquidity, stablesVolume] = dailyVolumes
+    .reduce(
+      (acc, current) => {
+        acc[0].unshift({
+          date: current.timestamp,
+          value: parseFloat(current.swap.balances[0] / 10 ** 18) + parseFloat(current.swap.balances[1] / 10 ** 6) + parseFloat(current.swap.balances[2] / 10 ** 6)
+        })
+        acc[1].unshift({
+          date: current.timestamp,
+          value: parseFloat(current.volume)
+        })
+        return acc;
+      },
+      [[], []]
+    )
 
   return (
     <AppShell>
@@ -160,6 +187,8 @@ export async function getStaticProps() {
   const client = getApollo();
 
   await getDayData(client);
+
+  await getDayDataStables(client);
 
   await getFusePrice(client);
 
