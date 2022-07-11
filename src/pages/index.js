@@ -155,7 +155,7 @@ function IndexPage() {
                   title="Liquidity"
                   width={width}
                   height={height}
-                  data={liquidity}
+                  data={aggregatedLiquidity}
                   margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
                   tooltipDisabled
                   overlayEnabled
@@ -177,7 +177,7 @@ function IndexPage() {
                   title="Volume"
                   width={width}
                   height={height}
-                  data={volume}
+                  data={aggregatedVolume}
                   margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
                   tooltipDisabled
                   overlayEnabled
