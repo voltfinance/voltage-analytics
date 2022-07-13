@@ -144,8 +144,8 @@ function PoolPage() {
       previousValue.tvl.push({
         date,
         value:
-          (parseFloat(pool.liquidityPair.reserveUSD) /
-            parseFloat(pool.liquidityPair.totalSupply)) *
+          (parseFloat(pool?.liquidityPair?.reserveUSD) /
+            parseFloat(pool?.liquidityPair?.totalSupply)) *
           parseFloat(currentValue.flpBalance),
       });
 
@@ -187,18 +187,18 @@ function PoolPage() {
           <Grid item xs={12} sm="auto" className={classes.title}>
             <Box display="flex" alignItems="center">
               <PairIcon
-                base={pool.liquidityPair.token0.id}
-                quote={pool.liquidityPair.token1.id}
+                base={pool?.liquidityPair?.token0?.id}
+                quote={pool?.liquidityPair?.token1?.id}
               />
               <Typography variant="h5" component="h1">
-                {pool.liquidityPair.token0.symbol}-
-                {pool.liquidityPair.token1.symbol} POOL
+                {pool?.liquidityPair?.token0?.symbol}-
+                {pool?.liquidityPair?.token1?.symbol} POOL
               </Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://app.voltage.finance/#/pool/${pool.liquidityPair.token0.id}/${pool.liquidityPair.token1.id}`}
+              href={`https://app.voltage.finance/#/pool/${pool?.liquidityPair?.token0?.id}/${pool?.liquidityPair?.token1?.id}`}
               target="_blank"
               variant="body1"
             >

@@ -26,8 +26,8 @@ export default function LiquidityProviderList({
 }) {
   const classes = useStyles();
   const theme = useTheme();
-  const pair = pool.liquidityPair;
-  const shareValueUSD = pair.reserveUSD / pair.totalSupply;
+  const pair = pool?.liquidityPair;
+  const shareValueUSD = pair?.reserveUSD / pair?.totalSupply;
   return (
     <div className={classes.root}>
       <SortableTable
