@@ -26,7 +26,7 @@ export default function TokenTable({ tokens, title }) {
   const {
     data: { bundles },
   } = useQuery(fusePriceQuery, {
-    pollInterval: 1800000,
+    pollInterval: 60000,
   });
 
   const { data: oneDayFusePriceData } = useQuery(oneDayFusePriceQuery);

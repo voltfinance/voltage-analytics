@@ -60,7 +60,7 @@ function IndexPage() {
         getOneDayFusePrice,
         getSevenDayFusePrice,
       ]),
-    1800000
+    60000
   );
 
   const [useUSD, setUseUSD] = useState(true);
@@ -177,7 +177,7 @@ export async function getStaticProps() {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 

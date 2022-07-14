@@ -17,7 +17,7 @@ function RecentPairsPage() {
     data: { pairs },
   } = useQuery(pairsQuery);
 
-  useInterval(() => Promise.all([getPairs]), 1800000);
+  useInterval(() => Promise.all([getPairs]), 60000);
 
   return (
     <AppShell>
@@ -36,7 +36,7 @@ export async function getStaticProps() {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 

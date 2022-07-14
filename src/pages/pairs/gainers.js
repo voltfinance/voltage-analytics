@@ -10,7 +10,7 @@ function GainersPage() {
   const { data } = useQuery(gainersQuery);
   useInterval(() => {
     getGainers();
-  }, 1800000);
+  }, 60000);
   const pairs = data.pairs.filter((pair) => {
     const positiveFees = Math.sign(pair.feesUSDGained - pair.feesUSDGainedYesterday) > 0;
     const positiveReserve = Math.sign(pair.reserveUSDGained) > 0;
@@ -34,7 +34,7 @@ export async function getStaticProps() {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 

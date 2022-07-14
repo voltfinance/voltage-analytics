@@ -88,7 +88,7 @@ function PairPage(props) {
   const {
     data: { bundles },
   } = useQuery(fusePriceQuery, {
-    pollInterval: 1800000,
+    pollInterval: 60000,
   });
 
   const {
@@ -100,11 +100,11 @@ function PairPage(props) {
 
   useInterval(async () => {
     await getPair(id);
-  }, 1800000);
+  }, 60000);
 
   const { data: transactions } = useQuery(transactionsQuery, {
     variables: { pairAddresses: [id] },
-    pollInterval: 1800000,
+    pollInterval: 60000,
   });
 
   const {
@@ -113,7 +113,7 @@ function PairPage(props) {
     variables: {
       pairs: [id],
     },
-    pollInterval: 1800000,
+    pollInterval: 60000,
   });
 
   const volumeUSD =
@@ -456,7 +456,7 @@ export async function getStaticProps({ params }) {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 

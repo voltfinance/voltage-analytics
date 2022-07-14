@@ -19,7 +19,7 @@ function RecentPoolsPage() {
       clientName: "masterchef",
     },
   });
-  useInterval(() => Promise.all([getPools]), 1800000);
+  useInterval(() => Promise.all([getPools]), 60000);
   return (
     <AppShell>
       <Head>
@@ -44,7 +44,7 @@ export async function getStaticProps() {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 

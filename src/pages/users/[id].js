@@ -83,7 +83,7 @@ function UserPage() {
   const {
     data: { bundles },
   } = useQuery(fusePriceQuery, {
-    pollInterval: 1800000,
+    pollInterval: 60000,
   });
 
   const { data: barData } = useQuery(barUserQuery, {
@@ -132,7 +132,7 @@ function UserPage() {
   //       getBarUser(id.toLocaleLowerCase()),
   //       getAvaxPrice,
   //     ]),
-  //   1800000
+  //   60000
   // );
 
   const voltPrice =
@@ -574,7 +574,7 @@ export async function getStaticProps({ params }) {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 

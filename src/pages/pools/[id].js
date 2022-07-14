@@ -80,7 +80,7 @@ function PoolPage() {
   const {
     data: { bundles },
   } = useQuery(fusePriceQuery, {
-    pollInterval: 1800000,
+    pollInterval: 60000,
   });
 
   const token_address = VOLT_TOKEN_ADDRESS;
@@ -445,7 +445,7 @@ export async function getStaticProps({ params: { id } }) {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 

@@ -92,7 +92,7 @@ function BarPage() {
       getVoltToken,
       getFusePrice,
     ]);
-  }, 1800000);
+  }, 60000);
 
   const {
     voltStakedUSD,
@@ -313,7 +313,7 @@ export async function getStaticProps() {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 

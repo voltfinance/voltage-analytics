@@ -91,7 +91,7 @@ function TokenPage() {
   const {
     data: { bundles },
   } = useQuery(fusePriceQuery, {
-    pollInterval: 1800000,
+    pollInterval: 60000,
   });
 
   const { data: oneDayEthPriceData } = useQuery(oneDayFusePriceQuery);
@@ -99,7 +99,7 @@ function TokenPage() {
   useInterval(async () => {
     await getToken(id);
     await getOneDayFusePrice();
-  }, 1800000);
+  }, 60000);
 
   const {
     data: { tokenDayDatas },
@@ -107,7 +107,7 @@ function TokenPage() {
     variables: {
       tokens: [id],
     },
-    pollInterval: 1800000,
+    pollInterval: 60000,
   });
 
   const {
@@ -122,7 +122,7 @@ function TokenPage() {
     variables: {
       pairAddresses: pairs.map((pair) => pair.id).sort(),
     },
-    pollInterval: 1800000,
+    pollInterval: 60000,
   });
 
   const chartDatas = tokenDayDatas.reduce(
@@ -353,7 +353,7 @@ export async function getStaticProps({ params }) {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 

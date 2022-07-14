@@ -161,7 +161,7 @@ function LendingsPage() {
 
   useInterval(async () => {
     await Promise.all([getMarkets]);
-  }, 1800000);
+  }, 60000);
 
   let totalBorrowsUSD = 0;
   let totalSupplyUSD = 0;
@@ -480,7 +480,7 @@ export async function getStaticProps() {
     props: {
       initialApolloState: client.cache.extract(),
     },
-    revalidate: 1800,
+    revalidate: 1,
   };
 }
 
