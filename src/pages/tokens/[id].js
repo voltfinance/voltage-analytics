@@ -173,7 +173,7 @@ function TokenPage() {
     <AppShell>
       <Head>
         <title>
-          {currencyFormatter.format(price || 0)} | {token.symbol} | Voltage
+          {formatCurrency(price || 0)} | {token.symbol} | Voltage
           Analytics
         </title>
       </Head>
