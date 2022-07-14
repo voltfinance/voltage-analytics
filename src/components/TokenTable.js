@@ -1,6 +1,7 @@
 import { Box, Typography } from "@material-ui/core";
 import { Sparklines, SparklinesLine } from "react-sparklines";
 import {
+  formatCurrency,
   fusePriceQuery,
   oneDayFusePriceQuery,
   sevenDayFusePriceQuery,
@@ -108,7 +109,7 @@ export default function TokenTable({ tokens, title }) {
             key: "price",
             align: "right",
             label: "Price",
-            render: (row) => currencyFormatter.format(row.price),
+            render: (row) => formatCurrency(row.price),
           },
           {
             key: "priceChange",

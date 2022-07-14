@@ -14,6 +14,7 @@ import {
 import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import {
   currencyFormatter,
+  formatCurrency,
   fusePriceQuery,
   getApollo,
   getOneDayBlock,
@@ -192,7 +193,7 @@ function TokenPage() {
             </Box>
             <Box display="flex" alignItems="center" className={classes.price}>
               <Typography variant="h6" component="div">
-                {currencyFormatter.format(price || 0)}
+                {formatCurrency(price || 0)}
               </Typography>
               <Percent percent={priceChange} ml={1} />
             </Box>

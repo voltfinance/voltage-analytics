@@ -23,7 +23,11 @@ export const fuseFormatter = new Intl.NumberFormat(locales, {
 export const formatDate = timeFormat("%b %d, '%y");
 
 export function formatCurrency(value) {
-  return currencyFormatter.format(value);
+  return new Intl.NumberFormat(locales, {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: value < 0.001 ? 4 : 2,
+  }).format(value)
 }
 
 export function formatDecimal(value) {
