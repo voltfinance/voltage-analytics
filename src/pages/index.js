@@ -8,11 +8,13 @@ import {
   TokenTable,
 } from "app/components";
 import { Box, Grid, Paper } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   dayDatasQuery,
+  dayDataStablesQuery,
   getApollo,
   getDayData,
+  getDayDataStables,
   getFusePrice,
   getOneDayFusePrice,
   getPairs,
@@ -28,6 +30,22 @@ import {
 import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import { useQuery } from "@apollo/client";
+
+const aggregateChartData = (data) =>
+  Object.values(
+    data.reduce(
+      (acc, current) => ({
+        ...acc,
+        [current.date]: {
+          date: current.date,
+          value: acc[current.date]
+            ? acc[current.date].value + current.value
+            : current.value,
+        },
+      }),
+      {}
+    )
+  );
 
 function IndexPage() {
   const {
@@ -50,6 +68,14 @@ function IndexPage() {
     data: { dayDatas },
   } = useQuery(dayDatasQuery);
 
+  const {
+    data: { dailyVolumes },
+  } = useQuery(dayDataStablesQuery, {
+    context: {
+      clientName: "stableswap",
+    },
+  });
+
   useInterval(
     () =>
       Promise.all([
@@ -57,6 +83,7 @@ function IndexPage() {
         getPools,
         getTokens,
         getDayData,
+        getDayDataStables,
         getOneDayFusePrice,
         getSevenDayFusePrice,
       ]),
@@ -83,6 +110,32 @@ function IndexPage() {
       },
       [[], []]
     );
+  const [stablesLiquidity, stablesVolume] = dailyVolumes.reduce(
+    (acc, current) => {
+      acc[0].unshift({
+        date: parseInt(current.timestamp),
+        value:
+          parseFloat(current.swap.balances[0] / 10 ** 18) +
+          parseFloat(current.swap.balances[1] / 10 ** 6) +
+          parseFloat(current.swap.balances[2] / 10 ** 6),
+      });
+      acc[1].unshift({
+        date: parseInt(current.timestamp),
+        value: parseFloat(current.volume),
+      });
+      return acc;
+    },
+    [[], []]
+  );
+
+  const aggregatedLiquidity = useMemo(
+    () => aggregateChartData([...liquidity, ...stablesLiquidity]),
+    [liquidity, stablesLiquidity]
+  );
+  const aggregatedVolume = useMemo(
+    () => aggregateChartData([...volume, ...stablesVolume]),
+    [volume, stablesVolume]
+  );
 
   return (
     <AppShell>
@@ -102,7 +155,7 @@ function IndexPage() {
                   title="Liquidity"
                   width={width}
                   height={height}
-                  data={liquidity}
+                  data={aggregatedLiquidity}
                   margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
                   tooltipDisabled
                   overlayEnabled
@@ -124,7 +177,7 @@ function IndexPage() {
                   title="Volume"
                   width={width}
                   height={height}
-                  data={volume}
+                  data={aggregatedVolume}
                   margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
                   tooltipDisabled
                   overlayEnabled
@@ -160,6 +213,8 @@ export async function getStaticProps() {
   const client = getApollo();
 
   await getDayData(client);
+
+  await getDayDataStables(client);
 
   await getFusePrice(client);
 

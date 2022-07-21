@@ -6,6 +6,7 @@ import {
   GRAPH_BAR_URI,
   GRAPH_MASTERCHEF_URI,
   GRAPH_EXCHANGE_URI,
+  GRAPH_STABLESWAP_URI,
   GRAPH_BLOCKS_URI,
   GRAPH_LENDING_URI,
   GRAPH_MONEY_MAKER_URI,
@@ -40,6 +41,14 @@ export const exchange = from([
   new RetryLink(),
   new HttpLink({
     uri: GRAPH_EXCHANGE_URI,
+    shouldBatch: true,
+  }),
+]);
+
+export const stableswap = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: GRAPH_STABLESWAP_URI,
     shouldBatch: true,
   }),
 ]);
@@ -88,7 +97,13 @@ export default split(
           return operation.getContext().clientName === "lockup";
         },
         lockup,
-        exchange
+        split(
+          (operation) => {
+            return operation.getContext().clientName === "stableswap";
+          },
+          stableswap,
+          exchange
+        )
       )
     )
   )

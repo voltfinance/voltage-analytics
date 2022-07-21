@@ -21,6 +21,7 @@ export * from "./masterchef";
 export * from "./pages";
 export * from "./lending";
 export * from "./stake";
+export * from "./stableswap";
 
 export async function preload() {
   // Pre-load anything that might be needed globally (stuff for search bar etc...)

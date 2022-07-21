@@ -19,3 +19,5 @@ export const FARMS_BLACKLIST = [
   "35", // JOEBORROW
   "36", // JOELDN
 ];
+
+export const BUSD_USDC_USDT_PAIR = "0x2a68d7c6ea986fa06b2665d08b4d08f5e7af960c"
