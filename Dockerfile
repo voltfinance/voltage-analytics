@@ -14,7 +14,7 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl \
 
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn --frozen-lockfile --prod
 
 FROM node:14.19.1-alpine as builder
 WORKDIR /app
@@ -27,11 +27,9 @@ WORKDIR /app
 
 ARG APP_ENV=production
 ARG NODE_ENV=production
-ARG PORT=3000
 
 ENV APP_ENV=${APP_ENV} \
-    NODE_ENV=${NODE_ENV} \
-    PORT=${PORT}
+    NODE_ENV=${NODE_ENV}
 ENV PATH=/app/node_modules/.bin:$PATH
 
 RUN addgroup --system --gid 1001 nodejs
@@ -48,6 +46,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
+
+ENV PORT 3000
 
 EXPOSE ${PORT}
 
