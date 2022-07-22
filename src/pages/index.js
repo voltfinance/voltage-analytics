@@ -20,9 +20,11 @@ import {
   getPairs,
   getPools,
   getSevenDayFusePrice,
+  getStablePairs,
   getTokens,
   pairsQuery,
   poolsQuery,
+  stablePairsQuery,
   tokensQuery,
   useInterval,
 } from "app/core";
@@ -57,6 +59,11 @@ function IndexPage() {
   } = useQuery(pairsQuery);
 
   const {
+    data: { swaps },
+  } = useQuery(stablePairsQuery);
+  console.log(swaps);
+
+  const {
     data: { pools },
   } = useQuery(poolsQuery, {
     context: {
@@ -80,6 +87,7 @@ function IndexPage() {
     () =>
       Promise.all([
         getPairs,
+        getStablePairs,
         getPools,
         getTokens,
         getDayData,
@@ -225,6 +233,8 @@ export async function getStaticProps() {
   await getTokens(client);
 
   await getPairs(client);
+
+  await getStablePairs(client);
 
   await getPools(client);
 

@@ -16,7 +16,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     connectToDevTools:
-      typeof window !== "undefined" && process.NODE_ENV === "development",
+      typeof window !== "undefined" && process.NODE_ENV !== "production",
     link,
     cache,
   });
