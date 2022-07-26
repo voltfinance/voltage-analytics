@@ -9,16 +9,17 @@ const tradeVolumeFields = gql`
 `;
 
 export const dayDataStablesQuery = gql`
-  query dayDataStablesQuery($first: Int! = 1000, $pair: Bytes!) {
-    dailyVolumes(first: $first, orderBy: timestamp, orderDirection: desc, where: { swap_contains: $pair }) {
+  query dayDataStablesQuery($first: Int! = 1000) {
+    dailyVolumes(first: $first, orderBy: timestamp, orderDirection: desc) {
       ...tradeVolumeFields
       swap {
+        id
         balances
       }
     }
   }
   ${tradeVolumeFields}
-`
+`;
 
 export const swapFields = gql`
   fragment swapFields on Swap {
@@ -36,14 +37,8 @@ export const swapFields = gql`
 `;
 
 export const stablePairsQuery = gql`
-  query stablePairsQuery(
-    $first: Int! = 1000
-    $pairAddresses: [Bytes]!
-  ) {
-    swaps(
-      first: $first
-      where: { id_in: $pairAddresses }
-    ) {
+  query stablePairsQuery($first: Int! = 1000) {
+    swaps(first: $first) {
       ...swapFields
       oneDay @client
       sevenDay @client
@@ -55,14 +50,9 @@ export const stablePairsQuery = gql`
 export const stablePairsTimeTravelQuery = gql`
   query stablePairsTimeTravelQuery(
     $first: Int! = 1000
-    $pairAddresses: [Bytes]!
     $block: Block_height!
   ) {
-    swaps(
-      first: $first
-      block: $block
-      where: { id_in: $pairAddresses }
-    ) {
+    swaps(first: $first, block: $block) {
       ...swapFields
     }
   }

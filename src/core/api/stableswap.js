@@ -1,45 +1,30 @@
-import { getUnixTime, startOfDay, subDays } from "date-fns";
 import { getApollo } from "../apollo";
-import { BUSD_USDC_USDT_PAIR } from "../constants";
-import { dayDataStablesQuery, stablePairsQuery, stablePairsTimeTravelQuery } from "../queries/stableswap";
+import {
+  dayDataStablesQuery,
+  stablePairsQuery,
+  stablePairsTimeTravelQuery,
+} from "../queries/stableswap";
 import { getOneDayBlock, getSevenDayBlock } from "./blocks";
 
-export async function getDayDataStables(
-  client = getApollo(),
-  pair = BUSD_USDC_USDT_PAIR
-) {
+export async function getDayDataStables(client = getApollo()) {
   const { data } = await client.query({
     query: dayDataStablesQuery,
     context: {
       clientName: "stableswap",
-    },
-    variables: {
-      pair,
     },
   });
 
   await client.cache.writeQuery({
     query: dayDataStablesQuery,
     data,
-    context: {
-      clientName: "stableswap",
-    }
   });
 
   return await client.cache.readQuery({
     query: dayDataStablesQuery,
-    context: {
-      clientName: "stableswap",
-    },
-    variables: {
-      pair,
-    },
   });
 }
 
-export async function getStablePairs(
-  client = getApollo()
-) {
+export async function getStablePairs(client = getApollo()) {
   const {
     data: { swaps },
   } = await client.query({
@@ -47,15 +32,9 @@ export async function getStablePairs(
     context: {
       clientName: "stableswap",
     },
-    variables: {
-      pairAddresses: [BUSD_USDC_USDT_PAIR]
-    }
   });
 
-  const pairAddresses = swaps.map((pair) => pair.id).sort();
-
   const oneDayBlock = await getOneDayBlock();
-
   const sevenDayBlock = await getSevenDayBlock();
 
   const {
@@ -67,7 +46,6 @@ export async function getStablePairs(
     },
     variables: {
       block: oneDayBlock,
-      pairAddresses,
     },
     fetchPolicy: "no-cache",
   });
@@ -81,7 +59,6 @@ export async function getStablePairs(
     },
     variables: {
       block: sevenDayBlock,
-      pairAddresses,
     },
     fetchPolicy: "no-cache",
   });
@@ -111,11 +88,5 @@ export async function getStablePairs(
 
   return await client.cache.readQuery({
     query: stablePairsQuery,
-    context: {
-      clientName: "stableswap",
-    },
-    variables: {
-      pairAddresses
-    }
   });
 }
