@@ -1,3 +1,6 @@
+import { ethers, BigNumber } from "ethers";
+import BigNumberJS from "bignumber.js";
+import { TokenAmount } from "@voltage-finance/sdk";
 import {
   AppShell,
   TVLAreaChart,
@@ -20,11 +23,9 @@ import {
   getPairs,
   getPools,
   getSevenDayFusePrice,
-  getStablePairs,
   getTokens,
   pairsQuery,
   poolsQuery,
-  stablePairsQuery,
   tokensQuery,
   useInterval,
 } from "app/core";
@@ -32,6 +33,8 @@ import {
 import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import { useQuery } from "@apollo/client";
+import { STABLESWAP_POOLS } from "app/core/constants";
+import { useStablecoinPrices } from "core/hooks/useStablecoinPrices";
 
 const aggregateChartData = (data) =>
   Object.values(
@@ -59,11 +62,6 @@ function IndexPage() {
   } = useQuery(pairsQuery);
 
   const {
-    data: { swaps },
-  } = useQuery(stablePairsQuery);
-  console.log(swaps);
-
-  const {
     data: { pools },
   } = useQuery(poolsQuery, {
     context: {
@@ -87,7 +85,6 @@ function IndexPage() {
     () =>
       Promise.all([
         getPairs,
-        getStablePairs,
         getPools,
         getTokens,
         getDayData,
@@ -99,6 +96,8 @@ function IndexPage() {
   );
 
   const [useUSD, setUseUSD] = useState(true);
+
+  const usdPrices = useStablecoinPrices();
 
   const [liquidity, volume] = dayDatas
     .filter((d) => d.liquidityUSD !== "0")
@@ -118,23 +117,40 @@ function IndexPage() {
       },
       [[], []]
     );
-  const [stablesLiquidity, stablesVolume] = dailyVolumes.reduce(
-    (acc, current) => {
-      acc[0].unshift({
-        date: parseInt(current.timestamp),
-        value:
-          parseFloat(current.swap.balances[0] / 10 ** 18) +
-          parseFloat(current.swap.balances[1] / 10 ** 6) +
-          parseFloat(current.swap.balances[2] / 10 ** 6),
-      });
-      acc[1].unshift({
-        date: parseInt(current.timestamp),
-        value: parseFloat(current.volume),
-      });
-      return acc;
-    },
-    [[], []]
-  );
+
+  const [stablesLiquidity, stablesVolume] =
+    !dailyVolumes || !Object.values(usdPrices).every((p) => !!p)
+      ? [[], []]
+      : dailyVolumes.reduce(
+          (acc, current) => {
+            const poolAddress = ethers.utils.getAddress(current.swap.id);
+            const totalLiquidity = current.swap.balances.reduce(
+              (mem, rawBalance, i) => {
+                const token = STABLESWAP_POOLS[poolAddress].tokenList[i];
+                return mem.add(
+                  new TokenAmount(token, rawBalance)
+                    .multiply(
+                      ((usdPrices[token.address] ?? 1) * 1e18).toString()
+                    )
+                    .toFixed(0)
+                );
+              },
+              BigNumber.from("0")
+            );
+            acc[0].unshift({
+              date: parseInt(current.timestamp),
+              value: BigNumberJS(totalLiquidity.toString())
+                .div(10 ** 18)
+                .toNumber(),
+            });
+            acc[1].unshift({
+              date: parseInt(current.timestamp),
+              value: parseFloat(current.volume),
+            });
+            return acc;
+          },
+          [[], []]
+        );
 
   const aggregatedLiquidity = useMemo(
     () => aggregateChartData([...liquidity, ...stablesLiquidity]),
@@ -233,8 +249,6 @@ export async function getStaticProps() {
   await getTokens(client);
 
   await getPairs(client);
-
-  await getStablePairs(client);
 
   await getPools(client);
 
