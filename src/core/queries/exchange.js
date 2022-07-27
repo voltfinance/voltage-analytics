@@ -70,6 +70,16 @@ export const fusePriceQuery = gql`
   ${bundleFields}
 `;
 
+export const tokenPriceQuery = gql`
+  query tokenPriceQuery($id: String!) {
+    token(id: $id) {
+      id
+      derivedETH
+    }
+  }
+`;
+
+
 export const fusePriceTimeTravelQuery = gql`
   query fusePriceTimeTravelQuery($id: Int! = 1, $block: Block_height!) {
     bundles(id: $id, block: $block) {

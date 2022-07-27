@@ -77,7 +77,10 @@ function TVLAreaChart({
     }
   }
 
-  const filteredData = data.filter((d) => timespan <= d.date);
+  const filteredData = useMemo(() =>
+    data.filter((d) => timespan <= d.date),
+    [data]
+  );
   var lastData =
     filteredData.length > 1 ? filteredData[filteredData.length - 1] : null;
   const lastDataValue = lastData ? lastData.value : 0;
@@ -100,7 +103,7 @@ function TVLAreaChart({
         : fuseFormatter.format(lastDataValue),
       date: lastData ? lastData.date : 0,
     });
-  }, [useUSD]);
+  }, [filteredData, useUSD]);
 
   // Max
   const xMax = width - margin.left - margin.right;
